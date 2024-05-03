@@ -1,0 +1,34 @@
+<div class="flex flex-col gap-2 flex-wrap justify-around p-2">
+    <div class="flex flex-col justify-between border border-solid border-emerald-200 from-emerald-200 to-emerald-50 rounded-md">
+        <div>
+            <div>
+                <input #search type="text" name="" id="" class="w-full py-4 px-2 rounded-sm bg-transparent text-white border-b border-solid border-emerald-300" placeholder="Search for a track">
+            </div>
+    
+            <div class="text-white px-4 py-2 text-lg">
+                <div class="flex justify-between">
+                    <p>Filter by:</p>
+                    <p class="text-white text-right">Right-click to remove <span class="text-cyan-300">({{activeFilters.size}} Filters)</span></p>
+                </div>
+                <div class="flex flex-wrap justify-center gap-2 p-4">
+                    @for (filter of filterList; track $index) {
+                        <app-filter [index]="$index" [filter]="filter" (onSelected)="onFilterSelected($event)" (onDeselected)="onFilterDeselected($event)"
+                            tabindex="0"></app-filter>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div>
+        <div class="bg-slate-700 rounded-md mt-4 p-4 flex flex-col gap-y-4 ">
+            <p class="tex-twhite text-lg font-semibold text-center">Results</p>
+            <app-track></app-track>
+            <app-track></app-track>
+            <app-track></app-track>
+            <app-track></app-track>
+            <app-track></app-track>
+            <app-track></app-track>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,6 @@
+
+<div #filter class="bg-slate-600 hover:bg-slate-500 flex flex-col justify-center items-center gap-y-2 py-10 px-14 cursor-pointer rounded-sm flex-1 w-0 border-2 border-solid border-cyan-300"
+    (click)="onClick()" (contextmenu)="onContextMenu()" role="button">
+    <fa-icon class="cursor-pointer text-white hover:text-cyan-300" pull="left" [icon]="icon"></fa-icon>
+    <p>{{text}}</p>
+</div>
