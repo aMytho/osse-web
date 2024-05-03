@@ -10,5 +10,5 @@ import { NavigationComponent } from './navigation/navigation.component';
   styleUrl: './app.component.css'
 })
 export class AppComponent {
-  title = 'osse-web';
+  title = 'Osse';
 }
