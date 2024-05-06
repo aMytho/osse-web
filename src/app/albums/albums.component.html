@@ -1,0 +1,14 @@
+<div class="grid grid-cols-4 justify-center gap-y-6 items-center">
+    @for (album of fakeData; track $index) {
+        <div class="text-lg text-white flex flex-col items-center">
+            <div class="rounded-lg flex flex-col justify-end h-60 w-60 bg-cover cursor-pointer" style="background-image: url('{{album.cover}}');">
+                <div class="bg-gradient-to-b from-transparent to-slate-700 pt-10 pb-1 px-1">
+                    <p>{{album.name}}</p>
+                </div>
+            </div>
+            <div>
+                <p>{{album.name}}</p>
+            </div>
+        </div>
+    }
+</div>
