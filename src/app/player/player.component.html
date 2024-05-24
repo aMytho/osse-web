@@ -29,12 +29,12 @@
             <p class="text-lg">Some other textual information that is important.</p>
         </div>
         <div class="bg-slate-700 rounded-md mt-4 p-4 flex flex-col gap-y-4 ">
-            <app-track></app-track>
-            <app-track></app-track>
-            <app-track></app-track>
-            <app-track></app-track>
-            <app-track></app-track>
-            <app-track></app-track>
+                  
+        @for (track of tracks; track track.id; let idx = $index) {
+            @if (idx < 6) {
+                <app-track [track]="track"></app-track>
+            }
+        }
         </div>
     </div>
 </div>
@@ -43,10 +43,9 @@
     <div class="text-center text-white">
         <h2 class="font-semibold text-xl">Queued Tracks</h2>
     </div>
-    <app-track></app-track>
-    <app-track></app-track>
-    <app-track></app-track>
-    <app-track></app-track>
-    <app-track></app-track>
-    <app-track></app-track>
+    @for (track of tracks; track track.id; let idx = $index) {
+        @if (idx >= 6) {
+            <app-track [track]="track"></app-track>
+        }
+    }
 </div>

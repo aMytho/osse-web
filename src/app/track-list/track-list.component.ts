@@ -2,6 +2,8 @@ import { AfterViewInit, Component, ElementRef, OnInit, QueryList, ViewChild, Vie
 import { TrackComponent } from "../player/track/track.component";
 import { FilterComponent } from "./filter/filter.component";
 import { Filter } from './filter/filter';
+import { TrackService } from '../shared/services/track/track.service';
+import { ApiService } from '../shared/services/api.service';
 
 @Component({
     selector: 'app-track-list',
@@ -18,6 +20,11 @@ export class TrackListComponent implements AfterViewInit {
   filterList: Filter[] = [Filter.Album, Filter.Playlist, Filter.Artist];
   activeFilters: Set<Filter> = new Set([Filter.Album, Filter.Playlist, Filter.Artist]);
 
+  constructor(
+    private trackService: TrackService,
+    private apiService: ApiService
+  ) {}
+
   /**
    * When a filter is selected, add it to the list
    */
@@ -31,5 +38,13 @@ export class TrackListComponent implements AfterViewInit {
 
   ngAfterViewInit(): void {
     this.searchBar.nativeElement.focus();
+  }
+
+  public async onSubmit() {
+    console.log("Submitted");
+    let tracks = await this.apiService.getAllTracks();
+    for (let track of tracks) {
+      this.trackService.tracks.push(track);
+    }
   }
 }
