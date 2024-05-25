@@ -15,6 +15,14 @@ export class Track {
         return this.track.title;
     }
 
+    public get size() {
+        return this.track.size;
+    }
+
+    public get duration() {
+        return this.track.duration;
+    }
+
     public hasArtist(): boolean {
         return this.track.artist_id != null;
     }

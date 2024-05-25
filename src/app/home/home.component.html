@@ -11,12 +11,12 @@
                 </div>
             </div>
             <div class="text-center mt-1 text-white">
-                <h2 class="text-xl font-semibold">Some Title</h2>
+                <h2 class="text-xl font-semibold">{{ title }}</h2>
                 <p class="italic">Some song artist</p>
                 <hr class="my-2">
                 <div class="flex justify-around text-xl gap-x-4">
                     <fa-icon class="cursor-pointer hover:text-emerald-300" pull="left" [icon]="back"></fa-icon>
-                    <fa-icon class="cursor-pointer hover:text-yellow-300" pull="left" [icon]="play"></fa-icon>
+                    <fa-icon (click)="onPlayerToggle()" class="cursor-pointer hover:text-yellow-300" pull="left" [icon]="play"></fa-icon>
                     <fa-icon class="cursor-pointer hover:text-emerald-300" pull="left" [icon]="forward"></fa-icon>
                 </div>
                 <img src="{{waveform}}" alt="waveform" class="w-full h-20">

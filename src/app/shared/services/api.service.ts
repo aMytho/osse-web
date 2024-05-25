@@ -20,4 +20,19 @@ export class ApiService {
       return [];
     }
   }
+
+  public async getAudioRange(id: number, start: number, end: number): Promise<ArrayBuffer> {
+    console.log("requesting", id);
+    let request = await fetch(`${this.configService.get('apiURL')}stream`, {
+      headers: {
+        'Range': `bytes=${start}-${end}`,
+        'Track': `${id}`
+      }
+    });
+
+    console.log(request.status);
+    console.log(request.statusText);
+
+    return await request.arrayBuffer();
+  }
 }
