@@ -1,16 +1,16 @@
 import { AfterViewInit, Component, ElementRef, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
-import { TrackComponent } from "../player/track/track.component";
 import { FilterComponent } from "./filter/filter.component";
 import { Filter } from './filter/filter';
 import { TrackService } from '../shared/services/track/track.service';
 import { ApiService } from '../shared/services/api.service';
+import { HomeComponent } from '../home/home.component';
 
 @Component({
     selector: 'app-track-list',
     standalone: true,
     templateUrl: './track-list.component.html',
     styles: ``,
-    imports: [TrackComponent, FilterComponent]
+    imports: [HomeComponent, FilterComponent]
 })
 export class TrackListComponent implements AfterViewInit {
   @ViewChild('search') searchBar!: ElementRef;

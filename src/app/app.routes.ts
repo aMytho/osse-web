@@ -1,7 +1,7 @@
 import { Routes } from '@angular/router';
-import { PlayerComponent } from './player/player.component';
 import { TrackListComponent } from './track-list/track-list.component';
 import { AlbumsComponent } from './albums/albums.component';
+import { HomeComponent } from './home/home.component';
 
 export const routes: Routes = [
     {
@@ -14,6 +14,6 @@ export const routes: Routes = [
     },
     {
         path: '**',
-        component: PlayerComponent
+        component: HomeComponent
     }
 ];
