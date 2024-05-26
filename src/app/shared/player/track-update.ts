@@ -5,11 +5,11 @@ export class TrackUpdate {
 
     public getDuration() {
         let date = new Date(0);
-        date.setSeconds(this.track.duration);
+        date.setSeconds(this.track.duration + 1);
         
         let minutes = date.getMinutes();
         let seconds = date.getSeconds();
-        return `${minutes}:${seconds}`;
+        return `${this.getNicelyFormattedTime(minutes)}:${this.getNicelyFormattedTime(seconds)}`;
     }
 
     public getCurrentTime() {
@@ -18,11 +18,33 @@ export class TrackUpdate {
         
         let minutes = date.getMinutes();
         let seconds = date.getSeconds();
-        return `${minutes}:${seconds}`;
+        return `${this.getNicelyFormattedTime(minutes)}:${this.getNicelyFormattedTime(seconds)}`;
+    }
+
+    private getNicelyFormattedTime(time: number) {
+        if (time == 0) {
+            return '00';
+        }
+
+        // Handle 1,2,3,
+        if (time < 10) {
+            return '0' + time;
+        }
+
+        // Ok format, leave as is
+        return time;
     }
 
     get title() {
         return this.track.title;
+    }
+
+    get artist() {
+        if (this.track.hasArtist()) {
+            return this.track.artist;
+        }
+
+        return null;
     }
 }
 
