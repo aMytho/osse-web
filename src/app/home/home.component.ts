@@ -18,6 +18,7 @@ export class HomeComponent implements OnInit {
   public tracks: Track[] = [];
   public playing: boolean = false;
   public title: string = '';
+  public artist: string = '';
 
   play = faPlay;
   pause = faPause;
@@ -35,13 +36,21 @@ export class HomeComponent implements OnInit {
   public onPlayerToggle() {
     this.playing = !this.playing;
     this.playerService.setTrack(this.trackService.activeTrack);
-    this.playerService.playFromStart();
+  }
+
+  public onNextTrack() {
+    this.trackService.moveToNextTrack();
+  }
+
+  public playTrack(index: number) {
+    this.trackService.moveToTrack(index);
   }
 
   ngOnInit(): void {
     this.tracks = this.trackService.tracks;
     this.playerService.trackUpdated.subscribe((val) => {
       this.title = val.title;
+      this.artist = val.artist?.name || '';
     })
   }
 }

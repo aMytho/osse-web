@@ -27,6 +27,8 @@ export class PlayerService {
 
   public setTrack(track: Track) {
     this.track = track;
+    this.audioCache = {};
+    this.playFromStart();
   }
 
   public playFromStart() {

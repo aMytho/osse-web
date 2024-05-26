@@ -41,10 +41,9 @@ export class TrackListComponent implements AfterViewInit {
   }
 
   public async onSubmit() {
-    console.log("Submitted");
     let tracks = await this.apiService.getAllTracks();
     for (let track of tracks) {
-      this.trackService.tracks.push(track);
+      this.trackService.addTrack(track);
     }
   }
 }
