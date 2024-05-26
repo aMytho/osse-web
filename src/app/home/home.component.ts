@@ -5,6 +5,7 @@ import { TrackComponent } from './track/track.component';
 import { TrackService } from '../shared/services/track/track.service';
 import { Track } from '../shared/services/track/track';
 import { PlayerService } from '../shared/player/player.service';
+import { PlaybackState } from '../shared/player/state-change';
 
 @Component({
   selector: 'app-home',
@@ -20,13 +21,18 @@ export class HomeComponent implements OnInit {
   public title: string = '';
   public artist: string = '';
 
-  play = faPlay;
-  pause = faPause;
   forward = faForward;
   back = faBackward;
   repeat = faRepeat;
   consume = faUtensils;
   info = faInfo;
+  get playerIcon() {
+    if (this.playing) {
+      return faPause;
+    } else {
+      return faPlay;
+    }
+  }
 
   constructor(
     private trackService: TrackService,
@@ -34,8 +40,16 @@ export class HomeComponent implements OnInit {
   ) {}
 
   public onPlayerToggle() {
+    // If no track, don't respond to button click
+    if (!this.trackService.activeTrack) return;
     this.playing = !this.playing;
-    this.playerService.setTrack(this.trackService.activeTrack);
+
+    if (!this.playing) {
+      this.playerService.pause();
+      return;
+    } else {
+      this.playerService.playAtCurrentPosition();
+    }
   }
 
   public onNextTrack() {
@@ -51,6 +65,15 @@ export class HomeComponent implements OnInit {
     this.playerService.trackUpdated.subscribe((val) => {
       this.title = val.title;
       this.artist = val.artist?.name || '';
-    })
+    });
+    this.playerService.stateChanged.subscribe((val) => {
+      if (val == PlaybackState.Paused) {
+        this.playing = false;
+      } else {
+        this.playing = true;
+      }
+    });
+
+    this.playerService.requestTrackState();
   }
 }

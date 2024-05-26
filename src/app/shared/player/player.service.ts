@@ -2,6 +2,7 @@ import { EventEmitter, Injectable } from '@angular/core';
 import { ApiService } from '../services/api.service';
 import { Track } from '../services/track/track';
 import { TrackPlayerInfo, TrackUpdate } from './track-update';
+import { PlaybackState } from './state-change';
 
 @Injectable({
   providedIn: 'root'
@@ -12,6 +13,7 @@ export class PlayerService {
    * This could be a new track, or just loading more buffer data
    */
   public trackUpdated = new EventEmitter<TrackUpdate>();
+  public stateChanged = new EventEmitter<PlaybackState>();
   private audioCache: any = {};
   private audioPlayer!: HTMLAudioElement;
   private track!: Track;
@@ -67,12 +69,36 @@ export class PlayerService {
    */
   private playAudio(urlData: string) {
     this.audioPlayer.src = urlData;
-    this.audioPlayer.play();
+    this.audioPlayer.play().then(() => this.stateChanged.emit(PlaybackState.Playing));
+  }
+
+  public playAtCurrentPosition() {
+    this.audioPlayer.play().then(() => this.stateChanged.emit(PlaybackState.Playing));
+  }
+
+  public pause() {
+    this.audioPlayer.pause();
+    this.stateChanged.emit(PlaybackState.Paused);
   }
 
   private buildTrackInfo(): TrackPlayerInfo {
     return {
       time: this.audioPlayer.currentTime
+    }
+  }
+
+  /**
+   * Causes the service to emit all track info to all subscribed listeners
+   */
+  public requestTrackState() {
+    if (this.track) {
+      this.trackUpdated.emit(new TrackUpdate(this.track, this.buildTrackInfo()));
+    }
+
+    if (this.audioPlayer.duration > 0 && !this.audioPlayer.paused) {
+      this.stateChanged.emit(PlaybackState.Playing);
+    } else {
+      this.stateChanged.emit(PlaybackState.Paused);
     }
   }
 }
