@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { EventEmitter, Injectable } from '@angular/core';
 import { ApiService } from '../services/api.service';
 import { BufferService } from './buffer.service';
 
@@ -6,8 +6,9 @@ import { BufferService } from './buffer.service';
   providedIn: 'root'
 })
 export class AudioService {
-  private audioContext = new AudioContext();
+  public buferRequest = new EventEmitter<1 | 2>();
 
+  private audioContext = new AudioContext();
   // Initialize audio buffer sources and gain nodes
   private sourceNode1 = this.audioContext.createBufferSource();
   private sourceNode2 = this.audioContext.createBufferSource();
@@ -38,45 +39,87 @@ export class AudioService {
   }
 
   public play() {
-    this.sourceNode1.buffer = this.currentBuffer;
+    const time = this.audioContext.currentTime;
+    const duration = this.currentBuffer.duration;
     this.sourceNode1.start(0);
-    this.sourceNode2.start(this.audioContext.currentTime + this.currentBuffer.duration, this.currentBuffer.duration);
+    this.sourceNode2.start(time + duration , duration);
   }
 
   public async loadFirstBuffer() {
     let decoded = await this.audioContext.decodeAudioData(this.bufferService.getEndBuffer().data.slice(0));
     this.currentBuffer = decoded;
+    this.sourceNode1.buffer = this.currentBuffer;
+    console.log("Buffer 1 loaded");
+
+    // Request buffer 2 data
+    this.buferRequest.emit(2);
   }
 
-  public async loadNextAudioBuffer() {
+  public async loadBuffer2() {
     // Fetch and decode the next audio buffer asynchronously
-    this.bufferService.temp;
-    let oldB = this.bufferService.getBufferAtIndex(0).data.slice(0);
-    let newB = this.bufferService.getEndBuffer().data.slice(0);
-
-    // Assuming `buffer1` and `buffer2` are the ArrayBuffers you want to combine
-    const combinedLength = oldB.byteLength + newB.byteLength;
-
-    // Create a new ArrayBuffer with the combined length
-    const combinedBuffer = new ArrayBuffer(combinedLength);
-
-    // Create views for the combined buffer and individual buffers
-    const combinedView = new Uint8Array(combinedBuffer);
-    const view1 = new Uint8Array(oldB);
-    const view2 = new Uint8Array(newB);
-
-    // Copy the contents of buffer1 into the combined buffer
-    combinedView.set(view1, 0);
-
-    // Copy the contents of buffer2 into the combined buffer after buffer1
-    combinedView.set(view2, oldB.byteLength);
+    let combinedBuffer = this.bufferService.getAllBufferData();
 
     // Now `combinedBuffer` contains the combined data of buffer1 and buffer2
 
     let decoded = await this.audioContext.decodeAudioData(combinedBuffer);
     this.nextBuffer = decoded;
     // Swap current and next buffers
-      
+
+    // Schedule the next buffer to start playing immediately after the current buffer ends
+    this.sourceNode2.buffer = this.nextBuffer;
+    console.log("Buffer 2 loaded");
+
+    this.queueBuffer2();
+  }
+
+  private async queueBuffer2() {
+    // Queue buffer 2
+    const time = this.audioContext.currentTime;
+    const duration = this.currentBuffer.duration;
+
+    // this.sourceNode2.start(time + duration, duration);
+    console.log(time, duration);
+    console.log("Buffer 2 queued");
+
+    let first = this.bufferService.getBufferAtIndex(0).data;
+    let last = this.bufferService.getEndBuffer().data;
+    const view1 = new Uint8Array(first);
+    const view2 = new Uint8Array(last);
+
+    // Define the number of bytes you want to compare
+    const numBytesToCompare = 16; // For example, you can adjust this number as needed
+
+    // Get the last bytes of the first buffer
+    const lastBytesBuf1 = view1.subarray(view1.length - numBytesToCompare);
+
+    // Get the first bytes of the second buffer
+    const firstBytesBuf2 = view2.subarray(0, numBytesToCompare);
+
+    // Compare the last bytes of the first buffer with the first bytes of the second buffer
+    let bytesMatch = true;
+    for (let i = 0; i < numBytesToCompare; i++) {
+      if (lastBytesBuf1[i] !== firstBytesBuf2[i]) {
+        bytesMatch = false;
+        break;
+      }
+    }
+
+    if (bytesMatch) {
+      console.log("Last bytes of the first buffer match the first bytes of the second buffer.");
+    } else {
+      console.log("Last bytes of the first buffer do not match the first bytes of the second buffer.");
+    }
+  }
+
+  public async loadNextAudioBuffer() {
+    // Fetch and decode the next audio buffer asynchronously
+    let combinedBuffer = this.bufferService.getAllBufferData();
+
+    // Now `combinedBuffer` contains the combined data of buffer1 and buffer2
+
+    let decoded = await this.audioContext.decodeAudioData(combinedBuffer);
+    this.nextBuffer = decoded;
+    // Swap current and next buffers
 
     // Schedule the next buffer to start playing immediately after the current buffer ends
     this.sourceNode2.buffer = this.nextBuffer;
@@ -85,7 +128,7 @@ export class AudioService {
   public switchToNextBuffer() {
     // Switch to the preloaded audio buffer
     if (this.nextBuffer) {
-      
+
       // this.sourceNode2.start(0, this.currentBuffer.duration);
       // Load the next audio buffer for seamless transition
       // this.loadNextAudioBuffer();

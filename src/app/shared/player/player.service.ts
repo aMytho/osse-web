@@ -64,10 +64,28 @@ export class PlayerService {
 
           this.bufferService.addingBufferInProgress = false;
           let time = this.audioPlayer.currentTime;
-          this.audioService.loadNextAudioBuffer();
         }
       }
     });
+
+    this.audioService.buferRequest.subscribe(async (bufNum) => {
+      if (bufNum == 1) {
+
+      } else {
+        let lastByteInBuffer = this.bufferService.getEndBuffer().endByte;
+        // Get the new buffer
+        let newBuffer = await this.apiService.getAudioRange(
+          this.track.id,
+          lastByteInBuffer,
+          lastByteInBuffer + this.track.bufferSize
+        );
+
+        // Add the new buffer to the list
+        this.bufferService.addSegmentToEnd(newBuffer);
+        // Load buffer 2
+        this.audioService.loadBuffer2();
+      }
+    })
 
 
     this.audioPlayer.addEventListener('ended', (ev) => {
@@ -85,7 +103,7 @@ export class PlayerService {
     // Get the buffer data
     let buffer = await this.apiService.getAudioRange(this.track.id, 0, this.track.bufferSize);
     // Save the buffer data
-    this.bufferService.addBeginningSegment(buffer, this.track.bufferSize);
+    this.bufferService.addBeginningSegment(buffer, this.track.bufferSize + 1);
     console.table({
       bufferSize: this.bufferService.size,
       expectedBuffers: this.bufferService.getExpectedBufferCount(this.track.size),
@@ -98,24 +116,6 @@ export class PlayerService {
   public async playFromStart() {
     await this.audioService.loadFirstBuffer();
     this.audioService.play();
-
-    // Preload the next segment
-    let currentBuffer = this.bufferService.getBufferAtIndex(0);
-
-    let lastByteInBuffer = currentBuffer.endByte;
-
-    // Get the new buffer
-    let newBuffer = await this.apiService.getAudioRange(
-      this.track.id,
-      currentBuffer.endByte + 1,
-      lastByteInBuffer + this.track.bufferSize
-    );
-
-    console.log(newBuffer.byteLength);
-
-    // Add the new buffer to the list
-    this.bufferService.addSegmentToEnd(newBuffer);
-    this.audioService.loadNextAudioBuffer();
 
     this.trackUpdated.emit(new TrackUpdate(this.track, this.buildTrackInfo()));
   }

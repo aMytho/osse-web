@@ -16,7 +16,7 @@ export class BufferService {
       data: data,
       endByte: size
     });
-    
+
     this.bufferSize = size;
   }
 
@@ -81,6 +81,28 @@ export class BufferService {
     return this.bufferSegments[index];
   }
 
+  public getAllBufferData() {
+    // Create a new ArrayBuffer with the combined length
+    const combinedBuffer = new ArrayBuffer(this.getEndBuffer().endByte + 1);
+
+    // Create views for the combined buffer and individual buffers
+    const combinedView = new Uint8Array(combinedBuffer);
+    let offset = 0;
+    for (let buffer of this.bufferSegments) {
+      const view1 = new Uint8Array(buffer.data.slice(0));
+      // If no buffers are loaded, start at 0
+      if (offset == 0) {
+        combinedView.set(view1, 0);
+      } else {
+        // Add the buffer after the last one
+        combinedView.set(view1, offset);
+      }
+      offset += view1.length;
+    }
+
+    return combinedBuffer;
+  }
+
   /**
    * Returns the amount of buffers loaded
    */
@@ -93,12 +115,5 @@ export class BufferService {
    */
   public get size() {
     return this.bufferSize;
-  }
-
-  public get temp() {
-    for (const idk of this.bufferSegments) {
-      console.log(idk.data.byteLength);
-    }
-    return 1;
   }
 }
