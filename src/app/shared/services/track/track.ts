@@ -6,6 +6,7 @@ import { OsseTrack } from "./osse-track";
 export class Track {
     public track!: OsseTrack;
     private trackArtist!: Artist;
+    public bufferSize: number = 0;
 
     constructor(track: OsseTrack, private apiService: ApiService) {
         this.track = track;

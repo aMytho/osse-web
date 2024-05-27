@@ -48,7 +48,7 @@ export class HomeComponent implements OnInit {
       this.playerService.pause();
       return;
     } else {
-      this.playerService.playAtCurrentPosition();
+      this.playerService.playFromStart();
     }
   }
 
