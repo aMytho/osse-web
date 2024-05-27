@@ -5,6 +5,7 @@ import { TrackPlayerInfo, TrackUpdate } from './track-update';
 import { PlaybackState } from './state-change';
 import { BufferService } from './buffer.service';
 import { estimatedBytesForBuffer, guessByteSizeForFirstBuffer } from './util';
+import { AudioService } from './audio.service';
 
 @Injectable({
   providedIn: 'root'
@@ -21,21 +22,22 @@ export class PlayerService {
 
   constructor(
     private apiService: ApiService,
-    private bufferService: BufferService
+    private bufferService: BufferService,
+    private audioService: AudioService
   ) { }
 
   public setAudioPlayer(player: HTMLAudioElement) {
     this.audioPlayer = player;
     this.audioPlayer.addEventListener('timeupdate', async (ev) => {
       this.trackUpdated.emit(new TrackUpdate(this.track, this.buildTrackInfo()));
-      
+
       // If we are nearing the end of this buffer, check for the next one
       let estimatedPosition = estimatedBytesForBuffer(this.audioPlayer.currentTime, this.track.bufferSize);
       if (!this.bufferService.addingBufferInProgress && estimatedPosition > (this.track.bufferSize / 2)) {
         console.log("Nearing buffer end, checking for next buffer");
         // Check if there the next buffer is loaded
         let bufferIndex = this.bufferService.getBufferIndexByPosition(estimatedPosition);
-        
+
         if (this.bufferService.bufferIndexExists(bufferIndex + 1)) {
           // Buffer exists, time to chill
         } else {
@@ -43,10 +45,10 @@ export class PlayerService {
           // Get the current buffer
           console.log("Requesting next buffer");
           let currentBuffer = this.bufferService.getBufferAtIndex(bufferIndex);
-          
+
           // Prevent requesting a new buffer while we are waiting on the next request
           this.bufferService.addingBufferInProgress = true;
-          
+
           let lastByteInBuffer = this.bufferService.getEndBuffer().endByte;
           // Get the new buffer
           let newBuffer = await this.apiService.getAudioRange(
@@ -54,7 +56,7 @@ export class PlayerService {
             currentBuffer.endByte + 1,
             lastByteInBuffer + this.track.bufferSize
           );
-          
+
           // Add the new buffer to the list
           this.bufferService.addSegmentToEnd(newBuffer);
 
@@ -62,8 +64,7 @@ export class PlayerService {
 
           this.bufferService.addingBufferInProgress = false;
           let time = this.audioPlayer.currentTime;
-          this.setSrc();
-          this.playAudioAtPosition(time);
+          this.audioService.loadNextAudioBuffer();
         }
       }
     });
@@ -90,31 +91,40 @@ export class PlayerService {
       expectedBuffers: this.bufferService.getExpectedBufferCount(this.track.size),
     });
 
-    this.setSrc();
-
     // Play the file
     this.playFromStart();
   }
 
-  private setSrc() {
-    this.audioPlayer.src = this.bufferService.getBlobForBuffers();
-  }
+  public async playFromStart() {
+    await this.audioService.loadFirstBuffer();
+    this.audioService.play();
 
-  public playFromStart() {
-    this.playAudio();
+    // Preload the next segment
+    let currentBuffer = this.bufferService.getBufferAtIndex(0);
+
+    let lastByteInBuffer = currentBuffer.endByte;
+
+    // Get the new buffer
+    let newBuffer = await this.apiService.getAudioRange(
+      this.track.id,
+      currentBuffer.endByte + 1,
+      lastByteInBuffer + this.track.bufferSize
+    );
+
+    console.log(newBuffer.byteLength);
+
+    // Add the new buffer to the list
+    this.bufferService.addSegmentToEnd(newBuffer);
+    this.audioService.loadNextAudioBuffer();
+
     this.trackUpdated.emit(new TrackUpdate(this.track, this.buildTrackInfo()));
   }
 
-  /**
-   * Once the data is loaded, call this to start playback
-   */
-  private playAudio() {
-    this.audioPlayer.play().then(() => this.stateChanged.emit(PlaybackState.Playing));
-  }
+
 
   private playAudioAtPosition(time: number) {
-    this.audioPlayer.currentTime = time;
-    this.playAudio();
+    // this.audioPlayer.currentTime = time;
+    // this.playAudio();
   }
 
   public pause() {

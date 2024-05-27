@@ -7,6 +7,7 @@ import { BufferSegment } from './buffer-segment';
 export class BufferService {
   private bufferSegments: BufferSegment[] = [];
   public addingBufferInProgress: boolean = false;
+  private bufferSize: number = 0;
   constructor() { }
 
   public addBeginningSegment(data: ArrayBuffer, size: number) {
@@ -15,10 +16,13 @@ export class BufferService {
       data: data,
       endByte: size
     });
+    
+    this.bufferSize = size;
   }
 
   public addSegmentToEnd(data: ArrayBuffer) {
     let last = this.getBufferAtIndex(this.count - 1);
+    console.log(last);
     this.bufferSegments.push({
       startByte: last.endByte + 1,
       data: data,
@@ -88,6 +92,13 @@ export class BufferService {
    * Returns the size of each buffer (last buffer could differ)
    */
   public get size() {
-    return this.bufferSegments[0].data.byteLength;
+    return this.bufferSize;
+  }
+
+  public get temp() {
+    for (const idk of this.bufferSegments) {
+      console.log(idk.data.byteLength);
+    }
+    return 1;
   }
 }
