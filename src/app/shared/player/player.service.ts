@@ -70,7 +70,18 @@ export class PlayerService {
 
     this.audioService.buferRequest.subscribe(async (bufNum) => {
       if (bufNum == 1) {
+        let lastByteInBuffer = this.bufferService.getEndBuffer().endByte;
+        // Get the new buffer
+        let newBuffer = await this.apiService.getAudioRange(
+          this.track.id,
+          lastByteInBuffer,
+          lastByteInBuffer + this.track.bufferSize
+        );
 
+        // Add the new buffer to the list
+        this.bufferService.addSegmentToEnd(newBuffer);
+        // Load buffer 2
+        this.audioService.updateBuffer1();
       } else {
         let lastByteInBuffer = this.bufferService.getEndBuffer().endByte;
         // Get the new buffer

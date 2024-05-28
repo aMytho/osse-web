@@ -35,18 +35,6 @@ export class BufferService {
     return this.bufferSegments[this.bufferSegments.length - 1];
   }
 
-  public getBlobForBuffers(): string {
-    let buffers = [];
-    for (let buffer of this.bufferSegments) {
-      buffers.push(buffer.data);
-    }
-
-    console.log(buffers);
-
-    let blob = new Blob([...buffers]);
-    return URL.createObjectURL(blob);
-  }
-
   public clearBuffer() {
     this.bufferSegments = [];
   }

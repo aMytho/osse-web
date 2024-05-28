@@ -28,13 +28,14 @@ export class AudioService {
 
     // Event listener to detect end of audio buffer
     this.sourceNode1.onended = () => {
-      console.log('1 ended', this.audioContext.currentTime);
-      this.switchToNextBuffer();
+      console.log('Buffer 1 finished.', this.audioContext.currentTime);
+      // Get buffer 3
+      this.buferRequest.emit(1);
     };
 
     this.sourceNode2.onended = () => {
       console.log("2 ended");
-      this.loadFirstBuffer();
+      // this.loadFirstBuffer();
     };
   }
 
@@ -42,7 +43,7 @@ export class AudioService {
     const time = this.audioContext.currentTime;
     const duration = this.currentBuffer.duration;
     this.sourceNode1.start(0);
-    this.sourceNode2.start(time + duration , duration);
+    this.sourceNode2.start(time + duration, duration);
   }
 
   public async loadFirstBuffer() {
@@ -67,49 +68,12 @@ export class AudioService {
 
     // Schedule the next buffer to start playing immediately after the current buffer ends
     this.sourceNode2.buffer = this.nextBuffer;
+    console.log("Source 2 buffer duration:", this.nextBuffer);
     console.log("Buffer 2 loaded");
-
-    this.queueBuffer2();
+    console.log(this.bufferService);
   }
 
-  private async queueBuffer2() {
-    // Queue buffer 2
-    const time = this.audioContext.currentTime;
-    const duration = this.currentBuffer.duration;
 
-    // this.sourceNode2.start(time + duration, duration);
-    console.log(time, duration);
-    console.log("Buffer 2 queued");
-
-    let first = this.bufferService.getBufferAtIndex(0).data;
-    let last = this.bufferService.getEndBuffer().data;
-    const view1 = new Uint8Array(first);
-    const view2 = new Uint8Array(last);
-
-    // Define the number of bytes you want to compare
-    const numBytesToCompare = 16; // For example, you can adjust this number as needed
-
-    // Get the last bytes of the first buffer
-    const lastBytesBuf1 = view1.subarray(view1.length - numBytesToCompare);
-
-    // Get the first bytes of the second buffer
-    const firstBytesBuf2 = view2.subarray(0, numBytesToCompare);
-
-    // Compare the last bytes of the first buffer with the first bytes of the second buffer
-    let bytesMatch = true;
-    for (let i = 0; i < numBytesToCompare; i++) {
-      if (lastBytesBuf1[i] !== firstBytesBuf2[i]) {
-        bytesMatch = false;
-        break;
-      }
-    }
-
-    if (bytesMatch) {
-      console.log("Last bytes of the first buffer match the first bytes of the second buffer.");
-    } else {
-      console.log("Last bytes of the first buffer do not match the first bytes of the second buffer.");
-    }
-  }
 
   public async loadNextAudioBuffer() {
     // Fetch and decode the next audio buffer asynchronously
@@ -133,5 +97,23 @@ export class AudioService {
       // Load the next audio buffer for seamless transition
       // this.loadNextAudioBuffer();
     }
+  }
+
+  public async updateBuffer1() {
+    let decoded = await this.audioContext.decodeAudioData(this.bufferService.getAllBufferData());
+    this.currentBuffer = decoded;
+
+    let newSourceNode1 = this.audioContext.createBufferSource();
+    newSourceNode1.connect(this.gainNode);
+    newSourceNode1.buffer = this.currentBuffer;
+
+    console.log("Buffer 1 reloaded");
+
+    this.sourceNode1 = newSourceNode1;
+
+    // Queue playback
+    let duration = this.nextBuffer.duration;
+    this.sourceNode1.start(this.audioContext.currentTime + duration, duration);
+    console.log("Buffer 2 queued");
   }
 }
