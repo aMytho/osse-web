@@ -3,9 +3,6 @@ import { ApiService } from '../services/api.service';
 import { Track } from '../services/track/track';
 import { TrackPlayerInfo, TrackUpdate } from './track-update';
 import { PlaybackState } from './state-change';
-import { BufferService } from './buffer.service';
-import { estimatedBytesForBuffer, guessByteSizeForFirstBuffer } from './util';
-import { AudioService } from './audio.service';
 
 @Injectable({
   providedIn: 'root'
@@ -22,113 +19,32 @@ export class PlayerService {
 
   constructor(
     private apiService: ApiService,
-    private bufferService: BufferService,
-    private audioService: AudioService
   ) { }
 
   public setAudioPlayer(player: HTMLAudioElement) {
     this.audioPlayer = player;
     this.audioPlayer.addEventListener('timeupdate', async (ev) => {
       this.trackUpdated.emit(new TrackUpdate(this.track, this.buildTrackInfo()));
-
-      // If we are nearing the end of this buffer, check for the next one
-      let estimatedPosition = estimatedBytesForBuffer(this.audioPlayer.currentTime, this.track.bufferSize);
-      if (!this.bufferService.addingBufferInProgress && estimatedPosition > (this.track.bufferSize / 2)) {
-        console.log("Nearing buffer end, checking for next buffer");
-        // Check if there the next buffer is loaded
-        let bufferIndex = this.bufferService.getBufferIndexByPosition(estimatedPosition);
-
-        if (this.bufferService.bufferIndexExists(bufferIndex + 1)) {
-          // Buffer exists, time to chill
-        } else {
-          // Buffer doesn't exist, request one
-          // Get the current buffer
-          console.log("Requesting next buffer");
-          let currentBuffer = this.bufferService.getBufferAtIndex(bufferIndex);
-
-          // Prevent requesting a new buffer while we are waiting on the next request
-          this.bufferService.addingBufferInProgress = true;
-
-          let lastByteInBuffer = this.bufferService.getEndBuffer().endByte;
-          // Get the new buffer
-          let newBuffer = await this.apiService.getAudioRange(
-            this.track.id,
-            currentBuffer.endByte + 1,
-            lastByteInBuffer + this.track.bufferSize
-          );
-
-          // Add the new buffer to the list
-          this.bufferService.addSegmentToEnd(newBuffer);
-
-          console.log(this.bufferService);
-
-          this.bufferService.addingBufferInProgress = false;
-          let time = this.audioPlayer.currentTime;
-        }
-      }
     });
 
-    this.audioService.buferRequest.subscribe(async (bufNum) => {
-      if (bufNum == 1) {
-        let lastByteInBuffer = this.bufferService.getEndBuffer().endByte;
-        // Get the new buffer
-        let newBuffer = await this.apiService.getAudioRange(
-          this.track.id,
-          lastByteInBuffer,
-          lastByteInBuffer + this.track.bufferSize
-        );
-
-        // Add the new buffer to the list
-        this.bufferService.addSegmentToEnd(newBuffer);
-        // Load buffer 2
-        this.audioService.updateBuffer1();
-      } else {
-        let lastByteInBuffer = this.bufferService.getEndBuffer().endByte;
-        // Get the new buffer
-        let newBuffer = await this.apiService.getAudioRange(
-          this.track.id,
-          lastByteInBuffer,
-          lastByteInBuffer + this.track.bufferSize
-        );
-
-        // Add the new buffer to the list
-        this.bufferService.addSegmentToEnd(newBuffer);
-        // Load buffer 2
-        this.audioService.loadBuffer2();
-      }
-    })
 
 
     this.audioPlayer.addEventListener('ended', (ev) => {
-      console.log(this.bufferService.count);
     })
   }
 
   public async setTrack(track: Track) {
     // Clear the buffer and request next track
-    this.bufferService.clearBuffer();
     this.track = track;
+    this.audioPlayer.preload = "metadata";
+    this.audioPlayer.src = "http://localhost:3000/stream?id=" + track.id;
+    await this.audioPlayer.play();
 
-    // Get the next buffer size
-    this.track.bufferSize = guessByteSizeForFirstBuffer(this.track.size, this.track.duration);
-    // Get the buffer data
-    let buffer = await this.apiService.getAudioRange(this.track.id, 0, this.track.bufferSize);
-    // Save the buffer data
-    this.bufferService.addBeginningSegment(buffer, this.track.bufferSize + 1);
-    console.table({
-      bufferSize: this.bufferService.size,
-      expectedBuffers: this.bufferService.getExpectedBufferCount(this.track.size),
-    });
-
-    // Play the file
-    this.playFromStart();
+    this.trackUpdated.emit(new TrackUpdate(this.track, this.buildTrackInfo()));
   }
 
   public async playFromStart() {
-    await this.audioService.loadFirstBuffer();
-    this.audioService.play();
-
-    this.trackUpdated.emit(new TrackUpdate(this.track, this.buildTrackInfo()));
+   
   }
 
 
