@@ -1,14 +1,14 @@
-@keyframes progress {
-    from {width: 0%;}
-    to {width: 100%;}
+
+/* Animate the point (cursor) movement */
+#point {
+    transition-duration: 1s;
+    transition-property: left;
 }
 
-#future {
-    animation-name: progress;
-    animation-duration: 10s;
-    animation-iteration-count: infinite;
-}
-
+/*
+    A linear gradient with variables for each percent
+    CSS variables and properties support transitions in updated browsers
+*/
 #rendered {
     background: rgb(2,0,36);
     background: linear-gradient(
@@ -86,12 +86,6 @@
         --bar-c-96, --bar-c-97, --bar-c-98,
         --bar-c-99;
     }
-
-@property --point-transparent {
-    syntax: "<color>";
-    inherits: false;
-    initial-value: transparent;
-}
 
 @property --point-played {
     syntax: "<color>";
@@ -705,23 +699,3 @@
     inherits: false;
     initial-value: transparent;
   }
-
-
-#point {
-    transition-duration: 1s;
-    transition-property: left;
-}
-
-.paused {
-    -webkit-animation-play-state: paused;
-    -moz-animation-play-state: paused;
-    -o-animation-play-state: paused; 
-    animation-play-state: paused;
-}
-
-.playing {
-    -webkit-animation-play-state: running;
-    -moz-animation-play-state: running;
-    -o-animation-play-state: running; 
-    animation-play-state: running;
-}

@@ -24,6 +24,7 @@ export class PlayerComponent implements AfterViewInit {
   public trackTitle: string = '';
   private isDragging = false;
   private abortMouseMove = new AbortController();
+  private seekDuration = 0;
 
 
   constructor(private playerService: PlayerService) {
@@ -79,6 +80,7 @@ export class PlayerComponent implements AfterViewInit {
 
       // Update the position of the progress point
       this.point.nativeElement.style.left = clampedPositionX + 'px';
+      this.seekDuration = (clampedPositionX / progressBarWidth);
     }
   }
 
@@ -86,7 +88,9 @@ export class PlayerComponent implements AfterViewInit {
     this.abortMouseMove.abort();
     this.abortMouseMove = new AbortController();
     this.setPointState(PointState.Play);
-    // this.setGradient(20, "75", 75);
+    let duration = Number(this.player.nativeElement.getAttribute("data-duration"));
+    this.player.nativeElement.currentTime = this.seekDuration * duration;
+    this.isDragging = false;
   }
 
   onSetPosition(ev: MouseEvent) {
@@ -111,14 +115,10 @@ export class PlayerComponent implements AfterViewInit {
 
   setGradient(start: number, color: string, end?: number) {
     if (end == undefined) {
-      this.rendered.nativeElement.style.setProperty('--bar-c-' + start, "var(--point-buffered)");
+      this.rendered.nativeElement.style.setProperty('--bar-c-' + start, color);
     } else {
       for (let i = start; i < end; i++) {
-        if (color) {
-          this.rendered.nativeElement.style.setProperty('--bar-c-' + i, color);
-        } else {
-          this.rendered.nativeElement.style.setProperty('--bar-c-' + i, "var(--point-buffered)");
-        }
+        this.rendered.nativeElement.style.setProperty('--bar-c-' + i, color);
       }
     }
   }
@@ -136,8 +136,7 @@ export class PlayerComponent implements AfterViewInit {
       for (let i = 0; i < buffered.length; i++) {
         let start = buffered.start(i) / trueDuration * 100;
         let end = buffered.end(i) / trueDuration * 100;
-        console.log(start, end);
-        this.setGradient(start, "", end);
+        this.setGradient(Math.floor(start), "var(--point-buffered)", Math.floor(end));
       }
     }
   }
@@ -151,8 +150,14 @@ export class PlayerComponent implements AfterViewInit {
       this.totalDuration = val.getDuration();
       this.currentTime = val.getCurrentTime();
       this.trackTitle = val.title;
-      this.point.nativeElement.style.left = Math.floor((val.currentSecond / val.totalSeconds) * 100) + "%";
+      // If the user is not seeking, update the position
+      if (!this.isDragging) {
+        this.point.nativeElement.style.left = Math.floor((val.currentSecond / val.totalSeconds) * 100) + "%";
+      }
     });
+    this.playerService.bufferReset.subscribe(() => {
+      this.setGradient(0, "transparent", 100);
+    })
 
     this.player.nativeElement.addEventListener("progress", this.onBufferProgress.bind(this));
   }
