@@ -26,16 +26,14 @@ export class PlayerService {
     this.audioPlayer.addEventListener('timeupdate', async (ev) => {
       this.trackUpdated.emit(new TrackUpdate(this.track, this.buildTrackInfo()));
     });
-
-
-
-    this.audioPlayer.addEventListener('ended', (ev) => {
-    })
   }
 
   public async setTrack(track: Track) {
     // Clear the buffer and request next track
     this.track = track;
+    // Set the real duration. Used for calculating buffer percentages later.
+    // Not all formats list the end duration at the start of the track
+    this.audioPlayer.setAttribute("data-duration", track.duration.toString());
     this.audioPlayer.preload = "metadata";
     this.audioPlayer.src = "http://localhost:3000/stream?id=" + track.id;
     await this.audioPlayer.play();

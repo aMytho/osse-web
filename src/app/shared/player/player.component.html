@@ -8,7 +8,7 @@
         
             <div #progressContainer id="progressContainer" (mousedown)="onSetPosition($event)"
                 class="relative w-full z-10 h-2 flex items-center bg-slate-700 bg-opacity-40 cursor-pointer">
-                <div id="rendered" class="absolute w-full h-2 rounded-l-lg rounded-r-lg"></div>
+                <div #rendered id="rendered" class="absolute w-full h-2 rounded-l-lg rounded-r-lg"></div>
                 <!-- <div id="loaded" class="bg-emerald-300 h-2 rounded-l-lg"></div> -->
                 <div #point id="point" class="absolute w-4 h-4 rounded-lg bg-cyan-300 hover:bg-cyan-400 -ml-2 z-20"
                     (mousedown)="onMouseDown($event)" (drag)="onMouseMove($event)"

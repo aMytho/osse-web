@@ -35,6 +35,14 @@ export class TrackUpdate {
         return time;
     }
 
+    get totalSeconds() {
+        return this.track.duration;
+    }
+
+    get currentSecond() {
+        return this.info.time;
+    }
+
     get title() {
         return this.track.title;
     }

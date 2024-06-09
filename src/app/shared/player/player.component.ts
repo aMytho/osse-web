@@ -3,6 +3,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faVolumeHigh, faVolumeLow, faVolumeOff } from '@fortawesome/free-solid-svg-icons';
 import { VisualizerComponent } from './visualizer/visualizer.component';
 import { PlayerService } from './player.service';
+import { PointState } from './point-state';
 
 @Component({
   selector: 'app-player',
@@ -15,6 +16,7 @@ export class PlayerComponent implements AfterViewInit {
   @ViewChild('player') player!: ElementRef<HTMLAudioElement>;
   @ViewChild('progressContainer') container!: ElementRef<HTMLDivElement>;
   @ViewChild('point') point!: ElementRef<HTMLDivElement>;
+  @ViewChild('rendered') rendered!: ElementRef<HTMLDivElement>;
 
   public bg: string = "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fstatic.wikia.nocookie.net%2Fgensin-impact%2Fimages%2F3%2F39%2FThe_Wind_and_The_Star_Traveler.png%2Frevision%2Flatest%3Fcb%3D20220126025606&f=1&nofb=1&ipt=5f807cbb82b211c04cfc30e7da2888613a53c4e98e0bbc1372c303e007a0df49&ipo=images";
   public currentTime: string = '';
@@ -60,6 +62,8 @@ export class PlayerComponent implements AfterViewInit {
     this.isDragging = true;
     ev.preventDefault();
 
+    this.setPointState(PointState.Pause);
+
     document.addEventListener('mousemove', this.onMouseMove, {signal: this.abortMouseMove.signal});
     document.addEventListener('mouseup', this.onMouseUp, {once: true});
   }
@@ -81,11 +85,61 @@ export class PlayerComponent implements AfterViewInit {
   onMouseUp(ev: any) {
     this.abortMouseMove.abort();
     this.abortMouseMove = new AbortController();
+    this.setPointState(PointState.Play);
+    // this.setGradient(20, "75", 75);
   }
 
   onSetPosition(ev: MouseEvent) {
     this.onMouseDown(ev);
     this.onMouseMove(ev);
+  }
+
+  setPointState(state: PointState) {
+    switch (state) {
+      case PointState.Pause:
+        this.point.nativeElement.classList.add('paused');
+        this.point.nativeElement.classList.remove('playing');
+        break;
+        case PointState.Play:
+          this.point.nativeElement.classList.add('playing');
+          this.point.nativeElement.classList.remove('paused');
+        break;
+      default:
+        break;
+    }
+  }
+
+  setGradient(start: number, color: string, end?: number) {
+    if (end == undefined) {
+      this.rendered.nativeElement.style.setProperty('--bar-c-' + start, "var(--point-buffered)");
+    } else {
+      for (let i = start; i < end; i++) {
+        if (color) {
+          this.rendered.nativeElement.style.setProperty('--bar-c-' + i, color);
+        } else {
+          this.rendered.nativeElement.style.setProperty('--bar-c-' + i, "var(--point-buffered)");
+        }
+      }
+    }
+  }
+
+  private onBufferProgress(ev: ProgressEvent<EventTarget>) {
+    console.log(ev);
+    // Browser estimate
+    const duration = this.player.nativeElement.duration;
+    // DB record
+    const trueDuration = Number(this.player.nativeElement.getAttribute("data-duration"));
+    const buffered = this.player.nativeElement.buffered;
+    this.point.nativeElement.style.animationDuration = trueDuration + "s";
+    
+    if (duration > 0) {
+      for (let i = 0; i < buffered.length; i++) {
+        let start = buffered.start(i) / trueDuration * 100;
+        let end = buffered.end(i) / trueDuration * 100;
+        console.log(start, end);
+        this.setGradient(start, "", end);
+      }
+    }
   }
 
   /**
@@ -97,6 +151,9 @@ export class PlayerComponent implements AfterViewInit {
       this.totalDuration = val.getDuration();
       this.currentTime = val.getCurrentTime();
       this.trackTitle = val.title;
+      this.point.nativeElement.style.left = Math.floor((val.currentSecond / val.totalSeconds) * 100) + "%";
     });
+
+    this.player.nativeElement.addEventListener("progress", this.onBufferProgress.bind(this));
   }
 }
