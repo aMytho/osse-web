@@ -54,6 +54,10 @@ export class TrackUpdate {
 
         return null;
     }
+
+    get id() {
+        return this.track.track.id;
+    }
 }
 
 export interface TrackPlayerInfo {

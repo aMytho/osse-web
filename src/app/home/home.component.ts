@@ -6,6 +6,7 @@ import { TrackService } from '../shared/services/track/track.service';
 import { Track } from '../shared/services/track/track';
 import { PlayerService } from '../shared/player/player.service';
 import { PlaybackState } from '../shared/player/state-change';
+import { ConfigService } from '../shared/services/config/config.service';
 
 @Component({
   selector: 'app-home',
@@ -36,7 +37,8 @@ export class HomeComponent implements OnInit {
 
   constructor(
     private trackService: TrackService,
-    private playerService: PlayerService
+    private playerService: PlayerService,
+    private configService: ConfigService
   ) {}
 
   public onPlayerToggle() {
@@ -65,6 +67,7 @@ export class HomeComponent implements OnInit {
     this.playerService.trackUpdated.subscribe((val) => {
       this.title = val.title;
       this.artist = val.artist?.name || '';
+      this.bg = this.configService.get('apiURL', 'localhost:3000') + "tracks/cover?id=" + val.id;
     });
     this.playerService.stateChanged.subscribe((val) => {
       if (val == PlaybackState.Paused) {
