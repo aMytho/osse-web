@@ -1,6 +1,6 @@
+import { getDuration } from "../../util/time";
 import { ApiService } from "../api.service";
 import { Artist } from "../artist/artist";
-import { OsseArtist } from "../artist/osse-artist";
 import { OsseTrack } from "./osse-track";
 
 export class Track {
@@ -29,6 +29,10 @@ export class Track {
 
     public get duration() {
         return this.track.duration;
+    }
+
+    public get durationFormatted() {
+        return getDuration(this.track.duration);
     }
 
     public hasArtist(): boolean {

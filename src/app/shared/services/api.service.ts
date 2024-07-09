@@ -3,6 +3,8 @@ import { ConfigService } from './config/config.service';
 import { Track } from './track/track';
 import { OsseTrack } from './track/osse-track';
 import { Artist } from './artist/artist';
+import { OsseAlbum } from './album/osse-album';
+import { Album } from './album/Album';
 
 @Injectable({
   providedIn: 'root'
@@ -38,11 +40,20 @@ export class ApiService {
   }
 
   public async getArtist(id: number): Promise<Artist | null> {
-    return null;
     let request = await fetch(`${this.configService.get('apiURL')}artists?id=${id}`);
     if (request.ok) {
       let artist = await request.json();
       return new Artist(artist);
+    } else {
+      return null;
+    }
+  }
+  
+  public async getAlbumWithTracks(id: number): Promise<Album | null> {
+    let request = await fetch(`${this.configService.get('apiURL')}albums/${id}/tracks`);
+    if (request.ok) {
+      let album = await request.json();
+      return new Album(album, this);
     } else {
       return null;
     }

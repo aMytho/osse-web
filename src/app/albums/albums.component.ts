@@ -1,18 +1,18 @@
 import { Component, OnInit } from '@angular/core';
-import { Album, PlaceholderData } from './album';
 import { ConfigService } from '../shared/services/config/config.service';
+import { RouterLink } from '@angular/router';
+import { Album } from '../shared/services/album/Album';
 
 @Component({
   selector: 'app-albums',
   standalone: true,
-  imports: [],
+  imports: [RouterLink],
   templateUrl: './albums.component.html',
   styles: ``
 })
 export class AlbumsComponent implements OnInit {
-  fakeData = PlaceholderData;
   albums: Album[] = [];
-  private albumURL: string = this.configService.get('apiURL') + 'albums/all';
+  private albumURL: string = this.configService.get('apiURL') + 'albums?tracks=true';
 
   constructor(private configService: ConfigService) {}
 
@@ -20,6 +20,5 @@ export class AlbumsComponent implements OnInit {
     let request = await fetch(this.albumURL);
     let result: Album[] = await request.json();
     this.albums = result;
-    console.log(this.albums);
-  }
+ }
 }

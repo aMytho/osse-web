@@ -1,0 +1,10 @@
+<div class="rounded-md p-4 hover:bg-slate-700 flex flex-col gap-2 h-full border-x border-emerald-300 cursor-pointer">
+    <div class="flex justify-between text-slate-300">
+        <p class="text-xl font-extralight">1</p>
+        <p>{{track.durationFormatted}}</p>
+    </div>
+    <div class="mt-auto">
+        <p class="text-xl font-semibold">{{track.title}}</p>
+        <p class="text-lg font-light text-slate-300">{{track.artist?.name ?? "Unknown Artist"}}</p>
+    </div>
+</div>

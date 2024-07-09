@@ -1,13 +1,13 @@
 <div class="grid grid-cols-4 justify-center gap-y-6 items-center">
-    @for (album of fakeData; track $index) {
+    @for (album of albums; track $index) {
         <div class="text-lg text-white flex flex-col items-center">
-            <div class="rounded-lg flex flex-col justify-end h-60 w-60 bg-cover cursor-pointer" style="background-image: url('{{album.cover}}');">
+            <a routerLink="view/{{album.id}}" class="rounded-lg flex flex-col justify-end h-60 w-60 bg-cover cursor-pointer" style="background-image: url('http://localhost:3000/tracks/cover?id={{album.tracks[0].id}}');">
                 <div class="bg-gradient-to-b from-transparent to-slate-700 pt-10 pb-1 px-1">
                     <p>{{album.name}}</p>
                 </div>
-            </div>
+            </a>
             <div>
-                <p>{{album.name}}</p>
+                <p>Artist Name</p>
             </div>
         </div>
     }
