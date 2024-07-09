@@ -4,6 +4,7 @@ import { faVolumeHigh, faVolumeLow, faVolumeOff } from '@fortawesome/free-solid-
 import { VisualizerComponent } from './visualizer/visualizer.component';
 import { PlayerService } from './player.service';
 import { PointState } from './point-state';
+import { ConfigService } from '../services/config/config.service';
 
 @Component({
   selector: 'app-player',
@@ -18,7 +19,7 @@ export class PlayerComponent implements AfterViewInit {
   @ViewChild('point') point!: ElementRef<HTMLDivElement>;
   @ViewChild('rendered') rendered!: ElementRef<HTMLDivElement>;
 
-  public bg: string = "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fstatic.wikia.nocookie.net%2Fgensin-impact%2Fimages%2F3%2F39%2FThe_Wind_and_The_Star_Traveler.png%2Frevision%2Flatest%3Fcb%3D20220126025606&f=1&nofb=1&ipt=5f807cbb82b211c04cfc30e7da2888613a53c4e98e0bbc1372c303e007a0df49&ipo=images";
+  public bg: string = "#";
   public currentTime: string = '';
   public totalDuration: string = '';
   public trackTitle: string = '';
@@ -27,7 +28,7 @@ export class PlayerComponent implements AfterViewInit {
   private seekDuration = 0;
 
 
-  constructor(private playerService: PlayerService) {
+  constructor(private playerService: PlayerService, private configService: ConfigService) {
     // Make sure the mouse up is accessible in global contexts
     this.onMouseUp = this.onMouseUp.bind(this);
     this.onMouseMove = this.onMouseMove.bind(this);
@@ -154,6 +155,8 @@ export class PlayerComponent implements AfterViewInit {
       if (!this.isDragging) {
         this.point.nativeElement.style.left = Math.floor((val.currentSecond / val.totalSeconds) * 100) + "%";
       }
+      // Set the cover bg
+      this.bg = this.configService.get('apiURL') + "tracks/cover?id=" + val.id;
     });
     this.playerService.bufferReset.subscribe(() => {
       this.setGradient(0, "transparent", 100);

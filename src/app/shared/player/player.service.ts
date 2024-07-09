@@ -1,8 +1,8 @@
 import { EventEmitter, Injectable } from '@angular/core';
-import { ApiService } from '../services/api.service';
 import { Track } from '../services/track/track';
 import { TrackPlayerInfo, TrackUpdate } from './track-update';
 import { PlaybackState } from './state-change';
+import { ConfigService } from '../services/config/config.service';
 
 @Injectable({
   providedIn: 'root'
@@ -18,9 +18,7 @@ export class PlayerService {
   private audioPlayer!: HTMLAudioElement;
   private track!: Track;
 
-  constructor(
-    private apiService: ApiService,
-  ) { }
+  constructor(private configService: ConfigService) {}
 
   public setAudioPlayer(player: HTMLAudioElement) {
     this.audioPlayer = player;
@@ -36,22 +34,20 @@ export class PlayerService {
     // Not all formats list the end duration at the start of the track
     this.audioPlayer.setAttribute("data-duration", track.duration.toString());
     this.audioPlayer.preload = "metadata";
-    this.audioPlayer.src = "http://localhost:3000/stream?id=" + track.id;
-    await this.audioPlayer.play();
+    this.audioPlayer.src = this.configService.get("apiURL") + "stream?id=" + track.id;
+    await this.play();
 
     this.trackUpdated.emit(new TrackUpdate(this.track, this.buildTrackInfo()));
     this.bufferReset.emit();
   }
 
-  public async playFromStart() {
-   
-  }
-
-
-
-  private playAudioAtPosition(time: number) {
-    // this.audioPlayer.currentTime = time;
-    // this.playAudio();
+  public play(time: number = this.audioPlayer.currentTime) {
+    this.audioPlayer.currentTime = time;
+    return new Promise<void>(async (resolve) => {
+      await this.audioPlayer.play();
+      this.stateChanged.emit(PlaybackState.Playing);
+      resolve();
+    });
   }
 
   public pause() {
@@ -73,7 +69,7 @@ export class PlayerService {
       this.trackUpdated.emit(new TrackUpdate(this.track, this.buildTrackInfo()));
     }
 
-    if (this.audioPlayer.duration > 0 && !this.audioPlayer.paused) {
+    if (!this.audioPlayer.paused) {
       this.stateChanged.emit(PlaybackState.Playing);
     } else {
       this.stateChanged.emit(PlaybackState.Paused);
