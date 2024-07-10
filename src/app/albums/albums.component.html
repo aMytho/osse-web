@@ -1,4 +1,4 @@
-<div class="grid grid-cols-4 justify-center gap-y-6 items-center">
+<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4  justify-center gap-y-6 items-center">
     @for (album of albums; track $index) {
         <div class="text-lg text-white flex flex-col items-center">
             <a routerLink="view/{{album.id}}" class="rounded-lg flex flex-col justify-end h-60 w-60 bg-cover cursor-pointer" style="background-image: url('http://localhost:3000/tracks/cover?id={{album.tracks[0].id}}');">
