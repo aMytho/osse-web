@@ -1,6 +1,7 @@
 <div class="px-4 py-2 h-full w-full flex flex-wrap justify-between gap-x-8 gap-y-4 items-center">
     <div>
-        <div class="bg-slate-300 rounded-md backdrop-blur-sm w-14 h-14 p-2 flex items-end flex-wrap bg-cover drop-shadow-glow" style="background-image: url('{{bg}}');"></div>
+        <div class="bg-slate-300 rounded-md backdrop-blur-sm w-14 h-14 p-2 flex items-end flex-wrap bg-cover drop-shadow-glow"
+        style="background-image: url('{{bg}}');"></div>
     </div>
     <div class="grow">
         <div class="w-full flex flex-col items-center justify-around gap-y-1">
@@ -17,7 +18,7 @@
             
             <div class="flex justify-around w-full">
                 @if (trackTitle) {
-                    <p>{{ trackTitle }} - Some Album - Some Artist</p>
+                    <p>{{ trackTitle }} - Some Album {{artistTitle ? '- ' + artistTitle : ''}}</p>
                 } @else {
                     <p aria-hidden="true"></p>
                 }

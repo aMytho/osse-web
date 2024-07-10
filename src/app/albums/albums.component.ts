@@ -19,6 +19,6 @@ export class AlbumsComponent implements OnInit {
   async ngOnInit(): Promise<void> {
     let request = await fetch(this.albumURL);
     let result: Album[] = await request.json();
-    this.albums = result;
+    this.albums = result.sort((a,b) => a.name.localeCompare(b.name));
  }
 }

@@ -16,8 +16,11 @@ export class TrackService {
   public tracks: Track[] = [];
   private index = 1;
   
-  constructor(private playerService: PlayerService) { }
-
+  constructor(private playerService: PlayerService) {
+    this.playerService.playbackEnded.subscribe(v => {
+      this.moveToNextTrack();
+    });
+  }
 
   get activeTrack() {
     return this.tracks[this.index];

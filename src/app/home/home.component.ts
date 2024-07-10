@@ -16,7 +16,6 @@ import { ConfigService } from '../shared/services/config/config.service';
 })
 export class HomeComponent implements OnInit {
   public bg: string = "#";
-  public waveform: string = "#";
   public tracks: Track[] = [];
   public playing: boolean = false;
   public title: string = '';

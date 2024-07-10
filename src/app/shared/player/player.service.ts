@@ -14,6 +14,7 @@ export class PlayerService {
    */
   public trackUpdated = new EventEmitter<TrackUpdate>();
   public stateChanged = new EventEmitter<PlaybackState>();
+  public playbackEnded = new EventEmitter();
   public bufferReset = new EventEmitter();
   private audioPlayer!: HTMLAudioElement;
   private track!: Track;
@@ -22,9 +23,11 @@ export class PlayerService {
 
   public setAudioPlayer(player: HTMLAudioElement) {
     this.audioPlayer = player;
-    this.audioPlayer.addEventListener('timeupdate', async (ev) => {
+    this.audioPlayer.addEventListener('timeupdate', (ev) => {
       this.trackUpdated.emit(new TrackUpdate(this.track, this.buildTrackInfo()));
     });
+
+    this.audioPlayer.addEventListener('ended', (ev) => this.playbackEnded.emit());
   }
 
   public async setTrack(track: Track) {
