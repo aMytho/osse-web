@@ -1,6 +1,6 @@
 import { AfterViewInit, Component, ElementRef, ViewChild } from '@angular/core';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { faVolumeHigh, faVolumeLow, faVolumeOff } from '@fortawesome/free-solid-svg-icons';
+import { faBackward, faForward, faInfo, faPause, faRepeat, faUtensils, faVolumeHigh, faVolumeLow, faVolumeOff } from '@fortawesome/free-solid-svg-icons';
 import { VisualizerComponent } from './visualizer/visualizer.component';
 import { PlayerService } from './player.service';
 import { PointState } from './point-state';
@@ -23,10 +23,20 @@ export class PlayerComponent implements AfterViewInit {
   public currentTime: string = '';
   public totalDuration: string = '';
   public trackTitle: string = '';
+  public artistTitle: string = '';
   private isDragging = false;
   private abortMouseMove = new AbortController();
   private seekDuration = 0;
 
+  forward = faForward;
+  back = faBackward;
+  repeat = faRepeat;
+  consume = faUtensils;
+  info = faInfo;
+
+  get playerIcon() {
+    return faPause;
+  }
 
   constructor(private playerService: PlayerService, private configService: ConfigService) {
     // Make sure the mouse up is accessible in global contexts
@@ -155,12 +165,13 @@ export class PlayerComponent implements AfterViewInit {
       if (!this.isDragging) {
         this.point.nativeElement.style.left = Math.floor((val.currentSecond / val.totalSeconds) * 100) + "%";
       }
+      this.artistTitle = val.artist?.name ?? '';
       // Set the cover bg
       this.bg = this.configService.get('apiURL') + "tracks/cover?id=" + val.id;
     });
     this.playerService.bufferReset.subscribe(() => {
       this.setGradient(0, "transparent", 100);
-    })
+    });
 
     this.player.nativeElement.addEventListener("progress", this.onBufferProgress.bind(this));
   }

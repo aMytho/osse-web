@@ -1,0 +1,16 @@
+<div>
+    <h1>Playlists</h1>
+    <div>
+        @for (playlist of playlists; track $index) {
+            <div class="text-white text-lg border-y border-purple-700 mx-4 flex justify-between">
+                <div>
+                    <p>{{playlist.name}}</p>
+                </div>
+                <div>
+                    <a routerLink="view/{{playlist.id}}">View</a>
+                </div>
+            </div>
+        }
+    </div>
+    
+</div>

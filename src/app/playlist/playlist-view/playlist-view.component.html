@@ -1,0 +1,15 @@
+<p>playlist-view works!</p>
+<div>
+    <h1>{{playlist.name}}</h1>
+
+    <div>
+        @for (track of playlist.tracks; track $index) {
+            <div>
+                {{track.title}}
+            </div>
+            <div>
+                {{track.artist}}
+            </div>
+        }
+    </div>
+</div>

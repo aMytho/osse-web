@@ -3,7 +3,6 @@ import { ConfigService } from './config/config.service';
 import { Track } from './track/track';
 import { OsseTrack } from './track/osse-track';
 import { Artist } from './artist/artist';
-import { OsseAlbum } from './album/osse-album';
 import { Album } from './album/Album';
 
 @Injectable({
@@ -11,15 +10,12 @@ import { Album } from './album/Album';
 })
 export class ApiService {
 
-  constructor(private configService: ConfigService) {
-
-  }
+  constructor(private configService: ConfigService) {}
 
   public async getAllTracks(): Promise<Track[]> {
     try {
       let request = await fetch(`${this.configService.get('apiURL')}tracks/all`);
       let response = await request.json();
-      console.log(response);
 
       return response.map((track: OsseTrack) => new Track(track, this))
     } catch(e) {
