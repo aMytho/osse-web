@@ -1,8 +1,17 @@
-<p>playlist-view works!</p>
 <div>
-    <h1>{{playlist.name}}</h1>
+    <app-header [text]="playlist.name"></app-header>
 
-    <div>
+    <div class="bg-slate-500 bg-opacity-15 rounded-lg p-4">
+        <button (click)="showEditMenu = !showEditMenu">Edit</button>
+    </div>
+    @if (showEditMenu) {
+        <div>
+            <input type="text">
+        </div>
+    }
+
+    <app-header [type]="2" [text]="'Tracks'"></app-header>
+    <div class="bg-slate-500 bg-opacity-15 rounded-lg p-4">
         @for (track of playlist.tracks; track $index) {
             <div>
                 {{track.title}}

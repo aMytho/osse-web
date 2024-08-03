@@ -2,11 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { ConfigService } from '../shared/services/config/config.service';
 import { RouterLink } from '@angular/router';
 import { Album } from '../shared/services/album/Album';
+import { HeaderComponent } from '../shared/ui/header/header.component';
 
 @Component({
   selector: 'app-albums',
   standalone: true,
-  imports: [RouterLink],
+  imports: [RouterLink, HeaderComponent],
   templateUrl: './albums.component.html',
   styles: ``
 })

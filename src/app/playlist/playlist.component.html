@@ -1,16 +1,20 @@
-<div>
-    <h1>Playlists</h1>
-    <div>
+<div class="bg-slate-400 bg-opacity-15 px-4 rounded-lg w-full flex justify-around gap-x-2">
+    <button (click)="createPlaylist()" class="text-lg text-white p-2 rounded-md bg-transparent">Refresh <fa-icon [icon]="refresh"></fa-icon></button>
+    <button (click)="createPlaylist()" class="text-lg text-white p-2 rounded-md bg-transparent">New <fa-icon [icon]="plus"></fa-icon></button>
+</div>
+<div class="mt-4">
+    <app-header text="Playlists"></app-header>
+    <div class="flex flex-col gap-y-1 bg-slate-500 bg-opacity-15 rounded-lg p-4">
         @for (playlist of playlists; track $index) {
-            <div class="text-white text-lg border-y border-purple-700 mx-4 flex justify-between">
+            <div class="text-white text-lg p-2 border-y border-emerald-300 mx-4 flex justify-between">
                 <div>
                     <p>{{playlist.name}}</p>
                 </div>
-                <div>
+                <div class="flex gap-x-2">
+                    <p>{{playlist.count}} Tracks</p>
                     <a routerLink="view/{{playlist.id}}">View</a>
                 </div>
             </div>
         }
     </div>
-    
 </div>

@@ -4,13 +4,14 @@ import { Filter } from './filter/filter';
 import { TrackService } from '../shared/services/track/track.service';
 import { ApiService } from '../shared/services/api.service';
 import { HomeComponent } from '../home/home.component';
+import { HeaderComponent } from '../shared/ui/header/header.component';
 
 @Component({
     selector: 'app-track-list',
     standalone: true,
     templateUrl: './track-list.component.html',
     styles: ``,
-    imports: [HomeComponent, FilterComponent]
+    imports: [HomeComponent, FilterComponent, HeaderComponent]
 })
 export class TrackListComponent implements AfterViewInit {
   @ViewChild('search') searchBar!: ElementRef;

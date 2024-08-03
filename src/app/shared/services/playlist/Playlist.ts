@@ -5,6 +5,9 @@ import { OssePlaylist } from "./osse-playlist";
 export class Playlist {
     public tracks: Track[] = [];
     constructor(private playlist: OssePlaylist, private apiService: ApiService) {
+        if (playlist.tracks == undefined) {
+            return
+        }
         this.tracks = playlist.tracks.map(t => {
             return new Track(t, this.apiService);
         })
@@ -16,5 +19,9 @@ export class Playlist {
 
     public get name() {
         return this.playlist.name;
+    }
+
+    public get count() {
+        return this.playlist.count;
     }
 }
