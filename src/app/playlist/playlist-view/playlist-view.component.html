@@ -1,17 +1,28 @@
-<div>
-    <app-header [text]="playlist.name"></app-header>
-
-    <div class="bg-slate-500 bg-opacity-15 rounded-lg p-4">
-        <button (click)="showEditMenu = !showEditMenu">Edit</button>
+<div [ngClass]="{'animate-pulse pointer-events-none': !ready}">
+    <div class="bg-slate-400 bg-opacity-15 px-4 rounded-lg w-full flex justify-around gap-x-2">
+        <button (click)="delete()" class="font-semibold text-lg text-white hover:text-red-500 p-2 rounded-md bg-transparent">Delete <fa-icon [icon]="trash"></fa-icon></button>
+        <button (click)="showEditMenu = !showEditMenu" class="font-semibold text-lg text-white p-2 rounded-md bg-transparent">Edit <fa-icon [icon]="pencil"></fa-icon></button>
     </div>
     @if (showEditMenu) {
-        <div>
-            <input type="text">
-        </div>
+        <form #form="ngForm" (ngSubmit)="edit()" class="mt-2 bg-slate-400 bg-opacity-15 p-4 rounded-lg w-full">
+            <div>
+                <app-header [type]="2" text="Edit Playlist"></app-header>
+            </div>
+            <label for="name" class="text-white font-semibold">Playlist Name: </label>
+            <input [(ngModel)]="model.name" required minlength="1" id="name" name="name" class="mx-2 p-2 rounded-md bg-opacity-25"> <br>
+            
+            <p class="text-red-500 font-semibold my-2" [hidden]="!(model.name.length == 0)">The playlist name must be at least 1 character.</p>
+
+            <app-button type="submit" class="mt-2" text="Save" [disabled]="!form.form.valid || false"></app-button>
+        </form>
     }
+    <div class="mt-4"></div>
+    <app-header [text]="playlist?.name ?? 'Loading'"></app-header>
+
 
     <app-header [type]="2" [text]="'Tracks'"></app-header>
     <div class="bg-slate-500 bg-opacity-15 rounded-lg p-4">
+    @if (playlist) {
         @for (track of playlist.tracks; track $index) {
             <div>
                 {{track.title}}
@@ -19,6 +30,9 @@
             <div>
                 {{track.artist}}
             </div>
+        } @empty {
+            <p class="text-white">No Tracks in this playlist.</p>
         }
+    }
     </div>
 </div>

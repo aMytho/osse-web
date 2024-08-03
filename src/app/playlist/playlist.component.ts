@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Playlist } from '../shared/services/playlist/Playlist';
 import { ConfigService } from '../shared/services/config/config.service';
 import { OssePlaylist } from '../shared/services/playlist/osse-playlist';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { ApiService } from '../shared/services/api.service';
 import { HeaderComponent } from '../shared/ui/header/header.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
@@ -20,14 +20,13 @@ export class PlaylistComponent implements OnInit {
   plus = faPlus;
   refresh = faRefresh;
 
-  constructor(private configService: ConfigService, private apiService: ApiService) {}
+  constructor(
+    private configService: ConfigService, private apiService: ApiService,
+    private router: Router
+  ) {}
   
-  async ngOnInit(): Promise<void> {
-    let request = await fetch(this.configService.get('apiURL') + 'playlists');
-    let result = await request.json();
-    console.log(result);
-    this.playlists = result.map((p: OssePlaylist) => new Playlist(p, this.apiService));
-    console.log(this.playlists)
+  ngOnInit(): void {
+    this.refreshPlaylistList();
   }
 
   public async createPlaylist() {
@@ -39,6 +38,17 @@ export class PlaylistComponent implements OnInit {
       headers: [
         ['Content-Type', 'application/json']
       ]
-    })
+    });
+
+    if (request.ok) {
+      let res = await request.json();
+      this.router.navigateByUrl("playlists/view/" + res.id);
+    }
+  }
+  
+  public async refreshPlaylistList() {
+    let request = await fetch(this.configService.get('apiURL') + 'playlists');
+    let result = await request.json();
+    this.playlists = result.map((p: OssePlaylist) => new Playlist(p, this.apiService));
   }
 }

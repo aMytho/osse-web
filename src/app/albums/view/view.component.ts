@@ -5,6 +5,7 @@ import { AlbumTrackComponent } from './album-track/album-track.component';
 import { ApiService } from '../../shared/services/api.service';
 import { Album } from '../../shared/services/album/Album';
 import { ConfigService } from '../../shared/services/config/config.service';
+import { TrackService } from '../../shared/services/track/track.service';
 
 @Component({
   selector: 'app-view',
@@ -30,6 +31,12 @@ export class ViewComponent {
   search = faSearch;
   filter = faFilter;
   
-  constructor(private apiService: ApiService, private configService: ConfigService) {}
+  constructor(
+    private apiService: ApiService, private configService: ConfigService,
+    private trackService: TrackService
+  ) {}
 
+  public addAll() {
+    this.album.tracks.forEach((t) => this.trackService.addTrack(t));
+  }
 }
