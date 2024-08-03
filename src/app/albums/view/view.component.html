@@ -9,7 +9,7 @@
                 <h1 class="font-bold text-6xl">{{album.name}}</h1>
                 <p class="text-slate-300 italic font-light mt-1">{{album.artist?.name ?? "Unknown Artist"}}</p>
                 <div class="flex flex-wrap gap-2 justify-between items-center mt-6">
-                    <button class="bg-green-500 hover:bg-green-400 p-2 text-white font-semibold rounded-lg">Play All</button>
+                    <button (click)="addAll()" class="bg-green-500 hover:bg-green-400 p-2 text-white font-semibold rounded-lg">Play All</button>
                     <a class="text-cyan-400 hover:text-cyan-500 cursor-pointer">View in MusicBrainz</a>
                     <p>2024</p>
                     <p>78 Minutes</p>
