@@ -57,8 +57,19 @@ export class HomeComponent implements OnInit {
     this.trackService.moveToNextTrack();
   }
 
+  public onPreviousTrack() {
+    this.trackService.moveToLastTrack();
+  }
+
   public playTrack(index: number) {
     this.trackService.moveToTrack(index);
+  }
+
+  public get trackProgress() {
+    if (this.trackService.activeTrack) {
+      return this.trackService.trackListProgress;
+    }
+    return '';
   }
 
   ngOnInit(): void {

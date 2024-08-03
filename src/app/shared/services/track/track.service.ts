@@ -14,7 +14,7 @@ export class TrackService {
    * List of tracks in the queue
    */
   public tracks: Track[] = [];
-  private index = 1;
+  private index = 0;
   
   constructor(private playerService: PlayerService) {
     this.playerService.playbackEnded.subscribe(v => {
@@ -24,6 +24,10 @@ export class TrackService {
 
   get activeTrack() {
     return this.tracks[this.index];
+  }
+
+  get trackListProgress() {
+    return `Track ${this.index + 1} of ${this.tracks.length} tracks`;
   }
 
   public addTrack(track: Track) {
@@ -38,6 +42,17 @@ export class TrackService {
   public moveToNextTrack() {
     this.index += 1;
     if (this.index == this.tracks.length) {
+      this.index = 0;
+    }
+
+    if (this.tracks[this.index]) {
+      this.playerService.setTrack(this.activeTrack);
+    }
+  }
+
+  public moveToLastTrack() {
+    this.index -= 1;
+    if (this.index < 0) {
       this.index = 0;
     }
 

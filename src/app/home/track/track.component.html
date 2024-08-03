@@ -1,7 +1,9 @@
 <div tabindex="0" (dblclick)="onDoubleClick()" class="flex justify-between border-x border-y border-r-emerald-400 border-b-emerald-400 border-r border-emerald-200 bg-opacity-10 hover:bg-emerald-400 hover:bg-opacity-10 hover:cursor-pointer p-4 rounded-lg shadow-sm shadow-cyan-950">
     <div>
         <h3 class="font-semibold text-lg text-slate-50">{{ track.title }}</h3>
-        <p class="text-slate-300">Some album name that is longer than song name</p>
+        <p class="text-slate-300">
+            {{track.artist?.name ?? ''}}
+        </p>
     </div>
     <div class="flex gap-2">
         <div class="text-green-400 font-semibold text-lg">
