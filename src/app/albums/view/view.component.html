@@ -6,7 +6,7 @@
                 </div>
             </div>
             <div>
-                <h1 class="font-bold text-6xl">{{album.name}}</h1>
+                <app-header class="font-bold text-6xl" [text]="album.name"></app-header>
                 <p class="text-slate-300 italic font-light mt-1">{{album.artist?.name ?? "Unknown Artist"}}</p>
                 <div class="flex flex-wrap gap-2 justify-between items-center mt-6">
                     <button (click)="addAll()" class="bg-green-500 hover:bg-green-400 p-2 text-white font-semibold rounded-lg">Play All</button>
@@ -35,7 +35,7 @@
             </div>
             <div class="grid 2xl:grid-cols-3 lg:grid-cols-2 grid-cols-1 gap-x-5 gap-y-8 border-t border-gray-600 mt-2 pt-4 px-1 rounded-t-lg">
                 @for(track of album.tracks; track track.id) {
-                    <app-album-track [track]="track"></app-album-track>
+                    <app-album-track [track]="track" (addTrack)="addTrack($event)"></app-album-track>
                 }
             </div>
         </div>

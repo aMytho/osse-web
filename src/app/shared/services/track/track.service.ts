@@ -9,7 +9,6 @@ import { PlayerService } from '../../player/player.service';
   providedIn: 'root'
 })
 export class TrackService {
-
   /**
    * List of tracks in the queue
    */
@@ -32,6 +31,10 @@ export class TrackService {
 
   public addTrack(track: Track) {
     this.tracks.push(track);
+    // If this is the first track added, start playback
+    if (this.tracks.length - 1 == 0) {
+      this.moveToTrack(0);
+    }
   }
 
   public clearTracks() {

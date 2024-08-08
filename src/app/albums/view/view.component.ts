@@ -1,16 +1,18 @@
 import { Component, Input } from '@angular/core';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { faCalendar, faFilter, faSearch, faStopwatch } from '@fortawesome/free-solid-svg-icons';
+import { faFilter, faSearch } from '@fortawesome/free-solid-svg-icons';
 import { AlbumTrackComponent } from './album-track/album-track.component';
 import { ApiService } from '../../shared/services/api.service';
 import { Album } from '../../shared/services/album/Album';
 import { ConfigService } from '../../shared/services/config/config.service';
 import { TrackService } from '../../shared/services/track/track.service';
+import { Track } from '../../shared/services/track/track';
+import { HeaderComponent } from '../../shared/ui/header/header.component';
 
 @Component({
   selector: 'app-view',
   standalone: true,
-  imports: [FontAwesomeModule, AlbumTrackComponent],
+  imports: [HeaderComponent, FontAwesomeModule, AlbumTrackComponent],
   templateUrl: './view.component.html',
   styles: ``
 })
@@ -38,5 +40,9 @@ export class ViewComponent {
 
   public addAll() {
     this.album.tracks.forEach((t) => this.trackService.addTrack(t));
+  }
+
+  public addTrack(track: Track) {
+    this.trackService.addTrack(track);
   }
 }

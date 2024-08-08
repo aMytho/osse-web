@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Track } from '../../../shared/services/track/track';
 
 @Component({
@@ -11,4 +11,11 @@ import { Track } from '../../../shared/services/track/track';
 export class AlbumTrackComponent {
   @Input()
   public track!: Track;
+
+  @Output()
+  public addTrack = new EventEmitter<Track>();
+
+  public onClick() {
+    this.addTrack.emit(this.track);
+  }
 }
