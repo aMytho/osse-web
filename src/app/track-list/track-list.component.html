@@ -14,7 +14,9 @@
             <p class="text-white text-lg font-semibold text-center">Results</p>
             <div class="grid 2xl:grid-cols-3 lg:grid-cols-2 grid-cols-1 gap-x-5 gap-y-8 border-t border-gray-600 mt-2 pt-4 px-1 rounded-t-lg">
                 @for(track of tracks; track track.id) {
-                    <button class="rounded-md p-4 hover:bg-slate-600 flex flex-col gap-2 w-full h-full border-x border-emerald-300 cursor-pointer">
+                    <button
+                      (click)="addTrack(track)"
+                      class="rounded-md p-4 hover:bg-slate-600 flex flex-col gap-2 w-full h-full border-x border-emerald-300 cursor-pointer">
                         <div class="flex justify-between text-slate-300">
                             <p class="text-xl font-extralight">1</p>
                             <p>{{track.durationFormatted}}</p>

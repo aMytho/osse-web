@@ -18,6 +18,7 @@ export class TrackListComponent implements AfterViewInit, OnInit {
   public tracks: Track[] = [];
   public allTracks: Track[] = [];
   private timeout: number = 0;
+  private scrollTimeout: number = 0;
 
   constructor(
     private trackService: TrackService,
@@ -30,8 +31,10 @@ export class TrackListComponent implements AfterViewInit, OnInit {
     window.addEventListener('scroll', () => {
       const endOfPage = window.innerHeight + window.pageYOffset >= document.body.offsetHeight;
       if (endOfPage) {
-        console.log('enb');
-        this.requestTracks(this.searchBar.nativeElement.value);
+        clearTimeout(this.scrollTimeout);
+        this.scrollTimeout = setTimeout(() => {
+          this.requestTracks(this.searchBar.nativeElement.value);
+        }, 500);
       }
     })
   }
@@ -47,10 +50,14 @@ export class TrackListComponent implements AfterViewInit, OnInit {
     });
   }
 
-  public async onSubmit() {
+  public onSubmit() {
     for (let track of this.tracks) {
       this.trackService.addTrack(track);
     }
+  }
+
+  public addTrack(track: Track) {
+    this.trackService.addTrack(track);
   }
 
   public async onInput(ev: any) {
