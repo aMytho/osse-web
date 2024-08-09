@@ -1,39 +1,52 @@
-<div class="px-4 py-2 h-full w-full flex flex-wrap justify-between gap-x-8 gap-y-4 items-center">
+<div class="px-4 pb-1 h-full w-full flex flex-wrap justify-between gap-x-8 gap-y-4 items-center">
+  <div class="flex gap-x-4 items-center">
+    <a class="bg-slate-300 rounded-md backdrop-blur-sm w-14 h-14 p-2 inline-block bg-cover drop-shadow-glow"
+       style="background-image: url('{{bg}}');" routerLink="/"></a>
     <div>
-        <div class="bg-slate-300 rounded-md backdrop-blur-sm w-14 h-14 p-2 flex items-end flex-wrap bg-cover drop-shadow-glow"
-        style="background-image: url('{{bg}}');"></div>
+      <p class="font-semibold text-lg">{{trackTitle}}</p>
+      <p class="italic">{{artistTitle}}</p>
     </div>
-    <div class="grow">
-        <div class="w-full flex flex-col items-center justify-around gap-y-1">
-            <!-- <app-visualizer></app-visualizer> -->
-        
-            <div #progressContainer id="progressContainer" (mousedown)="onSetPosition($event)"
-                class="relative w-full z-10 h-2 flex items-center bg-slate-700 bg-opacity-40 cursor-pointer">
-                <div #rendered id="rendered" class="absolute w-full h-2 rounded-l-lg rounded-r-lg"></div>
-                <!-- <div id="loaded" class="bg-emerald-300 h-2 rounded-l-lg"></div> -->
-                <div #point id="point" class="absolute w-4 h-4 rounded-lg bg-cyan-300 hover:bg-cyan-400 -ml-2 z-20"
-                    (mousedown)="onMouseDown($event)" (drag)="onMouseMove($event)"
-                ></div>
-            </div>
-            
-            <div class="flex justify-around w-full">
-                @if (trackTitle) {
-                    <p>{{ trackTitle }} - Some Album {{artistTitle ? '- ' + artistTitle : ''}}</p>
-                } @else {
-                    <p aria-hidden="true"></p>
-                }
-                <p>{{ currentTime || '0:00' }} / {{ totalDuration || '0:00' }}</p>
-            </div>
-        </div>
+  </div>
+  <div>
+    <div class="flex gap-x-2 text-lg">
+      <button class="onPreviousTrack()">
+      <fa-icon [icon]="back" class="rounded-full px-2 py-1 border border-solid border-emerald-300 hover:bg-emerald-300 hover:bg-opacity-15"></fa-icon>
+      </button>
+      <button (click)="onPlayerToggle()">
+        <fa-icon [icon]="playerIcon" class="rounded-full px-2 py-1 border border-solid border-emerald-300 hover:bg-emerald-300 hover:bg-opacity-15"></fa-icon>
+      </button>
+      <button (click)="onNextTrack()">
+        <fa-icon [icon]="forward" class="rounded-full px-2 py-1 border border-solid border-emerald-300 hover:bg-emerald-300 hover:bg-opacity-15"></fa-icon>
+      </button>
     </div>
-    <div class="max-md:hidden">
-        <div class="flex items-center gap-x-4">
-            <fa-icon (click)="onMuteToggle($event)" class="cursor-pointer hover:text-slate-200" pull="left" [icon]="muteStatusIcon"></fa-icon>
-            <input (input)="onVolumeChange($event)" type="range" name="volume" max="100" min="0" step="1" value="50"
-                class="cursor-pointer accent-emerald-500 hover:accent-emerald-400 active:accent-emerald-300"
-            >
-        </div>
+  </div>
+  <div>
+      <div class="flex justify-around w-full">
+        <p>{{ currentTime || '0:00' }} / {{ totalDuration || '0:00' }}</p>
+      </div>
+  </div>
+  <div class="grow">
+    <div class="w-full flex flex-col items-center justify-around gap-y-1">
+      <!-- <app-visualizer></app-visualizer> -->
+
+      <div #progressContainer id="progressContainer" (mousedown)="onSetPosition($event)"
+                              class="relative w-full z-10 h-2 flex items-center bg-slate-700 bg-opacity-40 cursor-pointer">
+        <div #rendered id="rendered" class="absolute w-full h-2 rounded-l-lg rounded-r-lg"></div>
+        <!-- <div id="loaded" class="bg-emerald-300 h-2 rounded-l-lg"></div> -->
+        <div #point id="point" class="absolute w-4 h-4 rounded-lg bg-cyan-300 hover:bg-cyan-400 -ml-2 z-20"
+                               (mousedown)="onMouseDown($event)" (drag)="onMouseMove($event)"
+                               ></div>
+      </div>
+
     </div>
+  </div>
+  <div class="max-md:hidden">
+    <div class="flex items-center gap-x-4">
+      <fa-icon (click)="onMuteToggle($event)" class="cursor-pointer hover:text-slate-200" pull="left" [icon]="muteStatusIcon"></fa-icon>
+      <input (input)="onVolumeChange($event)" type="range" name="volume" max="100" min="0" step="1" value="50"
+  class="cursor-pointer accent-emerald-500 hover:accent-emerald-400 active:accent-emerald-300">
+    </div>
+  </div>
 </div>
 
 <audio id="player" #player></audio>

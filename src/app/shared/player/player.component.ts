@@ -1,15 +1,19 @@
 import { AfterViewInit, Component, ElementRef, ViewChild } from '@angular/core';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { faBackward, faForward, faInfo, faPause, faRepeat, faUtensils, faVolumeHigh, faVolumeLow, faVolumeOff } from '@fortawesome/free-solid-svg-icons';
+import { faBackward, faForward, faInfo, faPause, faPlay, faRepeat, faUtensils, faVolumeHigh, faVolumeLow, faVolumeOff } from '@fortawesome/free-solid-svg-icons';
 import { VisualizerComponent } from './visualizer/visualizer.component';
 import { PlayerService } from './player.service';
 import { PointState } from './point-state';
 import { ConfigService } from '../services/config/config.service';
+import { RouterLink } from '@angular/router';
+import { ButtonComponent } from '../ui/button/button.component';
+import { PlaybackState } from './state-change';
+import { TrackService } from '../services/track/track.service';
 
 @Component({
   selector: 'app-player',
   standalone: true,
-  imports: [FontAwesomeModule, VisualizerComponent],
+  imports: [FontAwesomeModule, VisualizerComponent, RouterLink, ButtonComponent],
   templateUrl: './player.component.html',
   styleUrl: `./player.component.css`,
 })
@@ -27,7 +31,10 @@ export class PlayerComponent implements AfterViewInit {
   private isDragging = false;
   private abortMouseMove = new AbortController();
   private seekDuration = 0;
+  private playing: boolean = false;
 
+  play = faPlay;
+  pause = faPause;
   forward = faForward;
   back = faBackward;
   repeat = faRepeat;
@@ -35,13 +42,41 @@ export class PlayerComponent implements AfterViewInit {
   info = faInfo;
 
   get playerIcon() {
-    return faPause;
+    if (this.playing) {
+      return faPause;
+    } else {
+      return faPlay;
+    }
   }
 
-  constructor(private playerService: PlayerService, private configService: ConfigService) {
+  constructor(
+    private playerService: PlayerService, private configService: ConfigService,
+    private trackService: TrackService
+  ) {
     // Make sure the mouse up is accessible in global contexts
     this.onMouseUp = this.onMouseUp.bind(this);
     this.onMouseMove = this.onMouseMove.bind(this);
+  }
+
+  public onPlayerToggle() {
+    // If no track, don't respond to button click
+    if (!this.trackService.activeTrack) return;
+    this.playing = !this.playing;
+
+    if (!this.playing) {
+      this.playerService.pause();
+      return;
+    } else {
+      this.playerService.play();
+    }
+  }
+
+  public onNextTrack() {
+    this.trackService.moveToNextTrack();
+  }
+
+  public onPreviousTrack() {
+    this.trackService.moveToLastTrack();
   }
 
   onVolumeChange(event: any) {
@@ -85,7 +120,7 @@ export class PlayerComponent implements AfterViewInit {
       const progressBarRect = this.container.nativeElement.getBoundingClientRect();
       const progressBarWidth = progressBarRect.width;
       const newPositionX = ev.clientX - progressBarRect.left;
-      
+
       // Ensure the new position is within the bounds of the progress bar
       const clampedPositionX = Math.max(0, Math.min(progressBarWidth, newPositionX));
 
@@ -142,7 +177,7 @@ export class PlayerComponent implements AfterViewInit {
     const trueDuration = Number(this.player.nativeElement.getAttribute("data-duration"));
     const buffered = this.player.nativeElement.buffered;
     this.point.nativeElement.style.animationDuration = trueDuration + "s";
-    
+
     if (duration > 0) {
       for (let i = 0; i < buffered.length; i++) {
         let start = buffered.start(i) / trueDuration * 100;
@@ -171,6 +206,14 @@ export class PlayerComponent implements AfterViewInit {
     });
     this.playerService.bufferReset.subscribe(() => {
       this.setGradient(0, "transparent", 100);
+    });
+
+    this.playerService.stateChanged.subscribe((val) => {
+      if (val == PlaybackState.Paused) {
+        this.playing = false;
+      } else {
+        this.playing = true;
+      }
     });
 
     this.player.nativeElement.addEventListener("progress", this.onBufferProgress.bind(this));
