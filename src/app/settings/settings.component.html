@@ -1,0 +1,14 @@
+<app-header text="Settings"></app-header>
+
+<div class="bg-slate-500 bg-opacity-15 rounded-lg p-4 text-white">
+  <div>
+    <p>Scan Tracks</p>
+    <p class="my-2">You can start a track scan from the web GUI. This will scan the below directories as listed in your config.json file.</p>
+    <ul class="mb-2">
+      @for (dir of directories; track $index) {
+      <li>{{dir}}</li>
+      }
+    </ul>
+    <app-button text="Start Scan" [disabled]="scanInProgress" (click)="scan()"></app-button>
+  </div>
+</div>

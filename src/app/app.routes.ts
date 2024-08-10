@@ -28,6 +28,10 @@ export const routes: Routes = [
         component: PlaylistViewComponent
     },
     {
+      path: 'settings',
+      loadComponent: () => import('./settings/settings.component').then(c => c.SettingsComponent)
+    },
+    {
         path: '**',
         component: HomeComponent
     }
