@@ -8,6 +8,7 @@ import { ConfigService } from '../../shared/services/config/config.service';
 import { TrackService } from '../../shared/services/track/track.service';
 import { Track } from '../../shared/services/track/track';
 import { HeaderComponent } from '../../shared/ui/header/header.component';
+import { ToastService } from '../../toast-container/toast.service';
 
 @Component({
   selector: 'app-view',
@@ -32,17 +33,21 @@ export class ViewComponent {
   public bg: string = "";
   search = faSearch;
   filter = faFilter;
-  
+
   constructor(
     private apiService: ApiService, private configService: ConfigService,
-    private trackService: TrackService
+    private trackService: TrackService,
+    private notificationService: ToastService
   ) {}
 
   public addAll() {
     this.album.tracks.forEach((t) => this.trackService.addTrack(t));
+    this.notificationService.info('Added ' + this.album.tracks.length + ' tracks');
   }
 
   public addTrack(track: Track) {
     this.trackService.addTrack(track);
+    this.notificationService.info('Added ' + track.title);
   }
 }
+

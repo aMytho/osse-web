@@ -1,0 +1,7 @@
+<div class="flex flex-col gap-y-2">
+  @for (toast of toasts; track $index) {
+    <div class="bg-slate-700 p-4 rounded-md border-l-blue-300 border-l-2">
+      <p class="text-white">{{toast.message}}</p>
+    </div>
+  }
+</div>
