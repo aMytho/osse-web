@@ -7,15 +7,20 @@ import { OsseConfig } from './config';
 })
 export class ConfigService {
   private config!: OsseConfig;
-  
+
   constructor() {
-    // Get the ENV and populate any variables
+    // Get the ENV and populate any variables. Localstorage has priority
     this.config = {
-      apiURL: environment.apiUrl
-    }
+      apiURL: localStorage.getItem('apiURL') ?? environment.apiUrl
+    };
   }
 
   public get(key: keyof OsseConfig, defaultVal?: any) {
     return this.config[key] ?? defaultVal ?? null;
+  }
+
+  public save(key: keyof OsseConfig, val: any) {
+    localStorage.setItem(key, val);
+    this.config[key] = val;
   }
 }
