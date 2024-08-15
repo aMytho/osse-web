@@ -12,7 +12,7 @@
                     <button (click)="addAll()" class="bg-green-500 hover:bg-green-400 p-2 text-white font-semibold rounded-lg">Play All</button>
                     <a class="text-cyan-400 hover:text-cyan-500 cursor-pointer">View in MusicBrainz</a>
                     <p>2024</p>
-                    <p>78 Minutes</p>
+                    <p>{{totalDuration % 60}} Minutes</p>
                 </div>
             </div>
         </div>
@@ -30,11 +30,11 @@
                         <option value="3">Random</option>
                     </select>
                     <label for="search"><fa-icon aria-label="Search" class="cursor-pointer hover:text-emerald-300" pull="left" [icon]="search"></fa-icon></label>
-                    <input class="bg-transparent border border-emerald-300 rounded-md py-1 px-2 shrink" type="text" id="search" placeholder="Never gonna give you up...">
+                    <input (input)="filterTracks($event)" class="bg-transparent border border-emerald-300 rounded-md py-1 px-2 shrink" type="text" id="search" placeholder="Never gonna give you up...">
                 </div>
             </div>
             <div class="grid 2xl:grid-cols-3 lg:grid-cols-2 grid-cols-1 gap-x-5 gap-y-8 border-t border-gray-600 mt-2 pt-4 px-1 rounded-t-lg">
-                @for(track of album.tracks; track track.id) {
+                @for(track of filteredTracks; track track.id) {
                     <app-album-track [track]="track" (addTrack)="addTrack($event)"></app-album-track>
                 }
             </div>

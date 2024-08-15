@@ -29,8 +29,9 @@ export class TrackListComponent implements AfterViewInit, OnInit {
   ngAfterViewInit(): void {
     this.searchBar.nativeElement.focus();
     window.addEventListener('scroll', () => {
-      const endOfPage = window.innerHeight + window.pageYOffset >= document.body.offsetHeight;
+      const endOfPage = window.innerHeight + window.pageYOffset >= (document.body.offsetHeight * 0.8);
       if (endOfPage) {
+        console.log('send');
         clearTimeout(this.scrollTimeout);
         this.scrollTimeout = setTimeout(() => {
           this.requestTracks(this.searchBar.nativeElement.value);

@@ -23,12 +23,14 @@ export class ViewComponent {
     this.apiService.getAlbumWithTracks(id).then(val => {
       this.album = val as Album;
       this.loaded = true;
+      this.filterTracks({target: {value: '.'}})
 
       this.bg = this.configService.get('apiURL', 'localhost:3000') + "tracks/cover?id=" + this.album.tracks[0].id;
     });
   }
   public album!: Album;
   public loaded: boolean = false;
+  public filteredTracks: Track[] = [];
 
   public bg: string = "";
   search = faSearch;
@@ -48,6 +50,19 @@ export class ViewComponent {
   public addTrack(track: Track) {
     this.trackService.addTrack(track);
     this.notificationService.info('Added ' + track.title);
+  }
+
+  public get totalDuration() {
+    let total = 0;
+    this.album.tracks.forEach(t => {
+      total += t.duration;
+    });
+    return total;
+  }
+
+  public filterTracks(event: any) {
+    const regex = new RegExp('%' + event.target.value + "%");
+    this.filteredTracks = this.album.tracks.filter((t) => regex.test(t.title))
   }
 }
 
