@@ -23,7 +23,7 @@ export class ViewComponent {
     this.apiService.getAlbumWithTracks(id).then(val => {
       this.album = val as Album;
       this.loaded = true;
-      this.filterTracks({target: {value: '.'}})
+      this.filteredTracks = this.album.tracks;
 
       this.bg = this.configService.get('apiURL', 'localhost:3000') + "tracks/cover?id=" + this.album.tracks[0].id;
     });
@@ -61,8 +61,12 @@ export class ViewComponent {
   }
 
   public filterTracks(event: any) {
-    const regex = new RegExp('%' + event.target.value + "%");
-    this.filteredTracks = this.album.tracks.filter((t) => regex.test(t.title))
+    if (event.target.value.trim().length == 0) {
+      this.filteredTracks = this.album.tracks;
+    } else {
+      const regex = new RegExp(event.target.value, 'i');
+      this.filteredTracks = this.album.tracks.filter((t) => regex.test(t.title))
+    }
   }
 }
 

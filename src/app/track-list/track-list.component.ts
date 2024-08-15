@@ -5,6 +5,7 @@ import { HomeComponent } from '../home/home.component';
 import { HeaderComponent } from '../shared/ui/header/header.component';
 import { ConfigService } from '../shared/services/config/config.service';
 import { Track } from '../shared/services/track/track';
+import { ToastService } from '../toast-container/toast.service';
 
 @Component({
     selector: 'app-track-list',
@@ -23,7 +24,8 @@ export class TrackListComponent implements AfterViewInit, OnInit {
   constructor(
     private trackService: TrackService,
     private apiService: ApiService,
-    private configService: ConfigService
+    private configService: ConfigService,
+    private notificationService: ToastService
   ) {}
 
   ngAfterViewInit(): void {
@@ -59,6 +61,7 @@ export class TrackListComponent implements AfterViewInit, OnInit {
 
   public addTrack(track: Track) {
     this.trackService.addTrack(track);
+    this.notificationService.info('Added ' + track.title);
   }
 
   public async onInput(ev: any) {
