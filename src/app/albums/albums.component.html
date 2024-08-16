@@ -1,7 +1,7 @@
 <app-header text="Albums"></app-header>
-<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 justify-center gap-y-6 items-center bg-slate-500 bg-opacity-15 rounded-lg p-4">
+<div class="flex flex-wrap items-center gap-x-16 gap-y-6 pl-16 bg-slate-500 bg-opacity-15 rounded-lg p-4">
     @for (album of albums; track $index) {
-        <div class="text-lg text-white flex flex-col items-center">
+        <div class="text-lg text-white flex flex-col hover:brightness-110">
             <a routerLink="view/{{album.id}}" class="rounded-lg flex flex-col justify-end h-60 w-60 bg-cover cursor-pointer" style="background-image: url('http://localhost:3000/tracks/cover?id={{album.tracks[0].id}}');">
                 <div class="pt-4 text-center bg-gradient-to-t from-emerald-700 from-50%    hover:bg-opacity-85 p-2">
                     <p>{{album.name}}</p>

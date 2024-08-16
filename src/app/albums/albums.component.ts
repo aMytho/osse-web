@@ -15,11 +15,13 @@ export class AlbumsComponent implements OnInit {
   albums: Album[] = [];
   private albumURL: string = this.configService.get('apiURL') + 'albums?tracks=true';
 
-  constructor(private configService: ConfigService) {}
+  constructor(
+    private configService: ConfigService
+  ) {}
 
   async ngOnInit(): Promise<void> {
     let request = await fetch(this.albumURL);
     let result: Album[] = await request.json();
     this.albums = result.sort((a,b) => a.name.localeCompare(b.name));
- }
+  }
 }

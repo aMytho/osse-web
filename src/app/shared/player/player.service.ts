@@ -3,6 +3,7 @@ import { Track } from '../services/track/track';
 import { TrackPlayerInfo, TrackUpdate } from './track-update';
 import { PlaybackState } from './state-change';
 import { ConfigService } from '../services/config/config.service';
+import { BackgroundImageService } from '../ui/background-image.service';
 
 @Injectable({
   providedIn: 'root'
@@ -19,7 +20,10 @@ export class PlayerService {
   private audioPlayer!: HTMLAudioElement;
   private track!: Track;
 
-  constructor(private configService: ConfigService) {}
+  constructor(
+    private configService: ConfigService,
+    private backgroundImageService: BackgroundImageService
+  ) {}
 
   public setAudioPlayer(player: HTMLAudioElement) {
     this.audioPlayer = player;
@@ -39,6 +43,7 @@ export class PlayerService {
     this.audioPlayer.preload = "metadata";
     this.audioPlayer.src = this.configService.get("apiURL") + "stream?id=" + track.id;
     await this.play();
+    this.backgroundImageService.setBG(this.configService.get('apiURL') + 'tracks/cover?id=' + track.id);
 
     this.trackUpdated.emit(new TrackUpdate(this.track, this.buildTrackInfo()));
     this.bufferReset.emit();

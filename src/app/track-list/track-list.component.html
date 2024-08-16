@@ -1,33 +1,35 @@
 <app-header text="Tracks"></app-header>
 <div class="flex flex-col gap-2 flex-wrap justify-around p-2">
-    <div class="flex flex-col justify-between border border-solid border-emerald-200 from-emerald-200 to-emerald-50 rounded-md">
-        <div>
-            <div>
-                <input #search (keydown.enter)="onSubmit()" (input)="onInput($event)" type="text" class="w-full py-4 px-2 rounded-sm bg-transparent text-white border-b border-solid border-emerald-300" placeholder="Search for a track">
-            </div>
-        </div>
-    </div>
-    <p class="text-white">Start typing to view results. Press enter to add all visible tracks. Click a track to add it.</p>
-
+  <div class="flex flex-col justify-between border border-solid border-emerald-200 from-emerald-200 to-emerald-50 rounded-md">
     <div>
-        <div class="bg-slate-700 rounded-md mt-4 p-4 flex flex-col gap-y-4 ">
-            <p class="text-white text-lg font-semibold text-center">Results</p>
-            <div class="grid 2xl:grid-cols-3 lg:grid-cols-2 grid-cols-1 gap-x-5 gap-y-8 border-t border-gray-600 mt-2 pt-4 px-1 rounded-t-lg">
-                @for(track of tracks; track track.id) {
-                    <button
-                      (click)="addTrack(track)"
-                      class="rounded-md p-4 hover:bg-slate-600 flex flex-col gap-2 w-full h-full border-x border-emerald-300 cursor-pointer">
-                        <div class="flex justify-between text-slate-300">
-                            <p class="text-xl font-extralight" aria-hidden="true"></p>
-                            <p>{{track.durationFormatted}}</p>
-                        </div>
-                        <div class="mt-auto">
-                            <p class="text-xl font-semibold text-white">{{track.title}}</p>
-                            <p class="text-lg font-light text-slate-300">{{track.artist?.name ?? "Unknown Artist"}}</p>
-                        </div>
-                    </button>
-                }
-            </div>
-        </div>
+      <div>
+        <input #search (keydown.enter)="onSubmit()" (input)="onInput($event)" type="text" class="w-full py-4 px-2 rounded-sm bg-transparent text-white border-b border-solid border-emerald-300" placeholder="Search for a track">
+      </div>
     </div>
+  </div>
+  <p class="text-white">Start typing to view results. Press enter to add all visible tracks. Click a track to add it.</p>
+
+  <div>
+    <div class="bg-slate-500 bg-opacity-15 rounded-md mt-4 p-4 flex flex-col gap-y-4 ">
+      <div class="text-center mt-2">
+        <app-header [type]="2" text="Results"></app-header>
+      </div>
+      <div class="grid 2xl:grid-cols-3 lg:grid-cols-2 grid-cols-1 gap-x-5 gap-y-8 border-t border-gray-600 mt-2 pt-4 px-1 rounded-t-lg">
+        @for(track of tracks; track track.id) {
+        <button
+            (click)="addTrack(track)"
+            class="rounded-md p-4 hover:bg-slate-600 flex flex-col gap-2 w-full h-full border-x border-emerald-300 cursor-pointer">
+          <div class="flex justify-between text-slate-300">
+            <p class="text-xl font-extralight" aria-hidden="true"></p>
+            <p>{{track.durationFormatted}}</p>
+          </div>
+          <div class="mt-auto">
+            <p class="text-xl font-semibold text-white">{{track.title}}</p>
+            <p class="text-lg font-light text-slate-300">{{track.artist?.name ?? "Unknown Artist"}}</p>
+          </div>
+        </button>
+        }
+      </div>
+    </div>
+  </div>
 </div>

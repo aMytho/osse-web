@@ -9,6 +9,7 @@ import { TrackService } from '../../shared/services/track/track.service';
 import { Track } from '../../shared/services/track/track';
 import { HeaderComponent } from '../../shared/ui/header/header.component';
 import { ToastService } from '../../toast-container/toast.service';
+import { BackgroundImageService } from '../../shared/ui/background-image.service';
 
 @Component({
   selector: 'app-view',
@@ -26,6 +27,7 @@ export class ViewComponent {
       this.filteredTracks = this.album.tracks;
 
       this.bg = this.configService.get('apiURL', 'localhost:3000') + "tracks/cover?id=" + this.album.tracks[0].id;
+      this.backgroundImageService.setBG(this.bg)
     });
   }
   public album!: Album;
@@ -39,7 +41,8 @@ export class ViewComponent {
   constructor(
     private apiService: ApiService, private configService: ConfigService,
     private trackService: TrackService,
-    private notificationService: ToastService
+    private notificationService: ToastService,
+    private backgroundImageService: BackgroundImageService
   ) {}
 
   public addAll() {
