@@ -32,6 +32,11 @@ export class TrackComponent {
     }
   }
 
+  public toggleViewWithEvent(ev: Event) {
+      ev.preventDefault();
+      this.toggleView();
+  }
+
   public removeTrack() {
     this.onRemove.emit();
   }
