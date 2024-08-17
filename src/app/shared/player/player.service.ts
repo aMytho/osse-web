@@ -27,11 +27,11 @@ export class PlayerService {
 
   public setAudioPlayer(player: HTMLAudioElement) {
     this.audioPlayer = player;
-    this.audioPlayer.addEventListener('timeupdate', (ev) => {
+    this.audioPlayer.addEventListener('timeupdate', (_ev) => {
       this.trackUpdated.emit(new TrackUpdate(this.track, this.buildTrackInfo()));
     });
 
-    this.audioPlayer.addEventListener('ended', (ev) => this.playbackEnded.emit());
+    this.audioPlayer.addEventListener('ended', (_ev) => this.playbackEnded.emit());
   }
 
   public async setTrack(track: Track) {
@@ -82,5 +82,11 @@ export class PlayerService {
     } else {
       this.stateChanged.emit(PlaybackState.Paused);
     }
+  }
+
+  public clearTrack() {
+    this.audioPlayer.src = "#";
+    this.bufferReset.emit();
+    this.playbackEnded.emit();
   }
 }

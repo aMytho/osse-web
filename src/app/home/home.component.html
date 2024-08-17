@@ -31,7 +31,7 @@
 
         @for (track of tracks; track track.id; let idx = $index) {
             @if (idx < 6) {
-                <app-track (onPlay)="playTrack(idx)" [track]="track"></app-track>
+                <app-track (onPlay)="playTrack(idx)" (onRemove)="removeTrack(idx)" [track]="track"></app-track>
             }
         }
         </div>

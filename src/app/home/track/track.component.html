@@ -1,16 +1,30 @@
 <div tabindex="0" (dblclick)="onDoubleClick()" class="flex justify-between border-x border-y border-r-emerald-400 border-b-emerald-400 border-r border-emerald-200 bg-opacity-10 bg-slate-400 hover:bg-emerald-400 hover:bg-opacity-10 hover:cursor-pointer p-4 rounded-lg shadow-sm shadow-cyan-950">
-    <div>
-        <h3 class="font-semibold text-lg text-slate-50">{{ track.title }}</h3>
-        <p class="text-slate-300">
-            {{track.artist?.name ?? ''}}
-        </p>
+  @if (mode == 'view') {
+  <div>
+    <h3 class="font-semibold text-lg text-slate-50">{{ track.title }}</h3>
+    <p class="text-slate-300">
+    {{track.artist?.name ?? ''}}
+    </p>
+  </div>
+  <div class="flex gap-2">
+    <div class="text-green-400 font-semibold text-lg">
+      <fa-icon class="cursor-pointer text-white hover:text-yellow-300" pull="left" [icon]="star"></fa-icon>
     </div>
-    <div class="flex gap-2">
-        <div class="text-green-400 font-semibold text-lg">
-            <fa-icon class="cursor-pointer text-white hover:text-yellow-300" pull="left" [icon]="star"></fa-icon>
-        </div>
-        <div class="text-slate-100 font-semibold text-lg cursor-pointer">
-            <fa-icon class="cursor-pointer text-white hover:text-emerald-300" pull="left" [icon]="dots"></fa-icon>
-        </div>
+    <div class="text-slate-100 font-semibold text-lg cursor-pointer">
+      <button type="button" (click)="toggleView()" title="Options" aria-label="Show Options Menu" accesskey="o">
+        <fa-icon class="cursor-pointer text-white hover:text-emerald-300" pull="left" [icon]="dots"></fa-icon>
+      </button>
     </div>
+  </div>
+  } @else {
+   <div class="flex flex-wrap items-center place-items-center gap-x-2 w-full">
+     <button class="bg-slate-300 bg-opacity-10 hover:bg-slate-200 p-4 rounded-xl text-3xl" (click)="removeTrack()" title="Remove Track" aria-label="Remove Track" accesskey="d">
+        <fa-icon class="text-red-600 hover:text-red-700" [icon]="trash"></fa-icon>
+     </button>
+     <button class="bg-slate-300 bg-opacity-10 hover:bg-slate-200 p-4 rounded-xl text-3xl" (click)="toggleView()" title="Cancel" aria-label="Cancel" accesskey="c">
+        <fa-icon class="text-white hover:text-slate-700" [icon]="cancel"></fa-icon>
+     </button>
+   </div>
+   }
 </div>
+

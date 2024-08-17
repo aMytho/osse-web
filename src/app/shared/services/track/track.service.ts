@@ -14,9 +14,9 @@ export class TrackService {
    */
   public tracks: Track[] = [];
   private index = 0;
-  
+
   constructor(private playerService: PlayerService) {
-    this.playerService.playbackEnded.subscribe(v => {
+    this.playerService.playbackEnded.subscribe(_v => {
       this.moveToNextTrack();
     });
   }
@@ -68,5 +68,33 @@ export class TrackService {
     this.index = index;
 
     this.playerService.setTrack(this.activeTrack);
+  }
+
+  public removeTrack(index: number) {
+    // If 1 track is present, remove them and end playback
+    if (this.tracks.length == 0) {
+      this.playerService.pause();
+      this.playerService.clearTrack();
+      this.tracks = [];
+      this.index = 0;
+      return;
+    }
+
+    // If the track is after the current track remove it
+    if (index > this.index) {
+      this.tracks.splice(index, 1);
+    } else if (index == this.index) {
+      // If its the current track, stop playback, remove it, and play next
+      this.playerService.pause();
+      this.playerService.clearTrack();
+
+      this.tracks.splice(index, 1);
+      // Reduce the index by one to play the "next" track
+      this.moveToLastTrack();
+    } else {
+      // Track is before current, remove it and move index back 1
+      this.tracks.splice(index, 1);
+      this.index -= 1;
+    }
   }
 }

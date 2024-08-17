@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { faEllipsisV, faStar } from '@fortawesome/free-solid-svg-icons';
+import { faEllipsisV, faStar, faTrash, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { Track } from '../../shared/services/track/track';
 
 @Component({
@@ -12,10 +12,13 @@ import { Track } from '../../shared/services/track/track';
 export class TrackComponent {
   @Input() track!: Track;
   @Output() onPlay = new EventEmitter();
+  @Output() onRemove = new EventEmitter();
   public mode: string = 'view';
 
   star = faStar
   dots = faEllipsisV
+  trash = faTrash;
+  cancel = faXmark;
 
   public onDoubleClick() {
     this.onPlay.emit();
@@ -27,5 +30,13 @@ export class TrackComponent {
     } else {
       this.mode = 'view';
     }
+  }
+
+  public removeTrack() {
+    this.onRemove.emit();
+  }
+
+  public addToPlaylist() {
+    // to do
   }
 }

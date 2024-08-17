@@ -65,6 +65,10 @@ export class HomeComponent implements OnInit {
     this.trackService.moveToTrack(index);
   }
 
+  public removeTrack(index: number) {
+    this.trackService.removeTrack(index);
+  }
+
   public get trackProgress() {
     if (this.trackService.activeTrack) {
       return this.trackService.trackListProgress;
