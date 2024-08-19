@@ -1,7 +1,7 @@
 <div [ngClass]="{'animate-pulse pointer-events-none': !ready}">
     <div class="bg-slate-400 bg-opacity-15 px-4 rounded-lg w-full flex justify-around gap-x-2">
-        <button (click)="delete()" class="font-semibold text-lg text-white hover:text-red-500 p-2 rounded-md bg-transparent">Delete <fa-icon [icon]="trash"></fa-icon></button>
-        <button (click)="showEditMenu = !showEditMenu" class="font-semibold text-lg text-white p-2 rounded-md bg-transparent">Edit <fa-icon [icon]="pencil"></fa-icon></button>
+        <button (click)="delete()" class="font-semibold text-lg text-white hover:text-red-500 p-2 rounded-md bg-transparent group">Delete <app-icon class="group-hover:fill-red-500" [icon]="trash"></app-icon></button>
+        <button (click)="showEditMenu = !showEditMenu" class="font-semibold text-lg text-white p-2 rounded-md bg-transparent">Edit <app-icon [icon]="pencil"></app-icon></button>
     </div>
     @if (showEditMenu) {
         <form #form="ngForm" (ngSubmit)="edit()" class="mt-2 bg-slate-400 bg-opacity-15 p-4 rounded-lg w-full">
@@ -10,7 +10,7 @@
             </div>
             <label for="name" class="text-white font-semibold">Playlist Name: </label>
             <input [(ngModel)]="model.name" required minlength="1" id="name" name="name" class="mx-2 p-2 rounded-md bg-opacity-25"> <br>
-            
+
             <p class="text-red-500 font-semibold my-2" [hidden]="!(model.name.length == 0)">The playlist name must be at least 1 character.</p>
 
             <app-button type="submit" class="mt-2" text="Save" [disabled]="!form.form.valid || false"></app-button>

@@ -1,6 +1,4 @@
 import { Component, Input } from '@angular/core';
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { faFilter, faSearch } from '@fortawesome/free-solid-svg-icons';
 import { AlbumTrackComponent } from './album-track/album-track.component';
 import { ApiService } from '../../shared/services/api.service';
 import { Album } from '../../shared/services/album/Album';
@@ -10,11 +8,13 @@ import { Track } from '../../shared/services/track/track';
 import { HeaderComponent } from '../../shared/ui/header/header.component';
 import { ToastService } from '../../toast-container/toast.service';
 import { BackgroundImageService } from '../../shared/ui/background-image.service';
+import { IconComponent } from '../../shared/ui/icon/icon.component';
+import { mdiFilter, mdiSearchWeb } from '@mdi/js';
 
 @Component({
   selector: 'app-view',
   standalone: true,
-  imports: [HeaderComponent, FontAwesomeModule, AlbumTrackComponent],
+  imports: [HeaderComponent, IconComponent, AlbumTrackComponent],
   templateUrl: './view.component.html',
   styles: ``
 })
@@ -35,8 +35,8 @@ export class ViewComponent {
   public filteredTracks: Track[] = [];
 
   public bg: string = "";
-  search = faSearch;
-  filter = faFilter;
+  search = mdiSearchWeb;
+  filter = mdiFilter;
 
   constructor(
     private apiService: ApiService, private configService: ConfigService,

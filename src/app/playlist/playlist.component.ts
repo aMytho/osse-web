@@ -5,26 +5,26 @@ import { OssePlaylist } from '../shared/services/playlist/osse-playlist';
 import { Router, RouterLink } from '@angular/router';
 import { ApiService } from '../shared/services/api.service';
 import { HeaderComponent } from '../shared/ui/header/header.component';
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { faPlus, faRefresh } from '@fortawesome/free-solid-svg-icons';
+import { IconComponent } from '../shared/ui/icon/icon.component';
+import { mdiPlus, mdiRefresh } from '@mdi/js';
 
 @Component({
   selector: 'app-playlist',
   standalone: true,
-  imports: [RouterLink, HeaderComponent, FontAwesomeModule],
+  imports: [RouterLink, HeaderComponent, IconComponent],
   templateUrl: './playlist.component.html',
   styles: ``
 })
 export class PlaylistComponent implements OnInit {
   public playlists: Playlist[] = [];
-  plus = faPlus;
-  refresh = faRefresh;
+  plus = mdiPlus;
+  refresh = mdiRefresh;
 
   constructor(
     private configService: ConfigService, private apiService: ApiService,
     private router: Router
   ) {}
-  
+
   ngOnInit(): void {
     this.refreshPlaylistList();
   }
@@ -45,7 +45,7 @@ export class PlaylistComponent implements OnInit {
       this.router.navigateByUrl("playlists/view/" + res.id);
     }
   }
-  
+
   public async refreshPlaylistList() {
     let request = await fetch(this.configService.get('apiURL') + 'playlists');
     let result = await request.json();

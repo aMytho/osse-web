@@ -1,16 +1,16 @@
 import { Component } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { faGear } from '@fortawesome/free-solid-svg-icons';
+import { IconComponent } from '../shared/ui/icon/icon.component';
+import { mdiCog } from '@mdi/js';
 
 
 @Component({
   selector: 'app-navigation',
   standalone: true,
-  imports: [RouterLink, RouterLinkActive, FontAwesomeModule],
+  imports: [RouterLink, RouterLinkActive, IconComponent],
   templateUrl: './navigation.component.html',
   styles: ``
 })
 export class NavigationComponent {
-  gear = faGear;
+  gear = mdiCog;
 }

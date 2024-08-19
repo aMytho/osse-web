@@ -1,17 +1,17 @@
 import { Component, OnInit } from '@angular/core';
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { faPlay, faPause, faForward, faBackward, faRepeat, faInfo, faUtensils } from '@fortawesome/free-solid-svg-icons';
 import { TrackComponent } from './track/track.component';
 import { TrackService } from '../shared/services/track/track.service';
 import { Track } from '../shared/services/track/track';
 import { PlayerService } from '../shared/player/player.service';
 import { PlaybackState } from '../shared/player/state-change';
 import { ConfigService } from '../shared/services/config/config.service';
+import { IconComponent } from '../shared/ui/icon/icon.component';
+import { mdiFastForward, mdiInformation, mdiPause, mdiPlay, mdiRepeat, mdiRewind, mdiSilverwareForkKnife } from '@mdi/js';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [FontAwesomeModule, TrackComponent],
+  imports: [IconComponent, TrackComponent],
   templateUrl: './home.component.html'
 })
 export class HomeComponent implements OnInit {
@@ -21,16 +21,17 @@ export class HomeComponent implements OnInit {
   public title: string = '';
   public artist: string = '';
 
-  forward = faForward;
-  back = faBackward;
-  repeat = faRepeat;
-  consume = faUtensils;
-  info = faInfo;
+  forward = mdiFastForward;
+  back = mdiRewind;
+  repeat = mdiRepeat;
+  consume = mdiSilverwareForkKnife;
+  info = mdiInformation;
+
   get playerIcon() {
     if (this.playing) {
-      return faPause;
+      return mdiPause;
     } else {
-      return faPlay;
+      return mdiPlay;
     }
   }
 

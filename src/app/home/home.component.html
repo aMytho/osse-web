@@ -5,9 +5,9 @@
                 <div class="bg-slate-300 rounded-lg backdrop-blur-sm w-80 h-80 p-2 flex items-end flex-wrap bg-cover drop-shadow-glow" style="background-image: url('{{bg}}');">
                 </div>
                 <div class="flex flex-col justify-around text-xl text-white items-center">
-                    <fa-icon class="cursor-pointer hover:text-emerald-300" pull="left" [icon]="repeat"></fa-icon>
-                    <fa-icon class="cursor-pointer hover:text-yellow-300" pull="left" [icon]="consume"></fa-icon>
-                    <fa-icon class="cursor-pointer hover:text-yellow-300" pull="left" [icon]="info"></fa-icon>
+                    <app-icon class="cursor-pointer hover:fill-emerald-300" rotate="90" [icon]="repeat"></app-icon>
+                    <app-icon class="cursor-pointer hover:fill-yellow-300" pull="left" [icon]="consume"></app-icon>
+                    <app-icon class="cursor-pointer hover:fill-yellow-300" pull="left" [icon]="info"></app-icon>
                 </div>
             </div>
             <div class="text-center mt-1 text-white">
@@ -15,9 +15,9 @@
                 <p class="italic max-w-80">{{ artist || 'Unknown Artist' }}</p>
                 <hr class="my-2">
                 <div class="flex justify-around text-xl gap-x-4">
-                    <fa-icon (click)="onPreviousTrack()" class="cursor-pointer hover:text-emerald-300" pull="left" [icon]="back"></fa-icon>
-                    <fa-icon (click)="onPlayerToggle()" class="cursor-pointer hover:text-yellow-300" pull="left" [icon]="playerIcon"></fa-icon>
-                    <fa-icon (click)="onNextTrack()" class="cursor-pointer hover:text-emerald-300" pull="left" [icon]="forward"></fa-icon>
+                    <app-icon (click)="onPreviousTrack()" class="cursor-pointer hover:fill-emerald-300" pull="left" [icon]="back"></app-icon>
+                    <app-icon (click)="onPlayerToggle()" class="cursor-pointer hover:fill-yellow-300" pull="left" [icon]="playerIcon"></app-icon>
+                    <app-icon (click)="onNextTrack()" class="cursor-pointer hover:fill-emerald-300" pull="left" [icon]="forward"></app-icon>
                 </div>
             </div>
         </div>

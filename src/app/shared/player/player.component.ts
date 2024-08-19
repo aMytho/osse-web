@@ -1,6 +1,4 @@
 import { AfterViewInit, Component, ElementRef, ViewChild } from '@angular/core';
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { faBackward, faForward, faInfo, faPause, faPlay, faRepeat, faUtensils, faVolumeHigh, faVolumeLow, faVolumeOff } from '@fortawesome/free-solid-svg-icons';
 import { VisualizerComponent } from './visualizer/visualizer.component';
 import { PlayerService } from './player.service';
 import { PointState } from './point-state';
@@ -9,11 +7,13 @@ import { RouterLink } from '@angular/router';
 import { ButtonComponent } from '../ui/button/button.component';
 import { PlaybackState } from './state-change';
 import { TrackService } from '../services/track/track.service';
+import { IconComponent } from '../ui/icon/icon.component';
+import { mdiFastForward, mdiInformation, mdiPause, mdiPlay, mdiRepeat, mdiRewind, mdiSilverwareForkKnife, mdiVolumeHigh, mdiVolumeLow, mdiVolumeOff } from '@mdi/js';
 
 @Component({
   selector: 'app-player',
   standalone: true,
-  imports: [FontAwesomeModule, VisualizerComponent, RouterLink, ButtonComponent],
+  imports: [IconComponent, VisualizerComponent, RouterLink, ButtonComponent],
   templateUrl: './player.component.html',
   styleUrl: `./player.component.css`,
 })
@@ -33,19 +33,20 @@ export class PlayerComponent implements AfterViewInit {
   private seekDuration = 0;
   private playing: boolean = false;
 
-  play = faPlay;
-  pause = faPause;
-  forward = faForward;
-  back = faBackward;
-  repeat = faRepeat;
-  consume = faUtensils;
-  info = faInfo;
+  play = mdiPlay;
+  pause = mdiPause;
+  forward = mdiFastForward;
+  back = mdiRewind;
+  repeat = mdiRepeat;
+  consume = mdiSilverwareForkKnife;
+  info = mdiInformation;
+  volume = mdiVolumeOff;
 
   get playerIcon() {
     if (this.playing) {
-      return faPause;
+      return mdiPause;
     } else {
-      return faPlay;
+      return mdiPlay;
     }
   }
 
@@ -81,26 +82,26 @@ export class PlayerComponent implements AfterViewInit {
 
   onVolumeChange(event: any) {
     this.player.nativeElement.volume = event.target.value / 100;
+    this.setVolumeIcon();
   }
 
-  onMuteToggle(event: any) {
+  onMuteToggle() {
     if (this.player.nativeElement.volume == 0) {
       this.player.nativeElement.volume = 0.5;
     } else {
       this.player.nativeElement.volume = 0;
     }
+    this.setVolumeIcon();
   }
 
-  get muteStatusIcon() {
-    if (!this.player) return faVolumeOff;
-
+  setVolumeIcon() {
     if (this.player.nativeElement.volume == 0) {
-      return faVolumeOff
+      this.volume = mdiVolumeOff;
     } else {
       if (this.player.nativeElement.volume <= 0.5) {
-        return faVolumeLow;
+        this.volume = mdiVolumeLow;
       } else {
-        return faVolumeHigh;
+        this.volume = mdiVolumeHigh;
       }
     }
   }
@@ -130,7 +131,7 @@ export class PlayerComponent implements AfterViewInit {
     }
   }
 
-  onMouseUp(ev: any) {
+  onMouseUp(_ev: any) {
     this.abortMouseMove.abort();
     this.abortMouseMove = new AbortController();
     this.setPointState(PointState.Play);
@@ -214,6 +215,7 @@ export class PlayerComponent implements AfterViewInit {
       } else {
         this.playing = true;
       }
+      this.setVolumeIcon();
     });
 
     this.player.nativeElement.addEventListener("progress", this.onBufferProgress.bind(this));

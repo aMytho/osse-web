@@ -1,12 +1,12 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { faEllipsisV, faStar, faTrash, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { Track } from '../../shared/services/track/track';
+import { IconComponent } from '../../shared/ui/icon/icon.component';
+import { mdiClose, mdiDotsVertical, mdiStar, mdiTrashCan } from '@mdi/js';
 
 @Component({
   selector: 'app-track',
   standalone: true,
-  imports: [FontAwesomeModule],
+  imports: [IconComponent],
   templateUrl: './track.component.html'
 })
 export class TrackComponent {
@@ -15,10 +15,10 @@ export class TrackComponent {
   @Output() onRemove = new EventEmitter();
   public mode: string = 'view';
 
-  star = faStar
-  dots = faEllipsisV
-  trash = faTrash;
-  cancel = faXmark;
+  star = mdiStar;
+  dots = mdiDotsVertical;
+  trash = mdiTrashCan;
+  cancel = mdiClose;
 
   public onDoubleClick() {
     this.onPlay.emit();

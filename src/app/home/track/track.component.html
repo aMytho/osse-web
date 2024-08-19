@@ -8,21 +8,21 @@
   </div>
   <div class="flex gap-2">
     <div class="text-green-400 font-semibold text-lg">
-      <fa-icon class="cursor-pointer text-white hover:text-yellow-300" pull="left" [icon]="star"></fa-icon>
+      <app-icon class="cursor-pointer fill-white hover:fill-yellow-300" pull="left" [icon]="star"></app-icon>
     </div>
     <div class="text-slate-100 font-semibold text-lg cursor-pointer">
       <button type="button" (click)="toggleView()" title="Options" aria-label="Show Options Menu" accesskey="o">
-        <fa-icon class="cursor-pointer text-white hover:text-emerald-300" pull="left" [icon]="dots"></fa-icon>
+        <app-icon class="cursor-pointer fill-white hover:fill-emerald-300" pull="left" [icon]="dots"></app-icon>
       </button>
     </div>
   </div>
   } @else {
    <div class="flex flex-wrap items-center place-items-center gap-x-2 w-full">
-     <button class="bg-slate-300 bg-opacity-10 hover:bg-slate-200 p-4 rounded-xl text-3xl" (click)="removeTrack()" title="Remove Track" aria-label="Remove Track" accesskey="d">
-        <fa-icon class="text-red-600 hover:text-red-700" [icon]="trash"></fa-icon>
+     <button class="bg-red-400 hover:bg-opacity-90 p-4 rounded-xl group" (click)="removeTrack()" title="Remove Track" aria-label="Remove Track" accesskey="d">
+        <app-icon class="group-hover:opacity-95" [icon]="trash" align="middle"></app-icon>
      </button>
-     <button class="bg-slate-300 bg-opacity-10 hover:bg-slate-200 p-4 rounded-xl text-3xl" (click)="toggleView()" title="Cancel" aria-label="Cancel" accesskey="c">
-        <fa-icon class="text-white hover:text-slate-700" [icon]="cancel"></fa-icon>
+     <button class="bg-blue-400 hover:bg-opacity-90 p-4 rounded-xl group" (click)="toggleView()" title="Cancel" aria-label="Cancel" accesskey="c">
+        <app-icon class="group-hover:opacity-95" [icon]="cancel" align="middle"></app-icon>
      </button>
    </div>
    }
