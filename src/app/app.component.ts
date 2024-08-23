@@ -6,11 +6,12 @@ import { ToastContainerComponent } from './toast-container/toast-container.compo
 import { BackgroundImageService } from './shared/ui/background-image.service';
 import { PlayerService } from './shared/player/player.service';
 import { PlaybackState } from './shared/player/state-change';
+import { ModalComponent } from './shared/ui/modal/modal.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, NavigationComponent, PlayerComponent, ToastContainerComponent],
+  imports: [RouterOutlet, NavigationComponent, PlayerComponent, ToastContainerComponent, ModalComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
@@ -39,3 +40,4 @@ export class AppComponent {
     })
   }
 }
+

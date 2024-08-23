@@ -1,0 +1,10 @@
+::backdrop {
+  background-color: aliceblue;
+  opacity: 0.2;
+}
+
+dialog {
+  min-width: 30rem;
+  min-width: 15rem;
+}
+
