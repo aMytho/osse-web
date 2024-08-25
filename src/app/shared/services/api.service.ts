@@ -44,7 +44,7 @@ export class ApiService {
       return null;
     }
   }
-  
+
   public async getAlbumWithTracks(id: number): Promise<Album | null> {
     let request = await fetch(`${this.configService.get('apiURL')}albums/${id}/tracks`);
     if (request.ok) {
@@ -53,5 +53,9 @@ export class ApiService {
     } else {
       return null;
     }
+  }
+
+  public get url() {
+    return this.configService.get('apiURL');
   }
 }

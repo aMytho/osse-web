@@ -13,15 +13,26 @@ export class PlaylistService {
     private apiService: ApiService
   ) { }
 
+  public async getPlaylist(id: number) {
+    let req = await fetch(this.configService.get('apiURL') + 'playlists/' + id, {});
+    let res = await req.json();
+
+    if (req.ok) {
+      return new Playlist(res, this.apiService);
+    }
+
+    throw "Playlist Error";
+  }
+
   public async getAll(): Promise<Playlist[]> {
-   let req = await fetch(this.configService.get('apiURL') + 'playlists', {});
-   let res = await req.json();
+    let req = await fetch(this.configService.get('apiURL') + 'playlists', {});
+    let res = await req.json();
 
-   if (req.ok) {
-    return res.map((p: OssePlaylist) => new Playlist(p, this.apiService));
-   }
+    if (req.ok) {
+      return res.map((p: OssePlaylist) => new Playlist(p, this.apiService));
+    }
 
-   throw "Playlist Error";
+    throw "Playlist Error";
   }
 
   public async addTrackToPlaylist(playlistId: number, trackId: number) {

@@ -1,14 +1,15 @@
-import { Component, Input, numberAttribute, OnInit } from '@angular/core';
+import { Component, Input, numberAttribute} from '@angular/core';
 import { ConfigService } from '../../shared/services/config/config.service';
 import { Playlist } from '../../shared/services/playlist/Playlist';
 import { HeaderComponent } from '../../shared/ui/header/header.component';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { ButtonComponent } from '../../shared/ui/button/button.component';
 import { EditPlaylist } from './editPlaylistModel';
 import { FormsModule } from '@angular/forms';
 import { IconComponent } from '../../shared/ui/icon/icon.component';
 import { mdiPencil, mdiTrashCan } from '@mdi/js';
+import { PlaylistService } from '../../shared/services/playlist/playlist.service';
 
 @Component({
   selector: 'app-playlist-view',
@@ -17,7 +18,7 @@ import { mdiPencil, mdiTrashCan } from '@mdi/js';
   templateUrl: './playlist-view.component.html',
   styles: ``
 })
-export class PlaylistViewComponent implements OnInit {
+export class PlaylistViewComponent {
   @Input({transform: numberAttribute})
   set id(id: number) {
     this.getPlaylist(id);
@@ -33,7 +34,7 @@ export class PlaylistViewComponent implements OnInit {
 
   constructor(
     private configService: ConfigService, private router: Router,
-    private activatedRoute: ActivatedRoute
+    private playlistService: PlaylistService
   ) {}
 
   public delete() {
@@ -61,18 +62,11 @@ export class PlaylistViewComponent implements OnInit {
     }
   }
 
-  public ngOnInit(): void {
-    let id = this.activatedRoute.snapshot.params['id'];
-    if (id != null) {
-      this.id = Number(id);
-    }
-  }
-
   private async getPlaylist(id: number) {
-    let res = await fetch(this.configService.get('apiURL') + 'playlists/' + id);
-    let playlist = await res.json()
-    this.ready = true;
-    this.playlist = playlist;
+    this.playlist = await this.playlistService.getPlaylist(id);
+    await this.playlist.requestTracks();
     this.model.name = this.playlist.name;
+    this.ready = true;
   }
 }
+

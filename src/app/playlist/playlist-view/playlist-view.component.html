@@ -19,16 +19,15 @@
     <div class="mt-4"></div>
     <app-header [text]="playlist?.name ?? 'Loading'"></app-header>
 
-
     <app-header [type]="2" [text]="'Tracks'"></app-header>
-    <div class="bg-slate-500 bg-opacity-15 rounded-lg p-4">
+    <div class="text-white bg-slate-500 bg-opacity-15 rounded-lg p-4">
     @if (playlist) {
-        @for (track of playlist.tracks; track $index) {
-            <div>
+        @for (track of playlist.tracks; track track.id) {
+            <div class="text-lg">
                 {{track.title}}
             </div>
-            <div>
-                {{track.artist}}
+            <div class="italic">
+                {{track.artist?.name}}
             </div>
         } @empty {
             <p class="text-white">No Tracks in this playlist.</p>
@@ -36,3 +35,4 @@
     }
     </div>
 </div>
+
