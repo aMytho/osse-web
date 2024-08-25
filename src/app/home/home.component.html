@@ -31,7 +31,7 @@
 
         @for (track of tracks; track track.id; let idx = $index) {
             @if (idx < 6) {
-                <app-track (onPlay)="playTrack(idx)" (onRemove)="removeTrack(idx)" [track]="track"></app-track>
+                <app-track (onPlay)="playTrack(idx)" (onRemove)="removeTrack(idx)" [track]="track" (onPlaylistAdd)="addToPlaylist($event)"></app-track>
             }
         }
         </div>
@@ -44,7 +44,7 @@
     </div>
     @for (track of tracks; track track.id; let idx = $index) {
         @if (idx >= 6) {
-            <app-track (onPlay)="playTrack(idx)" [track]="track"></app-track>
+            <app-track (onPlay)="playTrack(idx)" (onRemove)="removeTrack(idx)" (onPlaylistAdd)="addToPlaylist($event)" [track]="track"></app-track>
         }
     }
 </div>

@@ -11,7 +11,7 @@ import { Component, Input } from '@angular/core';
 export class ButtonComponent {
   @Input()
   public text: string = '';
-  
+
   @Input()
   public arc: string = 'success';
 
@@ -20,4 +20,7 @@ export class ButtonComponent {
 
   @Input()
   public type: string = 'button';
+
+  @Input()
+  public border: boolean = true;
 }

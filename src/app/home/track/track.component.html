@@ -21,6 +21,9 @@
      <button class="bg-red-400 hover:bg-opacity-90 p-4 rounded-xl group" (click)="removeTrack()" title="Remove Track" aria-label="Remove Track" accesskey="d">
         <app-icon class="group-hover:opacity-95" [icon]="trash" align="middle"></app-icon>
      </button>
+     <button class="bg-slate-400 hover:bg-opacity-90 p-4 rounded-xl group" (click)="addToPlaylist()" title="Add to Playlist" aria-label="Add to Playlist" accesskey="p">
+        <app-icon class="group-hover:opacity-95" [icon]="playlist" align="middle"></app-icon>
+     </button>
      <button class="bg-blue-400 hover:bg-opacity-90 p-4 rounded-xl group" (click)="toggleView()" title="Cancel" aria-label="Cancel" accesskey="c">
         <app-icon class="group-hover:opacity-95" [icon]="cancel" align="middle"></app-icon>
      </button>

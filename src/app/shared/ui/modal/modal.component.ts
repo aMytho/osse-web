@@ -48,6 +48,9 @@ export class ModalComponent implements AfterViewInit {
 
       // Show changes
       this.cdr.detectChanges();
+
+      // Listen for close events
+      this.component.instance['onClose'].subscribe((_: any) => this.close());
     });
 
     this.modalService.onShow.subscribe(() => this.open());

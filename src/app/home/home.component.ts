@@ -7,6 +7,8 @@ import { PlaybackState } from '../shared/player/state-change';
 import { ConfigService } from '../shared/services/config/config.service';
 import { IconComponent } from '../shared/ui/icon/icon.component';
 import { mdiFastForward, mdiInformation, mdiPause, mdiPlay, mdiRepeat, mdiRewind, mdiSilverwareForkKnife } from '@mdi/js';
+import { ModalService } from '../shared/ui/modal/modal.service';
+import { AddToPlaylistComponent } from '../shared/ui/modals/add-to-playlist/add-to-playlist.component';
 
 @Component({
   selector: 'app-home',
@@ -38,7 +40,8 @@ export class HomeComponent implements OnInit {
   constructor(
     private trackService: TrackService,
     private playerService: PlayerService,
-    private configService: ConfigService
+    private configService: ConfigService,
+    private modalService: ModalService
   ) {}
 
   public onPlayerToggle() {
@@ -68,6 +71,14 @@ export class HomeComponent implements OnInit {
 
   public removeTrack(index: number) {
     this.trackService.removeTrack(index);
+  }
+
+  public addToPlaylist(track: Track) {
+    this.modalService.setDynamicModal(AddToPlaylistComponent, [{
+      name: 'track',
+      val: track
+    }], 'Add to Playlist');
+    this.modalService.show();
   }
 
   public get trackProgress() {

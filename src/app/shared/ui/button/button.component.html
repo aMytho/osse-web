@@ -1,10 +1,12 @@
 <button
     type="{{type}}"
     [disabled]="disabled"
-    class="px-4 py-2 rounded-lg text-white font-semibold"
+    class="px-4 py-2 rounded-lg text-white font-semibold hover:cursor-pointer"
     [ngClass]="{
-        'border border-solid border-emerald-300': arc == 'success',
-        'bg-emerald-200 bg-opacity-10 hover:bg-emerald-300 hover:bg-opacity-15 hover:cursor-pointer': arc == 'success',
-        '!bg-emerald-900 !bg-opacity-5 hover:!bg-emerald-950 hover:!bg-opacity-5 !cursor-not-allowed': disabled
+        'border-emerald-300': arc == 'success' && border,
+        'bg-emerald-200 bg-opacity-10 hover:bg-emerald-300 hover:bg-opacity-15': arc == 'success',
+        '!bg-emerald-900 !bg-opacity-5 hover:!bg-emerald-950 hover:!bg-opacity-5 !cursor-not-allowed': disabled,
+        'border border-solid border-emerald-300': border,
+        'bg-transparent': !border
     }"
 >{{text}}</button>
