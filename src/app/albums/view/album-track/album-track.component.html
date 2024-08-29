@@ -1,7 +1,9 @@
 <button (click)="onClick()" class="rounded-md px-4 py-2 hover:bg-slate-700 flex flex-col gap-2 w-full h-full border-x border-emerald-300 cursor-pointer">
-    <div class="flex justify-between text-slate-300 w-full">
-        <p class="text-xl font-extralight">1</p>
-        <p>{{track.durationFormatted}}</p>
+    <div class="flex text-slate-300 w-full">
+      @if (track.trackNumber != null) {
+      <p class="text-xl font-extralight">{{track.trackNumber}}</p>
+      }
+      <p class="ml-auto">{{track.durationFormatted}}</p>
     </div>
     <div class="mt-auto">
         <p class="text-xl font-semibold">{{track.title}}</p>

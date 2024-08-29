@@ -51,4 +51,8 @@ export class Track {
     public get artist() {
         return this.trackArtist || null;
     }
+
+    public get trackNumber() {
+      return this.track.track_number;
+    }
 }

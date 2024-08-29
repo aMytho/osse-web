@@ -10,11 +10,13 @@ import { ToastService } from '../../toast-container/toast.service';
 import { BackgroundImageService } from '../../shared/ui/background-image.service';
 import { IconComponent } from '../../shared/ui/icon/icon.component';
 import { mdiFilter, mdiSearchWeb } from '@mdi/js';
+import { AlbumFilter } from './album-filter';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-view',
   standalone: true,
-  imports: [HeaderComponent, IconComponent, AlbumTrackComponent],
+  imports: [HeaderComponent, IconComponent, AlbumTrackComponent, FormsModule],
   templateUrl: './view.component.html',
   styles: ``
 })
@@ -33,6 +35,8 @@ export class ViewComponent {
   public album!: Album;
   public loaded: boolean = false;
   public filteredTracks: Track[] = [];
+  public filterType = AlbumFilter;
+  public chosenFilter: AlbumFilter = AlbumFilter.TrackNumber;
 
   public bg: string = "";
   search = mdiSearchWeb;
@@ -69,6 +73,28 @@ export class ViewComponent {
     } else {
       const regex = new RegExp(event.target.value, 'i');
       this.filteredTracks = this.album.tracks.filter((t) => regex.test(t.title))
+    }
+  }
+
+  public sortTracks() {
+    if (this.chosenFilter == AlbumFilter.Alphabetical) {
+      this.filteredTracks.sort((a, b) => {
+        if (a.title.toLowerCase() < b.title.toLowerCase()) {
+          return -1;
+        }
+        if (a.title.toLowerCase() > b.title.toLowerCase()) {
+          return 1;
+        }
+        return 0;
+      });
+    } else if (this.chosenFilter = AlbumFilter.Random) {
+      this.filteredTracks = this.filteredTracks
+        .map(value => ({ value, sort: Math.random() }))
+        .sort((a, b) => a.sort - b.sort)
+        .map(({ value }) => value)
+    } else {
+      // Sort by track number
+      this.filteredTracks.sort((a, b) => (a.trackNumber ?? 0) - (b.trackNumber ?? 0));
     }
   }
 }
