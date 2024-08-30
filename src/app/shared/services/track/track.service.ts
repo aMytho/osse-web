@@ -97,4 +97,19 @@ export class TrackService {
       this.index -= 1;
     }
   }
+
+  /**
+   * Shuffles the tracks and moves the index to the new location of the active track (if any)
+   */
+  public shuffle() {
+    let currentTrack = this.activeTrack;
+
+    this.tracks = this.tracks
+      .map(value => ({ value, sort: Math.random() }))
+      .sort((a, b) => a.sort - b.sort)
+      .map(({ value }) => value);
+    if (currentTrack) {
+      this.index = this.tracks.findIndex((t) => t.id == currentTrack.id);
+    }
+  }
 }

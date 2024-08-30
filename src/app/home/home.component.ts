@@ -6,14 +6,15 @@ import { PlayerService } from '../shared/player/player.service';
 import { PlaybackState } from '../shared/player/state-change';
 import { ConfigService } from '../shared/services/config/config.service';
 import { IconComponent } from '../shared/ui/icon/icon.component';
-import { mdiFastForward, mdiInformation, mdiPause, mdiPlay, mdiRepeat, mdiRewind, mdiSilverwareForkKnife } from '@mdi/js';
+import { mdiFastForward, mdiInformation, mdiPause, mdiPlay, mdiRepeat, mdiRewind, mdiShuffle } from '@mdi/js';
 import { ModalService } from '../shared/ui/modal/modal.service';
 import { AddToPlaylistComponent } from '../shared/ui/modals/add-to-playlist/add-to-playlist.component';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [IconComponent, TrackComponent],
+  imports: [IconComponent, TrackComponent, CommonModule],
   templateUrl: './home.component.html'
 })
 export class HomeComponent implements OnInit {
@@ -26,7 +27,7 @@ export class HomeComponent implements OnInit {
   forward = mdiFastForward;
   back = mdiRewind;
   repeat = mdiRepeat;
-  consume = mdiSilverwareForkKnife;
+  shuffle = mdiShuffle;
   info = mdiInformation;
 
   get playerIcon() {
@@ -86,6 +87,11 @@ export class HomeComponent implements OnInit {
       return this.trackService.trackListProgress;
     }
     return '';
+  }
+
+  public shuffleTracks() {
+    this.trackService.shuffle();
+    this.tracks = this.trackService.tracks;
   }
 
   ngOnInit(): void {
