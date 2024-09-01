@@ -27,6 +27,7 @@ export class ViewComponent {
       this.album = val as Album;
       this.loaded = true;
       this.filteredTracks = this.album.tracks;
+      this.sortTracks();
 
       this.bg = this.configService.get('apiURL', 'localhost:3000') + "tracks/cover?id=" + this.album.tracks[0].id;
       this.backgroundImageService.setBG(this.bg)
@@ -87,7 +88,7 @@ export class ViewComponent {
         }
         return 0;
       });
-    } else if (this.chosenFilter = AlbumFilter.Random) {
+    } else if (this.chosenFilter == AlbumFilter.Random) {
       this.filteredTracks = this.filteredTracks
         .map(value => ({ value, sort: Math.random() }))
         .sort((a, b) => a.sort - b.sort)

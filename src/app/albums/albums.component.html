@@ -1,9 +1,9 @@
 <app-header text="Albums"></app-header>
-<div class="flex flex-wrap items-center gap-x-16 gap-y-6 pl-16 bg-slate-500 bg-opacity-15 rounded-lg p-4">
+<div class="w-full flex flex-wrap items-center justify-around gap-x-16 gap-y-6 pl-16 bg-slate-500 bg-opacity-15 rounded-lg p-4">
     @for (album of albums; track $index) {
-        <div class="text-lg text-white flex flex-col hover:brightness-110">
-            <a routerLink="view/{{album.id}}" class="rounded-lg flex flex-col justify-end h-60 w-60 bg-cover cursor-pointer" style="background-image: url('http://localhost:3000/tracks/cover?id={{album.tracks[0].id}}');">
-                <div class="pt-4 text-center bg-gradient-to-t from-emerald-700 from-50%    hover:bg-opacity-85 p-2">
+        <div class="text-lg text-white flex flex-col">
+            <a routerLink="view/{{album.id}}" class="hover:brightness-110 border-2 border-emerald-600 rounded-lg flex flex-col justify-end h-60 w-60 bg-cover cursor-pointer" style="background-image: url('http://localhost:3000/tracks/cover?id={{album.tracks[0].id}}');">
+                <div class="pt-4 text-center bg-opacity-45 bg-black p-2 rounded-b-md">
                     <p>{{album.name}}</p>
                 </div>
             </a>
