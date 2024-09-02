@@ -89,4 +89,14 @@ export class PlayerService {
     this.bufferReset.emit();
     this.playbackEnded.emit();
   }
+
+  public setVolume(vol: number) {
+    if (!this.audioPlayer) return;
+    this.audioPlayer.volume = vol;
+  }
+
+  public getVolume(): number {
+    if (!this.audioPlayer) return 0;
+    return this.audioPlayer.volume;
+  }
 }

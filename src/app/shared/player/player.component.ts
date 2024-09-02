@@ -1,5 +1,4 @@
 import { AfterViewInit, Component, ElementRef, ViewChild } from '@angular/core';
-import { VisualizerComponent } from './visualizer/visualizer.component';
 import { PlayerService } from './player.service';
 import { PointState } from './point-state';
 import { ConfigService } from '../services/config/config.service';
@@ -8,12 +7,13 @@ import { ButtonComponent } from '../ui/button/button.component';
 import { PlaybackState } from './state-change';
 import { TrackService } from '../services/track/track.service';
 import { IconComponent } from '../ui/icon/icon.component';
-import { mdiFastForward, mdiInformation, mdiPause, mdiPlay, mdiRepeat, mdiRewind, mdiSilverwareForkKnife, mdiVolumeHigh, mdiVolumeLow, mdiVolumeOff } from '@mdi/js';
+import { mdiDotsVertical, mdiFastForward, mdiInformation, mdiPause, mdiPlay, mdiRepeat, mdiRewind, mdiSilverwareForkKnife } from '@mdi/js';
+import { VolumeComponent } from './volume/volume.component';
 
 @Component({
   selector: 'app-player',
   standalone: true,
-  imports: [IconComponent, VisualizerComponent, RouterLink, ButtonComponent],
+  imports: [VolumeComponent, IconComponent, RouterLink, ButtonComponent],
   templateUrl: './player.component.html',
   styleUrl: `./player.component.css`,
 })
@@ -22,6 +22,7 @@ export class PlayerComponent implements AfterViewInit {
   @ViewChild('progressContainer') container!: ElementRef<HTMLDivElement>;
   @ViewChild('point') point!: ElementRef<HTMLDivElement>;
   @ViewChild('rendered') rendered!: ElementRef<HTMLDivElement>;
+  @ViewChild('volume') volumeComponent!: VolumeComponent;
 
   public bg: string = "#";
   public currentTime: string = '';
@@ -40,7 +41,7 @@ export class PlayerComponent implements AfterViewInit {
   repeat = mdiRepeat;
   consume = mdiSilverwareForkKnife;
   info = mdiInformation;
-  volume = mdiVolumeOff;
+  verticalDots = mdiDotsVertical;
 
   get playerIcon() {
     if (this.playing) {
@@ -78,32 +79,6 @@ export class PlayerComponent implements AfterViewInit {
 
   public onPreviousTrack() {
     this.trackService.moveToLastTrack();
-  }
-
-  onVolumeChange(event: any) {
-    this.player.nativeElement.volume = event.target.value / 100;
-    this.setVolumeIcon();
-  }
-
-  onMuteToggle() {
-    if (this.player.nativeElement.volume == 0) {
-      this.player.nativeElement.volume = 0.5;
-    } else {
-      this.player.nativeElement.volume = 0;
-    }
-    this.setVolumeIcon();
-  }
-
-  setVolumeIcon() {
-    if (this.player.nativeElement.volume == 0) {
-      this.volume = mdiVolumeOff;
-    } else {
-      if (this.player.nativeElement.volume <= 0.5) {
-        this.volume = mdiVolumeLow;
-      } else {
-        this.volume = mdiVolumeHigh;
-      }
-    }
   }
 
   onMouseDown(ev: MouseEvent) {
@@ -188,6 +163,10 @@ export class PlayerComponent implements AfterViewInit {
     }
   }
 
+  toggleSettings() {
+
+  }
+
   /**
    * When the audio player is fully loaded, send the audio element to player service
    */
@@ -215,7 +194,6 @@ export class PlayerComponent implements AfterViewInit {
       } else {
         this.playing = true;
       }
-      this.setVolumeIcon();
     });
 
     this.player.nativeElement.addEventListener("progress", this.onBufferProgress.bind(this));
