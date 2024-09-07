@@ -18,17 +18,19 @@ export class PlayerService {
   public playbackEnded = new EventEmitter();
   public bufferReset = new EventEmitter();
   private audioPlayer!: HTMLAudioElement;
-  private track!: Track;
+  private track!: Track | null;
 
   constructor(
     private configService: ConfigService,
     private backgroundImageService: BackgroundImageService
-  ) {}
+  ) { }
 
   public setAudioPlayer(player: HTMLAudioElement) {
     this.audioPlayer = player;
     this.audioPlayer.addEventListener('timeupdate', (_ev) => {
-      this.trackUpdated.emit(new TrackUpdate(this.track, this.buildTrackInfo()));
+      if (this.track) {
+        this.trackUpdated.emit(new TrackUpdate(this.track as Track, this.buildTrackInfo()));
+      }
     });
 
     this.audioPlayer.addEventListener('ended', (_ev) => this.playbackEnded.emit());
@@ -86,6 +88,7 @@ export class PlayerService {
 
   public clearTrack() {
     this.audioPlayer.src = "#";
+    this.track = null;
     this.bufferReset.emit();
     this.playbackEnded.emit();
   }

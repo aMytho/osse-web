@@ -10,14 +10,25 @@ import { PlayerService } from '../../player/player.service';
 })
 export class TrackService {
   /**
-   * List of tracks in the queue
+   * List of tracks in the queue. We can only call methods on it. DO NOT reset the value or the UI loses reference.
    */
   public tracks: Track[] = [];
   private index = 0;
+  /**
+   * If true, track is removed on end playback
+  */
+  public consume: boolean = false;
 
   constructor(private playerService: PlayerService) {
-    this.playerService.playbackEnded.subscribe(_v => {
-      this.moveToNextTrack();
+    this.playerService.playbackEnded.subscribe(_ => {
+      if (this.tracks.length <= 0) return;
+
+      if (this.consume) {
+        this.tracks.splice(this.index, 1);
+        this.moveToLastTrack();
+      } else {
+        this.moveToNextTrack();
+      }
     });
   }
 
@@ -38,7 +49,9 @@ export class TrackService {
   }
 
   public clearTracks() {
-    this.tracks = [];
+    while (this.tracks.length != 0) {
+      this.tracks.pop();
+    }
     this.index = 0;
   }
 
@@ -72,11 +85,12 @@ export class TrackService {
 
   public removeTrack(index: number) {
     // If 1 track is present, remove them and end playback
-    if (this.tracks.length == 0) {
+    if (this.tracks.length == 1) {
+      this.tracks.pop();
+      this.index = 0;
+
       this.playerService.pause();
       this.playerService.clearTrack();
-      this.tracks = [];
-      this.index = 0;
       return;
     }
 
@@ -85,10 +99,11 @@ export class TrackService {
       this.tracks.splice(index, 1);
     } else if (index == this.index) {
       // If its the current track, stop playback, remove it, and play next
+      this.tracks.splice(index, 1);
+
       this.playerService.pause();
       this.playerService.clearTrack();
 
-      this.tracks.splice(index, 1);
       // Reduce the index by one to play the "next" track
       this.moveToLastTrack();
     } else {
