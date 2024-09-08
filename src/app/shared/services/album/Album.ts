@@ -1,34 +1,37 @@
+import { LocatorService } from "../../../locator.service";
 import { ApiService } from "../api.service";
 import { Artist } from "../artist/artist";
 import { Track } from "../track/track";
 import { OsseAlbum } from "./osse-album";
 
 export class Album {
-    private trackList: Track[] = [];
-    private artistInfo!: Artist;
-    constructor(public album: OsseAlbum, private apiService: ApiService) {
-        album.tracks.forEach(track => {
-            this.trackList.push(new Track(track, apiService));
-        });
+  private trackList: Track[] = [];
+  private artistInfo!: Artist;
+  private apiService: ApiService = LocatorService.injector.get(ApiService);
 
-        if (this.album.artist_id != null) {
-            this.apiService.getArtist(this.album.artist_id).then(val => this.artistInfo = val as Artist);
-        }
-    }
+  constructor(public album: OsseAlbum) {
+    album.tracks.forEach(track => {
+      this.trackList.push(new Track(track));
+    });
 
-    public get id() {
-        return this.album.id;
+    if (this.album.artist_id != null) {
+      this.apiService.getArtist(this.album.artist_id).then(val => this.artistInfo = val as Artist);
     }
+  }
 
-    public get name() {
-        return this.album.name;
-    }
+  public get id() {
+    return this.album.id;
+  }
 
-    public get tracks() {
-        return this.trackList;
-    }
+  public get name() {
+    return this.album.name;
+  }
 
-    public get artist() {
-        return this.artistInfo ?? null;
-    }
+  public get tracks() {
+    return this.trackList;
+  }
+
+  public get artist() {
+    return this.artistInfo ?? null;
+  }
 }

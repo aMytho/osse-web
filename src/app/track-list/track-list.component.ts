@@ -1,6 +1,5 @@
 import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { TrackService } from '../shared/services/track/track.service';
-import { ApiService } from '../shared/services/api.service';
 import { HomeComponent } from '../home/home.component';
 import { HeaderComponent } from '../shared/ui/header/header.component';
 import { ConfigService } from '../shared/services/config/config.service';
@@ -8,11 +7,11 @@ import { Track } from '../shared/services/track/track';
 import { ToastService } from '../toast-container/toast.service';
 
 @Component({
-    selector: 'app-track-list',
-    standalone: true,
-    templateUrl: './track-list.component.html',
-    styles: ``,
-    imports: [HomeComponent, HeaderComponent]
+  selector: 'app-track-list',
+  standalone: true,
+  templateUrl: './track-list.component.html',
+  styles: ``,
+  imports: [HomeComponent, HeaderComponent]
 })
 export class TrackListComponent implements AfterViewInit, OnInit {
   @ViewChild('search') searchBar!: ElementRef;
@@ -23,10 +22,9 @@ export class TrackListComponent implements AfterViewInit, OnInit {
 
   constructor(
     private trackService: TrackService,
-    private apiService: ApiService,
     private configService: ConfigService,
     private notificationService: ToastService
-  ) {}
+  ) { }
 
   ngAfterViewInit(): void {
     this.searchBar.nativeElement.focus();
@@ -47,8 +45,8 @@ export class TrackListComponent implements AfterViewInit, OnInit {
     if (!req.ok) return;
     let tracks = await req.json();
     tracks.tracks.forEach((track: any) => {
-      this.tracks.push(new Track(track, this.apiService));
-      this.allTracks.push(new Track(track, this.apiService));
+      this.tracks.push(new Track(track));
+      this.allTracks.push(new Track(track));
     });
   }
 
@@ -81,38 +79,38 @@ export class TrackListComponent implements AfterViewInit, OnInit {
   }
 
   public async requestTracks(search: string) {
-      // Find the amount of track that we have that match the regex.
-      let offset = 0;
+    // Find the amount of track that we have that match the regex.
+    let offset = 0;
 
-      if (search.length == 0) {
-        offset = this.tracks.length;
-      } else {
-        const regex = new RegExp('%' + search + "%");
-        this.tracks.forEach(val => {
-          if (regex.test(val.title)) {
-            offset += 1;
-          }
-        });
-        if (offset < 25) {
-          offset = 0;
+    if (search.length == 0) {
+      offset = this.tracks.length;
+    } else {
+      const regex = new RegExp('%' + search + "%");
+      this.tracks.forEach(val => {
+        if (regex.test(val.title)) {
+          offset += 1;
         }
+      });
+      if (offset < 25) {
+        offset = 0;
       }
+    }
 
-      // Search for tracks
-      let req = await fetch(this.configService.get('apiURL')
-        + 'tracks/search?'
-        + new URLSearchParams({
-          track: search,
-          track_offset: offset.toString()
-        }).toString());
-      if (!req.ok) return;
+    // Search for tracks
+    let req = await fetch(this.configService.get('apiURL')
+      + 'tracks/search?'
+      + new URLSearchParams({
+        track: search,
+        track_offset: offset.toString()
+      }).toString());
+    if (!req.ok) return;
 
-      let json = await req.json();
-      for (let track of json.tracks) {
-        if (this.allTracks.some(v => v.id == track.id)) continue;
-        this.allTracks.push(new Track(track, this.apiService));
-      }
-      this.tracks = this.getMatchingTracks(search);
+    let json = await req.json();
+    for (let track of json.tracks) {
+      if (this.allTracks.some(v => v.id == track.id)) continue;
+      this.allTracks.push(new Track(track));
+    }
+    this.tracks = this.getMatchingTracks(search);
   }
 
   public getMatchingTracks(search: string): Track[] {

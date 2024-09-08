@@ -10,15 +10,15 @@ import { Album } from './album/Album';
 })
 export class ApiService {
 
-  constructor(private configService: ConfigService) {}
+  constructor(private configService: ConfigService) { }
 
   public async getAllTracks(): Promise<Track[]> {
     try {
       let request = await fetch(`${this.configService.get('apiURL')}tracks/all`);
       let response = await request.json();
 
-      return response.map((track: OsseTrack) => new Track(track, this))
-    } catch(e) {
+      return response.map((track: OsseTrack) => new Track(track))
+    } catch (e) {
       return [];
     }
   }
@@ -49,7 +49,7 @@ export class ApiService {
     let request = await fetch(`${this.configService.get('apiURL')}albums/${id}/tracks`);
     if (request.ok) {
       let album = await request.json();
-      return new Album(album, this);
+      return new Album(album);
     } else {
       return null;
     }
