@@ -16,7 +16,7 @@ export class SettingsComponent implements OnInit {
   public scanInProgress = false;
   public directories: string[] = [];
   public url: string = this.configService.get("apiURL");
-  constructor(private configService: ConfigService, private notificationService: ToastService) {}
+  constructor(private configService: ConfigService, private notificationService: ToastService) { }
 
   public scan() {
     this.scanInProgress = true;
@@ -28,12 +28,19 @@ export class SettingsComponent implements OnInit {
     });
   }
 
-  public saveURL() {
+  public async saveURL() {
     if (!this.url.endsWith("/")) {
       this.url += "/";
     }
-    this.configService.save("apiURL", this.url);
-    this.notificationService.info("URL saved as " + this.configService.get("apiURL"));
+    // Check if the server is running
+    let res = await fetch(this.url + "ping");
+    if (res.ok) {
+      // Save the URL
+      this.configService.save("apiURL", this.url);
+      this.notificationService.info("URL saved as " + this.configService.get("apiURL"));
+    } else {
+      alert('Failed to reach server. URL not set. Confirm that the URL is correct and that the server is running.');
+    }
   }
 
   async ngOnInit(): Promise<void> {
