@@ -9,6 +9,9 @@
                     <button (click)="shuffleTracks()" title="Shuffle">
                       <app-icon class="cursor-pointer hover:fill-yellow-300" pull="left" [icon]="shuffle"></app-icon>
                     </button>
+                    <button (click)="toggleConsume()" title="Consume">
+                      <app-icon class="cursor-pointer hover:fill-gray-300" pull="left" [icon]="consume"></app-icon>
+                    </button>
                     <app-icon class="cursor-pointer hover:fill-yellow-300" pull="left" [icon]="info"></app-icon>
                 </div>
             </div>
@@ -31,7 +34,7 @@
         </div>
         <div class="mt-4 p-4 flex flex-col gap-y-4 ">
 
-        @for (track of tracks; track track.id; let idx = $index) {
+        @for (track of tracks; track $index; let idx = $index) {
             @if (idx < 6) {
                 <app-track (onPlay)="playTrack(idx)" (onRemove)="removeTrack(idx)" [track]="track" (onPlaylistAdd)="addToPlaylist($event)"></app-track>
             }
@@ -44,7 +47,7 @@
     <div class="text-center text-white">
         <h2 class="font-semibold text-xl">Queued Tracks</h2>
     </div>
-    @for (track of tracks; track track.id; let idx = $index) {
+    @for (track of tracks; track $index; let idx = $index) {
         @if (idx >= 6) {
             <app-track (onPlay)="playTrack(idx)" (onRemove)="removeTrack(idx)" (onPlaylistAdd)="addToPlaylist($event)" [track]="track"></app-track>
         }

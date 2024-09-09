@@ -3,7 +3,6 @@ import { Playlist } from '../shared/services/playlist/Playlist';
 import { ConfigService } from '../shared/services/config/config.service';
 import { OssePlaylist } from '../shared/services/playlist/osse-playlist';
 import { Router, RouterLink } from '@angular/router';
-import { ApiService } from '../shared/services/api.service';
 import { HeaderComponent } from '../shared/ui/header/header.component';
 import { IconComponent } from '../shared/ui/icon/icon.component';
 import { mdiPlus, mdiRefresh } from '@mdi/js';
@@ -21,9 +20,9 @@ export class PlaylistComponent implements OnInit {
   refresh = mdiRefresh;
 
   constructor(
-    private configService: ConfigService, private apiService: ApiService,
+    private configService: ConfigService,
     private router: Router
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.refreshPlaylistList();
@@ -49,6 +48,6 @@ export class PlaylistComponent implements OnInit {
   public async refreshPlaylistList() {
     let request = await fetch(this.configService.get('apiURL') + 'playlists');
     let result = await request.json();
-    this.playlists = result.map((p: OssePlaylist) => new Playlist(p, this.apiService));
+    this.playlists = result.map((p: OssePlaylist) => new Playlist(p));
   }
 }

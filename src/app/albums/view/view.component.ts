@@ -30,7 +30,8 @@ export class ViewComponent {
       this.sortTracks();
 
       this.bg = this.configService.get('apiURL', 'localhost:3000') + "tracks/cover?id=" + this.album.tracks[0].id;
-      this.backgroundImageService.setBG(this.bg)
+      this.backgroundImageService.setBG(this.bg);
+      this.artistFromTracks();
     });
   }
   public album!: Album;
@@ -38,6 +39,7 @@ export class ViewComponent {
   public filteredTracks: Track[] = [];
   public filterType = AlbumFilter;
   public chosenFilter: AlbumFilter = AlbumFilter.TrackNumber;
+  public albumTrackArtist: string = '';
 
   public bg: string = "";
   search = mdiSearchWeb;
@@ -48,7 +50,7 @@ export class ViewComponent {
     private trackService: TrackService,
     private notificationService: ToastService,
     private backgroundImageService: BackgroundImageService
-  ) {}
+  ) { }
 
   public addAll() {
     this.album.tracks.forEach((t) => this.trackService.addTrack(t));
@@ -97,6 +99,23 @@ export class ViewComponent {
       // Sort by track number
       this.filteredTracks.sort((a, b) => (a.trackNumber ?? 0) - (b.trackNumber ?? 0));
     }
+  }
+
+  public async artistFromTracks() {
+    let artists = new Map();
+    for (let i = 0; i < this.album.tracks.length; i++) {
+      let track = this.album.tracks[i];
+      if (track.track.artist_id != null) {
+        artists.set(i, (artists.get(track.track.artist_id) ?? 0) + 1);
+      }
+    }
+
+    if (artists.size == 0) return;
+
+    // Get the artist with the highest track occurence and set it to the album artist
+    let artist = ([...artists.entries()]).reduce((a, e) => e[1] > a[1] ? e : a);
+    await this.album.tracks[artist[0]].getArtist();
+    this.albumTrackArtist = (this.album.tracks[artist[0]].artist)!.name + ' (Inferred)';
   }
 }
 

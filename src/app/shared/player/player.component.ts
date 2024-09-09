@@ -87,8 +87,8 @@ export class PlayerComponent implements AfterViewInit {
 
     this.setPointState(PointState.Pause);
 
-    document.addEventListener('mousemove', this.onMouseMove, {signal: this.abortMouseMove.signal});
-    document.addEventListener('mouseup', this.onMouseUp, {once: true});
+    document.addEventListener('mousemove', this.onMouseMove, { signal: this.abortMouseMove.signal });
+    document.addEventListener('mouseup', this.onMouseUp, { once: true });
   }
 
   onMouseMove(ev: MouseEvent) {
@@ -126,9 +126,9 @@ export class PlayerComponent implements AfterViewInit {
         this.point.nativeElement.classList.add('paused');
         this.point.nativeElement.classList.remove('playing');
         break;
-        case PointState.Play:
-          this.point.nativeElement.classList.add('playing');
-          this.point.nativeElement.classList.remove('paused');
+      case PointState.Play:
+        this.point.nativeElement.classList.add('playing');
+        this.point.nativeElement.classList.remove('paused');
         break;
       default:
         break;
@@ -145,8 +145,7 @@ export class PlayerComponent implements AfterViewInit {
     }
   }
 
-  private onBufferProgress(ev: ProgressEvent<EventTarget>) {
-    console.log(ev);
+  private onBufferProgress(_ev: ProgressEvent<EventTarget>) {
     // Browser estimate
     const duration = this.player.nativeElement.duration;
     // DB record
@@ -186,6 +185,13 @@ export class PlayerComponent implements AfterViewInit {
     });
     this.playerService.bufferReset.subscribe(() => {
       this.setGradient(0, "transparent", 100);
+    });
+    this.playerService.playbackEnded.subscribe(_ => {
+      this.totalDuration = "";
+      this.currentTime = "";
+      this.trackTitle = "";
+      this.artistTitle = "";
+      this.bg = "#";
     });
 
     this.playerService.stateChanged.subscribe((val) => {
