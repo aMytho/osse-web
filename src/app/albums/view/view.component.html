@@ -17,9 +17,10 @@
             </div>
         </div>
         <div class="mt-4">
-            <div class="flex justify-between mx-2">
+            <div class="flex flex-wrap justify-between mx-2 gap-2">
                 <p class="self-center max-sm:hidden">{{album.tracks.length}} Tracks</p>
-                <div class="flex items-center gap-x-1">
+                <div class="flex flex-wrap items-center gap-x-1 gap-y-2">
+                  <div class="flex items-center gap-x-1">
                     <label for="filter">
                         <app-icon aria-hidden="true" class="md:hidden cursor-pointer hover:text-emerald-300" pull="left" [icon]="filter"></app-icon>
                         <span class="max-md:hidden">Filter: </span>
@@ -29,8 +30,11 @@
                         <option [value]="filterType.Alphabetical">Alphabetical</option>
                         <option [value]="filterType.Random">Random</option>
                     </select>
-                    <label for="search"><app-icon aria-label="Search" class="cursor-pointer hover:text-emerald-300" pull="left" [icon]="search"></app-icon></label>
-                    <input (input)="filterTracks($event)" class="bg-transparent border border-emerald-300 rounded-md py-1 px-2 shrink" type="text" id="search" placeholder="Never gonna give you up..." (click)="sortTracks()">
+                  </div>
+                    <div class="flex items-center gap-x-1">
+                      <label for="search"><app-icon aria-label="Search" class="cursor-pointer hover:text-emerald-300" pull="left" [icon]="search"></app-icon></label>
+                      <input (input)="filterTracks($event)" class="bg-transparent border border-emerald-300 rounded-md py-1 px-2 shrink" type="text" id="search" placeholder="Never gonna give you up..." (click)="sortTracks()">
+                    </div>
                 </div>
             </div>
             <div class="grid 2xl:grid-cols-3 lg:grid-cols-2 grid-cols-1 gap-x-5 gap-y-8 border-t border-gray-600 mt-2 pt-4 px-1 rounded-t-lg">
