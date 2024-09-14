@@ -5,12 +5,14 @@
                 <div class="bg-slate-300 rounded-lg backdrop-blur-sm w-80 h-80 p-2 flex items-end flex-wrap bg-cover drop-shadow-glow" style="background-image: url('{{bg}}');">
                 </div>
                 <div class="flex flex-col justify-around text-xl text-white items-center">
-                    <app-icon class="cursor-pointer hover:fill-cyan-300" rotate="90" [icon]="repeat"></app-icon>
-                    <button (click)="shuffleTracks()" title="Shuffle">
-                      <app-icon class="cursor-pointer hover:fill-cyan-300" pull="left" [icon]="shuffle"></app-icon>
+                    <button class="rounded-full px-2 py-1 hover:bg-emerald-300 hover:bg-opacity-15">
+                        <app-icon rotate="90" [icon]="repeat"></app-icon>
                     </button>
-                    <button (click)="toggleConsume()" title="Consume">
-                      <app-icon [active]="consumeState" class="cursor-pointer hover:fill-cyan-300" pull="left" [icon]="consume"></app-icon>
+                    <button (click)="shuffleTracks()" title="Shuffle" class="rounded-full px-2 py-1 hover:bg-emerald-300 hover:bg-opacity-15">
+                      <app-icon pull="left" [icon]="shuffle"></app-icon>
+                    </button>
+                    <button (click)="toggleConsume()" title="Consume" class="rounded-full px-2 py-1 hover:bg-emerald-300 hover:bg-opacity-15">
+                      <app-icon [active]="consumeState" pull="left" [icon]="consume"></app-icon>
                     </button>
                     <app-icon class="cursor-pointer hover:fill-cyan-300" pull="left" [icon]="info"></app-icon>
                 </div>
@@ -20,9 +22,15 @@
                 <p class="italic max-w-80">{{ artist || 'Unknown Artist' }}</p>
                 <hr class="my-2">
                 <div class="flex justify-around text-xl gap-x-4">
-                    <app-icon (click)="onPreviousTrack()" class="cursor-pointer hover:fill-emerald-300" pull="left" [icon]="back"></app-icon>
-                    <app-icon (click)="onPlayerToggle()" class="cursor-pointer hover:fill-cyan-300" pull="left" [icon]="playerIcon"></app-icon>
-                    <app-icon (click)="onNextTrack()" class="cursor-pointer hover:fill-emerald-300" pull="left" [icon]="forward"></app-icon>
+                    <button (click)="onPreviousTrack()"  class="rounded-full px-2 py-1 hover:bg-emerald-300 hover:bg-opacity-15">
+                        <app-icon [icon]="back"></app-icon>
+                    </button>
+                    <button (click)="onPlayerToggle()" class="rounded-full px-2 py-1 hover:bg-emerald-300 hover:bg-opacity-15">
+                        <app-icon [icon]="playerIcon"></app-icon>
+                    </button>
+                    <button (click)="onNextTrack()" class="rounded-full px-2 py-1 hover:bg-emerald-300 hover:bg-opacity-15">
+                        <app-icon [icon]="forward"></app-icon>
+                    </button>
                 </div>
             </div>
         </div>
