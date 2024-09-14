@@ -3,6 +3,9 @@ module.exports = {
     content: [
         "./src/**/*.{html,ts}",
     ],
+    safelist: [
+        '!fill-emerald-300'
+    ],
     theme: {
         extend: {
             dropShadow: {

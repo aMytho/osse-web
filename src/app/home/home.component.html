@@ -5,14 +5,14 @@
                 <div class="bg-slate-300 rounded-lg backdrop-blur-sm w-80 h-80 p-2 flex items-end flex-wrap bg-cover drop-shadow-glow" style="background-image: url('{{bg}}');">
                 </div>
                 <div class="flex flex-col justify-around text-xl text-white items-center">
-                    <app-icon class="cursor-pointer hover:fill-emerald-300" rotate="90" [icon]="repeat"></app-icon>
+                    <app-icon class="cursor-pointer hover:fill-cyan-300" rotate="90" [icon]="repeat"></app-icon>
                     <button (click)="shuffleTracks()" title="Shuffle">
-                      <app-icon class="cursor-pointer hover:fill-yellow-300" pull="left" [icon]="shuffle"></app-icon>
+                      <app-icon class="cursor-pointer hover:fill-cyan-300" pull="left" [icon]="shuffle"></app-icon>
                     </button>
                     <button (click)="toggleConsume()" title="Consume">
-                      <app-icon class="cursor-pointer hover:fill-gray-300" pull="left" [icon]="consume"></app-icon>
+                      <app-icon [active]="consumeState" class="cursor-pointer hover:fill-cyan-300" pull="left" [icon]="consume"></app-icon>
                     </button>
-                    <app-icon class="cursor-pointer hover:fill-yellow-300" pull="left" [icon]="info"></app-icon>
+                    <app-icon class="cursor-pointer hover:fill-cyan-300" pull="left" [icon]="info"></app-icon>
                 </div>
             </div>
             <div class="text-center mt-1 text-white">
@@ -21,7 +21,7 @@
                 <hr class="my-2">
                 <div class="flex justify-around text-xl gap-x-4">
                     <app-icon (click)="onPreviousTrack()" class="cursor-pointer hover:fill-emerald-300" pull="left" [icon]="back"></app-icon>
-                    <app-icon (click)="onPlayerToggle()" class="cursor-pointer hover:fill-yellow-300" pull="left" [icon]="playerIcon"></app-icon>
+                    <app-icon (click)="onPlayerToggle()" class="cursor-pointer hover:fill-cyan-300" pull="left" [icon]="playerIcon"></app-icon>
                     <app-icon (click)="onNextTrack()" class="cursor-pointer hover:fill-emerald-300" pull="left" [icon]="forward"></app-icon>
                 </div>
             </div>

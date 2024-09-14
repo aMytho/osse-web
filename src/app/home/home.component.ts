@@ -104,6 +104,10 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.trackService.consume = !this.trackService.consume;
   }
 
+  public get consumeState() {
+    return this.trackService.consume;
+  }
+
   ngOnInit(): void {
     this.tracks = this.trackService.tracks;
 
