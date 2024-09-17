@@ -1,7 +1,11 @@
-<div class="flex items-center gap-x-4">
-  <button type="button" (click)="onMuteToggle()" aria-label="Toggle Mute" class="rounded-full px-2 py-1 hover:bg-emerald-300 hover:bg-opacity-15">
+<div class="relative">
+  <button [class.hidden]="showVolumeMenu" (click)="toggleMenu()" (contextmenu)="onMuteToggle(); false"
+    class="absolute rounded-full px-2 py-1 hover:bg-emerald-300 hover:bg-opacity-15">
     <app-icon class="cursor-pointer hover:fill-slate-200" [icon]="volumeIcon"></app-icon>
   </button>
-  <input #volume (input)="onVolumeChange($event)" type="range" name="volume" max="1" min="0" step="0.01" class="cursor-pointer accent-emerald-500 hover:accent-emerald-400 active:accent-emerald-300">
-</div>
 
+  <div [class.hidden]="!showVolumeMenu" class="absolute z-20 px-2 py-1 bg-slate-600 rounded-md">
+    <input #volume (change)="onVolumeChange($event)" type="range" name="volume" min="0" max="1" step="0.01"
+      class="cursor-pointer accent-emerald-500 hover:accent-emerald-400 active:accent-emerald-300">
+  </div>
+</div>

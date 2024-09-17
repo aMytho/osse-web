@@ -13,6 +13,7 @@ import { IconComponent } from '../../ui/icon/icon.component';
 export class VolumeComponent {
   @ViewChild('volume') volumeInput!: ElementRef<HTMLInputElement>;
   volumeIcon = mdiVolumeOff;
+  public showVolumeMenu: boolean = false;
 
   constructor(private playerService: PlayerService) {
     this.playerService.stateChanged.subscribe((_v) => this.setVolumeIcon());
@@ -21,6 +22,7 @@ export class VolumeComponent {
   onVolumeChange(event: any) {
     this.playerService.setVolume(event.target.value);
     this.setVolumeIcon();
+    this.showVolumeMenu = false;
   }
 
   setVolumeIcon() {
@@ -46,6 +48,10 @@ export class VolumeComponent {
 
     this.setVolumeIcon();
     this.volumeInput.nativeElement.value = String(this.playerService.getVolume());
+  }
+
+  public toggleMenu() {
+    this.showVolumeMenu = !this.showVolumeMenu;
   }
 }
 

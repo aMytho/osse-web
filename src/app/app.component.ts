@@ -42,7 +42,7 @@ export class AppComponent {
       } else {
         this.playerState = false;
       }
-    })
+    });
   }
 }
 

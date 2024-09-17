@@ -22,7 +22,6 @@ export class PlayerComponent implements AfterViewInit {
   @ViewChild('progressContainer') container!: ElementRef<HTMLDivElement>;
   @ViewChild('point') point!: ElementRef<HTMLDivElement>;
   @ViewChild('rendered') rendered!: ElementRef<HTMLDivElement>;
-  @ViewChild('volume') volumeComponent!: VolumeComponent;
 
   public bg: string = "#";
   public currentTime: string = '';
