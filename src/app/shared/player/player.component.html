@@ -3,8 +3,8 @@
     <a class="bg-slate-300 rounded-md backdrop-blur-sm w-14 h-14 p-2 inline-block bg-cover drop-shadow-glow"
       style="background-image: url('{{bg}}');" routerLink="/"></a>
     <div class="grow">
-      <div id="track-title-container" class="relative whitespace-nowrap overflow-hidden font-semibold text-lg">
-        <p class="whitespace-nowrap">
+      <div id="track-title-container" class="w-full relative whitespace-nowrap overflow-hidden font-semibold text-lg">
+        <p class="whitespace-nowrap w-min" #trackTitleElement>
           {{trackTitle}}
         </p>
       </div>

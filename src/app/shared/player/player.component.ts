@@ -22,6 +22,7 @@ export class PlayerComponent implements AfterViewInit {
   @ViewChild('progressContainer') container!: ElementRef<HTMLDivElement>;
   @ViewChild('point') point!: ElementRef<HTMLDivElement>;
   @ViewChild('rendered') rendered!: ElementRef<HTMLDivElement>;
+  @ViewChild('trackTitleElement') trackTitleElement!: ElementRef<HTMLParagraphElement>;
 
   public bg: string = "#";
   public currentTime: string = '';
@@ -32,6 +33,7 @@ export class PlayerComponent implements AfterViewInit {
   private abortMouseMove = new AbortController();
   private seekDuration = 0;
   private playing: boolean = false;
+  private resizeTimer = 0;
 
   play = mdiPlay;
   pause = mdiPause;
@@ -57,6 +59,14 @@ export class PlayerComponent implements AfterViewInit {
     // Make sure the mouse up is accessible in global contexts
     this.onMouseUp = this.onMouseUp.bind(this);
     this.onMouseMove = this.onMouseMove.bind(this);
+
+    // Listen for the resize event
+    window.addEventListener('resize', (e) => {
+      clearTimeout(this.resizeTimer);
+      this.resizeTimer = setTimeout(() => {
+        this.setTitleAnimationByScreenSize();
+      }, 150);
+    })
   }
 
   public onPlayerToggle() {
@@ -161,8 +171,16 @@ export class PlayerComponent implements AfterViewInit {
     }
   }
 
-  toggleSettings() {
-
+  private setTitleAnimationByScreenSize() {
+    if (this.trackTitleElement.nativeElement.offsetWidth < this.trackTitleElement.nativeElement.parentElement!.offsetWidth) {
+      // Pause, set text to be visible
+      this.trackTitleElement.nativeElement.style.animationPlayState = 'paused';
+      let anim = this.trackTitleElement.nativeElement.getAnimations()[0];
+      let duration = anim.effect!.getTiming().duration;
+      anim.currentTime = (duration as number) / 2;
+    } else {
+      this.trackTitleElement.nativeElement.style.animationPlayState = 'running';
+    }
   }
 
   /**
@@ -181,6 +199,7 @@ export class PlayerComponent implements AfterViewInit {
       this.artistTitle = val.artist?.name ?? '';
       // Set the cover bg
       this.bg = this.configService.get('apiURL') + "tracks/cover?id=" + val.id;
+      this.setTitleAnimationByScreenSize();
     });
     this.playerService.bufferReset.subscribe(() => {
       this.setGradient(0, "transparent", 100);

@@ -5,7 +5,7 @@
   </button>
 
   <div [class.hidden]="!showVolumeMenu" class="absolute z-20 px-2 py-1 bg-slate-600 rounded-md">
-    <input #volume (change)="onVolumeChange($event)" type="range" name="volume" min="0" max="1" step="0.01"
-      class="cursor-pointer accent-emerald-500 hover:accent-emerald-400 active:accent-emerald-300">
+    <input #volume (change)="onVolumeSet()" (input)="onVolumeChange($event)" type="range" name="volume" min="0" max="1"
+      step="0.01" class="cursor-pointer accent-emerald-500 hover:accent-emerald-400 active:accent-emerald-300">
   </div>
 </div>

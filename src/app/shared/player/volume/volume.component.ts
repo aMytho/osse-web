@@ -21,6 +21,9 @@ export class VolumeComponent {
 
   onVolumeChange(event: any) {
     this.playerService.setVolume(event.target.value);
+  }
+
+  onVolumeSet() {
     this.setVolumeIcon();
     this.showVolumeMenu = false;
   }
