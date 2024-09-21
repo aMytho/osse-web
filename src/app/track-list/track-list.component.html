@@ -28,6 +28,10 @@
             <p class="text-lg font-light text-slate-300">{{track.artist?.name ?? "Unknown Artist"}}</p>
           </div>
         </button>
+        } @empty {
+          <p class="text-white">
+            No tracks were found...
+          </p>
         }
       </div>
     </div>

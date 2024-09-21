@@ -16,12 +16,12 @@
     <app-header [type]="2" text="Scan Tracks"></app-header>
     <p class="my-2 ml-2">You can start a track scan from the web GUI. This will scan the below directories as listed in your config.json file.</p>
     <ul class="mb-2 ml-4 list-disc list-inside">
-      @for (dir of directories; track $index) {
+      @for (dir of directories(); track $index) {
       <li class="my-1">{{dir}}</li>
       }
     </ul>
     <div class="mt-2">
-      <app-button text="Start Scan" [disabled]="scanInProgress" (click)="scan()"></app-button>
+      <app-button text="Start Scan" [disabled]="scanInProgress()" (click)="scan()"></app-button>
     </div>
   </div>
 </div>

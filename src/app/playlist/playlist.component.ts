@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, WritableSignal, signal } from '@angular/core';
 import { Playlist } from '../shared/services/playlist/Playlist';
 import { ConfigService } from '../shared/services/config/config.service';
 import { OssePlaylist } from '../shared/services/playlist/osse-playlist';
@@ -12,10 +12,11 @@ import { mdiPlus, mdiRefresh } from '@mdi/js';
   standalone: true,
   imports: [RouterLink, HeaderComponent, IconComponent],
   templateUrl: './playlist.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   styles: ``
 })
 export class PlaylistComponent implements OnInit {
-  public playlists: Playlist[] = [];
+  public playlists: WritableSignal<Playlist[]> = signal([]);
   plus = mdiPlus;
   refresh = mdiRefresh;
 
@@ -48,6 +49,6 @@ export class PlaylistComponent implements OnInit {
   public async refreshPlaylistList() {
     let request = await fetch(this.configService.get('apiURL') + 'playlists');
     let result = await request.json();
-    this.playlists = result.map((p: OssePlaylist) => new Playlist(p));
+    this.playlists.set(result.map((p: OssePlaylist) => new Playlist(p)));
   }
 }
