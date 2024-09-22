@@ -6,3 +6,8 @@
 img, svg, video, canvas, audio, iframe, embed, object {
   vertical-align: text-bottom !important;
 }
+
+p, a {
+  font-size: 1rem;
+  line-height: 1.5rem;
+}

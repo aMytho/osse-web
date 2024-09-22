@@ -1,12 +1,12 @@
 <button (click)="onClick()" class="rounded-md px-4 py-2 hover:bg-slate-700 flex flex-col gap-2 w-full h-full border-x border-emerald-300 cursor-pointer">
     <div class="flex text-slate-300 w-full">
       @if (track.trackNumber != null) {
-      <p class="text-xl font-extralight">{{track.trackNumber}}</p>
+        <p class="font-extralight">{{track.trackNumber}}</p>
       }
       <p class="ml-auto">{{track.durationFormatted}}</p>
     </div>
     <div class="mt-auto">
-        <p class="text-xl font-semibold">{{track.title}}</p>
-        <p class="text-lg font-light text-slate-300">{{track.artist?.name ?? "Unknown Artist"}}</p>
+        <p class="text-lg font-semibold">{{track.title}}</p>
+        <p class="font-light text-slate-300">{{track.artist?.name ?? "Unknown Artist"}}</p>
     </div>
 </button>
