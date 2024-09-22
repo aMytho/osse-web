@@ -1,27 +1,31 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, WritableSignal, signal } from '@angular/core';
 import { ConfigService } from '../shared/services/config/config.service';
 import { RouterLink } from '@angular/router';
 import { Album } from '../shared/services/album/Album';
 import { HeaderComponent } from '../shared/ui/header/header.component';
+import { OsseAlbum } from '../shared/services/album/osse-album';
 
 @Component({
   selector: 'app-albums',
   standalone: true,
   imports: [RouterLink, HeaderComponent],
   templateUrl: './albums.component.html',
-  styles: ``
+  styles: ``,
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AlbumsComponent implements OnInit {
-  albums: Album[] = [];
-  private albumURL: string = this.configService.get('apiURL') + 'albums?tracks=true';
+  albums: WritableSignal<Album[]> = signal([]);
+  coverUrlBase: WritableSignal<string> = signal(this.configService.get('apiURL') + "tracks/cover?id=");
 
   constructor(
     private configService: ConfigService
-  ) {}
+  ) { }
 
   async ngOnInit(): Promise<void> {
-    let request = await fetch(this.albumURL);
-    let result: Album[] = await request.json();
-    this.albums = result.sort((a,b) => a.name.localeCompare(b.name));
+    let request = await fetch(this.configService.get('apiURL') + 'albums?tracks=true');
+    let result: OsseAlbum[] = await request.json();
+
+    result.sort((a, b) => a.name.localeCompare(b.name));
+    this.albums.set(result.map((a) => new Album(a)));
   }
 }

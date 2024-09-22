@@ -1,4 +1,4 @@
-import { Component, Input, numberAttribute} from '@angular/core';
+import { Component, Input, numberAttribute } from '@angular/core';
 import { ConfigService } from '../../shared/services/config/config.service';
 import { Playlist } from '../../shared/services/playlist/Playlist';
 import { HeaderComponent } from '../../shared/ui/header/header.component';
@@ -19,7 +19,7 @@ import { PlaylistService } from '../../shared/services/playlist/playlist.service
   styles: ``
 })
 export class PlaylistViewComponent {
-  @Input({transform: numberAttribute})
+  @Input({ transform: numberAttribute })
   set id(id: number) {
     this.getPlaylist(id);
   }
@@ -35,7 +35,7 @@ export class PlaylistViewComponent {
   constructor(
     private configService: ConfigService, private router: Router,
     private playlistService: PlaylistService
-  ) {}
+  ) { }
 
   public delete() {
     fetch(this.configService.get('apiURL') + 'playlists/' + this.playlist.id, {

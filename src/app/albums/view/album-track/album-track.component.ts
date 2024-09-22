@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
 import { Track } from '../../../shared/services/track/track';
 
 @Component({
@@ -6,7 +6,8 @@ import { Track } from '../../../shared/services/track/track';
   standalone: true,
   imports: [],
   templateUrl: './album-track.component.html',
-  styles: ``
+  styles: ``,
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AlbumTrackComponent {
   @Input()
