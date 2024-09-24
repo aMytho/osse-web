@@ -25,8 +25,8 @@ export class ViewComponent implements OnInit {
   public album!: WritableSignal<Album>;
   public filteredTracks: WritableSignal<Track[]> = signal([]);
   public filterType = AlbumFilter;
-  public chosenFilter: AlbumFilter = AlbumFilter.TrackNumber;
-  public albumTrackArtist: string = '';
+  public chosenFilter: WritableSignal<AlbumFilter> = signal(AlbumFilter.TrackNumber);
+  public albumTrackArtist: WritableSignal<string> = signal('');
   public bg = signal("");
 
   search = mdiSearchWeb;
@@ -70,7 +70,7 @@ export class ViewComponent implements OnInit {
   }
 
   public sortTracks() {
-    if (this.chosenFilter == AlbumFilter.Alphabetical) {
+    if (this.chosenFilter() == AlbumFilter.Alphabetical) {
       this.filteredTracks().sort((a, b) => {
         if (a.title.toLowerCase() < b.title.toLowerCase()) {
           return -1;
@@ -80,7 +80,7 @@ export class ViewComponent implements OnInit {
         }
         return 0;
       });
-    } else if (this.chosenFilter == AlbumFilter.Random) {
+    } else if (this.chosenFilter() == AlbumFilter.Random) {
       this.filteredTracks.update(value => {
         return value.map(value => ({ value, sort: Math.random() }))
           .sort((a, b) => a.sort - b.sort)
@@ -106,7 +106,7 @@ export class ViewComponent implements OnInit {
     // Get the artist with the highest track occurence and set it to the album artist
     let artist = ([...artists.entries()]).reduce((a, e) => e[1] > a[1] ? e : a);
     await this.album().tracks[artist[0]].getArtist();
-    this.albumTrackArtist = (this.album().tracks[artist[0]].artist)!.name + ' (Inferred)';
+    this.albumTrackArtist.set((this.album().tracks[artist[0]].artist())!.name + ' (Inferred)');
   }
 
   ngOnInit(): void {

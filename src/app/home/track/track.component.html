@@ -1,9 +1,10 @@
-<div tabindex="0" (dblclick)="onDoubleClick()" (contextmenu)="toggleViewWithEvent($event)" class="flex justify-between border-x border-y border-r-emerald-400 border-b-emerald-400 border-r border-emerald-200 bg-opacity-10 bg-slate-400 hover:bg-emerald-400 hover:bg-opacity-10 hover:cursor-pointer p-4 rounded-lg shadow-sm shadow-cyan-950">
+<div tabindex="0" (dblclick)="onDoubleClick()" (contextmenu)="toggleViewWithEvent($event)"
+  class="flex justify-between border-x border-y border-r-emerald-400 border-b-emerald-400 border-r border-emerald-200 bg-opacity-10 bg-slate-400 hover:bg-emerald-400 hover:bg-opacity-10 hover:cursor-pointer p-4 rounded-lg shadow-sm shadow-cyan-950">
   @if (mode == 'view') {
   <div>
     <h3 class="font-semibold text-lg text-slate-50">{{ track.title }}</h3>
     <p class="text-slate-300">
-    {{track.artist?.name ?? ''}}
+      {{track.artist()?.name ?? ''}}
     </p>
   </div>
   <div class="flex gap-2">
@@ -17,17 +18,19 @@
     </div>
   </div>
   } @else {
-   <div class="flex flex-wrap items-center place-items-center gap-x-2 w-full">
-     <button class="bg-red-400 hover:bg-opacity-90 p-4 rounded-xl group" (click)="removeTrack()" title="Remove Track" aria-label="Remove Track" accesskey="d">
-        <app-icon class="group-hover:opacity-95" [icon]="trash" align="middle"></app-icon>
-     </button>
-     <button class="bg-slate-400 hover:bg-opacity-90 p-4 rounded-xl group" (click)="addToPlaylist()" title="Add to Playlist" aria-label="Add to Playlist" accesskey="p">
-        <app-icon class="group-hover:opacity-95" [icon]="playlist" align="middle"></app-icon>
-     </button>
-     <button class="bg-blue-400 hover:bg-opacity-90 p-4 rounded-xl group" (click)="toggleView()" title="Cancel" aria-label="Cancel" accesskey="c">
-        <app-icon class="group-hover:opacity-95" [icon]="cancel" align="middle"></app-icon>
-     </button>
-   </div>
-   }
+  <div class="flex flex-wrap items-center place-items-center gap-x-2 w-full">
+    <button class="bg-red-400 hover:bg-opacity-90 p-4 rounded-xl group" (click)="removeTrack()" title="Remove Track"
+      aria-label="Remove Track" accesskey="d">
+      <app-icon class="group-hover:opacity-95" [icon]="trash" align="middle"></app-icon>
+    </button>
+    <button class="bg-slate-400 hover:bg-opacity-90 p-4 rounded-xl group" (click)="addToPlaylist()"
+      title="Add to Playlist" aria-label="Add to Playlist" accesskey="p">
+      <app-icon class="group-hover:opacity-95" [icon]="playlist" align="middle"></app-icon>
+    </button>
+    <button class="bg-blue-400 hover:bg-opacity-90 p-4 rounded-xl group" (click)="toggleView()" title="Cancel"
+      aria-label="Cancel" accesskey="c">
+      <app-icon class="group-hover:opacity-95" [icon]="cancel" align="middle"></app-icon>
+    </button>
+  </div>
+  }
 </div>
-

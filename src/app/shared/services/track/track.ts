@@ -1,14 +1,17 @@
+import { WritableSignal, signal } from "@angular/core";
 import { LocatorService } from "../../../locator.service";
 import { getDuration } from "../../util/time";
 import { ApiService } from "../api.service";
 import { ArtistStoreService } from "../artist/artist-store.service";
 import { OsseTrack } from "./osse-track";
+import { Artist } from "../artist/artist";
 
 export class Track {
   public track!: OsseTrack;
   private artistStore: ArtistStoreService = LocatorService.injector.get(ArtistStoreService);
   private apiService: ApiService = LocatorService.injector.get(ApiService);
   public bufferSize: number = 0;
+  public artist: WritableSignal<Artist | null> = signal(null);
 
   constructor(track: OsseTrack) {
     this.track = track;
@@ -45,18 +48,21 @@ export class Track {
     if (!this.hasArtist) return;
 
     // Check if it already exists in the store
-    if (this.artistStore.artistIsLoaded(this.track.artist_id as number)) return;
+    if (this.artistStore.artistIsLoaded(this.track.artist_id as number)) {
+      this.setArtist();
+      return;
+    }
 
     let artist = await this.apiService.getArtist(this.track.artist_id as number);
     if (artist) {
       this.artistStore.setArtist(artist);
+      this.setArtist();
     }
   }
 
-  public get artist() {
-    if (!this.hasArtist) return null;
-
-    return this.artistStore.getArtistById(this.track.artist_id as number) || null;
+  private setArtist() {
+    let artist = this.artistStore.getArtistById(this.track.artist_id as number) ?? null;
+    this.artist.set(artist);
   }
 
   public get trackNumber() {
