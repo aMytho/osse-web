@@ -45,8 +45,9 @@ export class Track {
   }
 
   public async getArtist() {
-    if (!this.hasArtist) return;
-
+    if (!this.hasArtist()) {
+      return;
+    }
     // Check if it already exists in the store
     if (this.artistStore.artistIsLoaded(this.track.artist_id as number)) {
       this.setArtist();
