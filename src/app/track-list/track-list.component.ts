@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, OnInit, ViewChild, WritableSignal, signal } from '@angular/core';
 import { TrackService } from '../shared/services/track/track.service';
 import { HomeComponent } from '../home/home.component';
 import { HeaderComponent } from '../shared/ui/header/header.component';
@@ -11,12 +11,14 @@ import { ToastService } from '../toast-container/toast.service';
   standalone: true,
   templateUrl: './track-list.component.html',
   styles: ``,
-  imports: [HomeComponent, HeaderComponent]
+  imports: [HomeComponent, HeaderComponent],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TrackListComponent implements AfterViewInit, OnInit {
   @ViewChild('search') searchBar!: ElementRef;
-  public tracks: Track[] = [];
-  public allTracks: Track[] = [];
+  public loading: WritableSignal<boolean> = signal(true);
+  public tracks: WritableSignal<Track[]> = signal([]);
+  private allTracks: Track[] = [];
   private timeout: number = 0;
   private scrollTimeout: number = 0;
 
@@ -42,18 +44,20 @@ export class TrackListComponent implements AfterViewInit, OnInit {
   async ngOnInit(): Promise<void> {
     // On load, get the first 25 tracks
     let req = await fetch(this.configService.get('apiURL') + 'tracks/search');
+    this.loading.set(false);
     if (!req.ok) return;
     let tracks = await req.json();
     tracks.tracks.forEach((track: any) => {
-      this.tracks.push(new Track(track));
       this.allTracks.push(new Track(track));
     });
+    this.tracks.set(this.allTracks);
   }
 
   public onSubmit() {
-    for (let track of this.tracks) {
+    for (let track of this.tracks()) {
       this.trackService.addTrack(track);
     }
+    this.notificationService.info('Added ' + this.tracks().length + ' tracks');
   }
 
   public addTrack(track: Track) {
@@ -67,7 +71,7 @@ export class TrackListComponent implements AfterViewInit, OnInit {
 
     // If the search input is empty, reset the filter
     if (ev.target.value.length == 0) {
-      this.tracks = this.allTracks;
+      this.tracks.set(this.allTracks);
     }
 
     clearTimeout(this.timeout);
@@ -83,10 +87,10 @@ export class TrackListComponent implements AfterViewInit, OnInit {
     let offset = 0;
 
     if (search.length == 0) {
-      offset = this.tracks.length;
+      offset = this.tracks().length;
     } else {
       const regex = new RegExp('%' + search + "%");
-      this.tracks.forEach(val => {
+      this.tracks().forEach(val => {
         if (regex.test(val.title)) {
           offset += 1;
         }
@@ -97,12 +101,14 @@ export class TrackListComponent implements AfterViewInit, OnInit {
     }
 
     // Search for tracks
+    this.loading.set(true);
     let req = await fetch(this.configService.get('apiURL')
       + 'tracks/search?'
       + new URLSearchParams({
         track: search,
         track_offset: offset.toString()
       }).toString());
+    this.loading.set(false);
     if (!req.ok) return;
 
     let json = await req.json();
@@ -110,7 +116,7 @@ export class TrackListComponent implements AfterViewInit, OnInit {
       if (this.allTracks.some(v => v.id == track.id)) continue;
       this.allTracks.push(new Track(track));
     }
-    this.tracks = this.getMatchingTracks(search);
+    this.tracks.set(this.getMatchingTracks(search));
   }
 
   public getMatchingTracks(search: string): Track[] {

@@ -14,18 +14,19 @@
   </p>
 
   <div>
-    <div class="bg-slate-500 bg-opacity-15 rounded-md mt-4 p-4 flex flex-col gap-y-4 ">
+    <div class="bg-slate-500 bg-opacity-15 rounded-md mt-4 p-4 flex flex-col gap-y-4">
       <div class="text-center mt-2">
         <app-header [type]="2" text="Results"></app-header>
       </div>
       <div
-        class="grid 2xl:grid-cols-3 lg:grid-cols-2 grid-cols-1 gap-x-5 gap-y-8 border-t border-gray-600 mt-2 pt-4 px-1 rounded-t-lg">
-        @for(track of tracks; track track.id) {
+        class="grid 2xl:grid-cols-3 lg:grid-cols-2 grid-cols-1 gap-x-5 gap-y-8 border-t border-gray-600 mt-2 pt-4 px-1 rounded-t-lg"
+        [class.loading]="loading()">
+        @for(track of tracks(); track track.id) {
         <button (click)="addTrack(track)"
           class="flex gap-x-2 items-center rounded-md px-4 py-2 hover:bg-slate-700 w-full h-full border-x border-emerald-300 text-white">
           <p class="text-lg font-semibold">{{track.title}}</p>
           <p class="font-light text-slate-300 ml-auto">{{track.artist()?.name ?? "Unknown Artist"}}</p>
-          <p class="">{{track.durationFormatted}}</p>
+          <p>{{track.durationFormatted}}</p>
         </button>
         } @empty {
         <p class="text-white">
