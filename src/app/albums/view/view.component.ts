@@ -86,6 +86,9 @@ export class ViewComponent implements OnInit {
           .sort((a, b) => a.sort - b.sort)
           .map(({ value }) => value)
       });
+    } else if (this.chosenFilter() == AlbumFilter.DiscNumber) {
+      this.filteredTracks.update(v => v.sort((a, b) => (a.discNumber ?? 0) - (b.discNumber ?? 0)));
+      // To-do: When we store the total discs, sort by disc order and show title
     } else {
       // Sort by track number
       this.filteredTracks.update(v => v.sort((a, b) => (a.trackNumber ?? 0) - (b.trackNumber ?? 0)));

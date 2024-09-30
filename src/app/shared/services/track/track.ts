@@ -69,4 +69,8 @@ export class Track {
   public get trackNumber() {
     return this.track.track_number;
   }
+
+  public get discNumber() {
+    return this.track.disc_number;
+  }
 }

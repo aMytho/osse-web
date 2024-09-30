@@ -33,6 +33,7 @@
           </label>
           <select id="filter" [(ngModel)]="chosenFilter" class="text-black p-2 rounded-md" (change)="sortTracks()">
             <option [value]="filterType.TrackNumber" selected>Track Number (default)</option>
+            <option [value]="filterType.DiscNumber">Disc Number</option>
             <option [value]="filterType.Alphabetical">Alphabetical</option>
             <option [value]="filterType.Random">Random</option>
           </select>
