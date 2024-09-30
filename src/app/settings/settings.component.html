@@ -3,10 +3,13 @@
 <div class="bg-slate-500 bg-opacity-15 rounded-lg p-4 text-white">
   <div>
     <app-header [type]="2" text="Server URL"></app-header>
-    <p class="my-2">Enter the server URL. This must include the machine (URL) and port nuber. The default value is localhost:3000.</p>
+    <p class="my-2">Enter the server URL. This must include the machine (URL) and port nuber. The default value is
+      http://localhost:3000.</p>
     <form #form="ngForm" (ngSubmit)="saveURL()" class="ml-2">
       <label for="name" class="text-white font-semibold">URL: </label>
-      <input [(ngModel)]="url" required minlength="1" id="name" name="name" class="text-emerald-300 m-2 p-2 rounded-md bg-opacity-15 focus:bg-opacity-30 bg-white" placeholder="http://localhost:3000"> <br>
+      <input [(ngModel)]="url" required minlength="1" id="name" name="name"
+        class="text-emerald-300 m-2 p-2 rounded-md bg-opacity-15 focus:bg-opacity-30 bg-white"
+        placeholder="http://localhost:3000"> <br>
 
       <app-button type="submit" text="Save" [disabled]="!form.form.valid || false"></app-button>
     </form>
@@ -14,7 +17,8 @@
 
   <div class="mt-4">
     <app-header [type]="2" text="Scan Tracks"></app-header>
-    <p class="my-2 ml-2">You can start a track scan from the web GUI. This will scan the below directories as listed in your config.json file.</p>
+    <p class="my-2 ml-2">You can start a track scan from the web GUI. This will scan the below directories as listed in
+      your config.json file.</p>
     <ul class="mb-2 ml-4 list-disc list-inside">
       @for (dir of directories(); track $index) {
       <li class="my-1">{{dir}}</li>
