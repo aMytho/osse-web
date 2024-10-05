@@ -11,18 +11,19 @@ import { ModalService } from '../shared/ui/modal/modal.service';
 import { AddToPlaylistComponent } from '../shared/ui/modals/add-to-playlist/add-to-playlist.component';
 import { CommonModule } from '@angular/common';
 import { Subscription } from 'rxjs';
+import { HeaderComponent } from '../shared/ui/header/header.component';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [IconComponent, TrackComponent, CommonModule],
+  imports: [IconComponent, TrackComponent, CommonModule, HeaderComponent],
   templateUrl: './home.component.html'
 })
 export class HomeComponent implements OnInit, OnDestroy {
   public bg: string = "#";
   public tracks: Track[] = [];
   public playing: boolean = false;
-  public title: string = '';
+  public title: string = 'No Track Found';
   public artist: string = '';
 
   private trackUpdated!: Subscription;
