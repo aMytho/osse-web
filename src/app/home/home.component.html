@@ -10,7 +10,7 @@
   <div class="grow flex flex-col text-white">
     <app-header [text]="title"></app-header>
     <p class="italic max-w-80">{{ artist || 'Unknown Artist' }}</p>
-    <div class="text-center mt-1 text-white mt-auto">
+    <div class="text-center text-white mt-auto">
       <hr class="my-2">
       <div class="flex justify-around text-xl gap-x-4">
         <button class="rounded-full px-2 py-1 hover:bg-emerald-300 hover:bg-opacity-15">
@@ -34,7 +34,7 @@
 
 <div class="bg-slate-700 bg-opacity-50 rounded-md mt-8 p-4 flex flex-col gap-y-4" *ngIf="tracks.length > 0">
   @for (track of tracks; track $index; let idx = $index) {
-    <app-track (onPlay)="playTrack(idx)" (onRemove)="removeTrack(idx)" (onPlaylistAdd)="addToPlaylist($event)"
-      [track]="track"></app-track>
+  <app-track (onPlay)="playTrack(idx)" (onRemove)="removeTrack(idx)" (onPlaylistAdd)="addToPlaylist($event)"
+    [track]="track"></app-track>
   }
 </div>
