@@ -1,13 +1,18 @@
-<div class="z-10 w-full sm:w-32 fixed top-0 sm:bottom-0 left-0 right-0 sm:right-auto flex flex-row sm:flex-col justify-center bg-slate-900 text-white py-4 px-6 border-r border-0 border-solid border-emerald-200 from-emerald-200 to-emerald-50">
-    <div class="flex flex-row sm:flex-col gap-x-4 sm:gap-y-4 grow justify-end">
-        <a class="border-solid border-transparent border hover:border-emerald-300 hover:rounded-lg hover:bg-emerald-300 hover:bg-opacity-15 cursor-pointer p-2" routerLink="/" routerLinkActive="active" ariaCurrentWhenActive="page">Home</a>
-        <a class="border-solid border-transparent border hover:border-emerald-300 hover:rounded-lg hover:bg-emerald-300 hover:bg-opacity-15 cursor-pointer p-2" routerLink="/tracks" routerLinkActive="active" ariaCurrentWhenActive="page">Tracks</a>
-        <a class="border-solid border-transparent border hover:border-emerald-300 hover:rounded-lg hover:bg-emerald-300 hover:bg-opacity-15 cursor-pointer p-2" routerLink="/playlists" routerLinkActive="active" ariaCurrentWhenActive="page">Playlists</a>
-        <a class="border-solid border-transparent border hover:border-emerald-300 hover:rounded-lg hover:bg-emerald-300 hover:bg-opacity-15 cursor-pointer p-2" routerLink="/albums" routerLinkActive="active" ariaCurrentWhenActive="page">Albums</a>
-    </div>
-    <div class="flex flex-col gap-y-4 text-center grow justify-center sm:justify-end">
-      <a routerLink="/settings" routerLinkActive="active" ariaCurrentWhenActive="page">
-        <app-icon class="cursor-pointer text-white hover:text-emerald-300" [icon]="gear"></app-icon>
-      </a>
-    </div>
+<div
+  class="z-10 w-full sm:w-32 fixed top-0 sm:bottom-0 left-0 right-0 sm:right-auto flex flex-row sm:flex-col justify-center bg-slate-900 text-white py-4 px-6 border-r border-0 border-solid border-emerald-200 from-emerald-200 to-emerald-50">
+  <div class="flex flex-row sm:flex-col gap-x-4 sm:gap-y-4 grow justify-end">
+    <a class="border-solid border-transparent border hover:border-emerald-300 rounded-lg hover:bg-emerald-300 hover:bg-opacity-15 cursor-pointer p-2"
+      routerLink="/home" routerLinkActive="bg-emerald-200 bg-opacity-15" ariaCurrentWhenActive="page">Home</a>
+    <a class="border-solid border-transparent border hover:border-emerald-300 rounded-lg hover:bg-emerald-300 hover:bg-opacity-15 cursor-pointer p-2"
+      routerLink="/tracks" routerLinkActive="bg-emerald-200 bg-opacity-15" ariaCurrentWhenActive="page">Tracks</a>
+    <a class="border-solid border-transparent border hover:border-emerald-300 rounded-lg hover:bg-emerald-300 hover:bg-opacity-15 cursor-pointer p-2"
+      routerLink="/playlists" routerLinkActive="bg-emerald-200 bg-opacity-15" ariaCurrentWhenActive="page">Playlists</a>
+    <a class="border-solid border-transparent border hover:border-emerald-300 rounded-lg hover:bg-emerald-300 hover:bg-opacity-15 cursor-pointer p-2"
+      routerLink="/albums" routerLinkActive="bg-emerald-200 bg-opacity-15" ariaCurrentWhenActive="page">Albums</a>
+  </div>
+  <div class="flex flex-col gap-y-4 text-center grow justify-center sm:justify-end">
+    <a routerLink="/settings" routerLinkActive="bg-emerald-200 bg-opacity-15" ariaCurrentWhenActive="page">
+      <app-icon class="cursor-pointer text-white hover:text-emerald-300" [icon]="gear"></app-icon>
+    </a>
+  </div>
 </div>
