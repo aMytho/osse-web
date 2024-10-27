@@ -13,7 +13,7 @@
     <div class="text-center text-white mt-auto">
       <hr class="my-2">
       <div class="flex justify-around text-xl gap-x-4">
-        <button class="rounded-full px-2 py-1 hover:bg-emerald-300 hover:bg-opacity-15">
+        <button class="rounded-full px-2 py-1 hover:bg-emerald-300 hover:bg-opacity-15" title="Repeat">
           <app-icon rotate="90" [icon]="repeat"></app-icon>
         </button>
         <button (click)="shuffleTracks()" title="Shuffle"
@@ -24,7 +24,7 @@
           class="rounded-full px-2 py-1 hover:bg-emerald-300 hover:bg-opacity-15">
           <app-icon [active]="consumeState" pull="left" [icon]="consume"></app-icon>
         </button>
-        <button title="Consume" class="rounded-full px-2 py-1 hover:bg-emerald-300 hover:bg-opacity-15">
+        <button title="Info" class="rounded-full px-2 py-1 hover:bg-emerald-300 hover:bg-opacity-15">
           <app-icon [icon]="info"></app-icon>
         </button>
       </div>
