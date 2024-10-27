@@ -32,7 +32,7 @@ export class PlayerComponent implements AfterViewInit {
   private isDragging = false;
   private abortMouseMove = new AbortController();
   private seekDuration = 0;
-  private playing: boolean = false;
+  public playing: boolean = false;
   private resizeTimer = 0;
 
   play = mdiPlay;

@@ -1,19 +1,20 @@
 <div class="px-4 pb-1">
-  <div class="h-full w-full flex justify-between gap-x-8 gap-y-4 items-center" [class.hidden]="false">
-    <div class="flex gap-x-4 items-center basis-1/4">
-      <a class="bg-slate-300 rounded-md backdrop-blur-sm w-14 h-14 p-2 inline-block bg-cover drop-shadow-glow"
-         style="background-image: url('{{bg}}');" routerLink="/"></a>
-      <div class="grow">
+  <div class="min-h-14 h-full w-full flex lg:justify-between md:gap-x-8 gap-x-4 items-center" [class.hidden]="false"
+    [class.justify-center]="!playing">
+    <div class="flex gap-x-4 items-center basis-1/4" [class.hidden]="!playing">
+      <a class="bg-slate-300 rounded-md backdrop-blur-sm w-14 h-14 p-2 inline-block bg-cover drop-shadow-glow max-md:hidden"
+        style="background-image: url('{{bg}}');" routerLink="/"></a>
+      <div class="grow shrink">
         <div id="track-title-container" class="w-full relative whitespace-nowrap overflow-hidden font-semibold text-lg">
           <p class="whitespace-nowrap w-min" #trackTitleElement>
-          {{trackTitle}}
+            {{trackTitle}}
           </p>
         </div>
         <p class="italic">{{artistTitle}}</p>
       </div>
     </div>
-    <div class="basis-1/4">
-      <div class="flex gap-x-3 text-lg">
+    <div class="lg:basis-1/4 basis-3/4">
+      <div class="flex gap-x-3 text-lg max-lg:justify-center">
         <button class="rounded-full px-2 py-1 hover:bg-emerald-300 hover:bg-opacity-15">
           <app-icon [icon]="verticalDots"></app-icon>
         </button>
@@ -29,22 +30,19 @@
         <app-volume #volume></app-volume>
       </div>
     </div>
-    <div class="basis-1/4 flex gap-x-4">
+    <div class="basis-1/4 flex gap-x-4 max-lg:hidden">
       <p>{{ currentTime || '0:00' }}</p>
       <div class="w-full flex flex-col items-center justify-around gap-y-1">
         <div #progressContainer id="progressContainer" (mousedown)="onSetPosition($event)"
-                                class="relative w-full z-10 h-2 flex items-center bg-slate-700 bg-opacity-40 cursor-pointer">
+          class="relative w-full z-10 h-2 flex items-center bg-slate-700 bg-opacity-40 cursor-pointer">
           <div #rendered id="rendered" class="absolute w-full h-2 rounded-l-lg rounded-r-lg"></div>
           <!-- <div id="loaded" class="bg-emerald-300 h-2 rounded-l-lg"></div> -->
           <div #point id="point" class="absolute w-4 h-4 rounded-lg bg-cyan-300 hover:bg-cyan-400 -ml-2 z-20"
-                                 (mousedown)="onMouseDown($event)" (drag)="onMouseMove($event)"></div>
+            (mousedown)="onMouseDown($event)" (drag)="onMouseMove($event)"></div>
         </div>
       </div>
       <p>{{ totalDuration || '0:00' }}</p>
     </div>
-  </div>
-  <div class="w-full" [class.hidden]="true">
-
   </div>
 </div>
 
