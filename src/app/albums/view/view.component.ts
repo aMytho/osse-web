@@ -28,6 +28,7 @@ export class ViewComponent implements OnInit {
   public chosenFilter: WritableSignal<AlbumFilter> = signal(AlbumFilter.TrackNumber);
   public albumTrackArtist: WritableSignal<string> = signal('');
   public bg = signal("");
+  public duration = 0;
 
   search = mdiSearchWeb;
   filter = mdiFilter;
@@ -57,7 +58,7 @@ export class ViewComponent implements OnInit {
       total += t.duration;
     });
 
-    return total;
+    return Math.floor(total / 60);
   }
 
   public filterTracks(event: any) {
@@ -122,6 +123,8 @@ export class ViewComponent implements OnInit {
 
     this.sortTracks();
     this.artistFromTracks();
+
+    this.duration = this.album().tracks.reduce((acc, t) => t.duration + acc, 0) % 60;
   }
 }
 
