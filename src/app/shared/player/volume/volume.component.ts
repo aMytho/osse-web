@@ -1,4 +1,4 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ElementRef, ViewChild, signal } from '@angular/core';
 import { PlayerService } from '../player.service';
 import { mdiVolumeOff, mdiVolumeLow, mdiVolumeHigh } from '@mdi/js';
 import { IconComponent } from '../../ui/icon/icon.component';
@@ -8,19 +8,42 @@ import { IconComponent } from '../../ui/icon/icon.component';
   standalone: true,
   imports: [IconComponent],
   templateUrl: './volume.component.html',
-  styles: ``
+  styles: ``,
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class VolumeComponent {
   @ViewChild('volume') volumeInput!: ElementRef<HTMLInputElement>;
-  volumeIcon = mdiVolumeOff;
+  volumeIcon = signal(mdiVolumeOff);
   public showVolumeMenu: boolean = false;
 
   constructor(private playerService: PlayerService) {
     this.playerService.stateChanged.subscribe((_v) => this.setVolumeIcon());
+    this.playerService.playerLoaded.subscribe((_v) => this.setInitialVolume());
+  }
+
+  setInitialVolume(): void {
+    this.storeAndSetVolume(Number(localStorage.getItem('volume') ?? 0));
+    this.volumeInput.nativeElement.value = String(this.playerService.getVolume());
   }
 
   onVolumeChange(event: any) {
-    this.playerService.setVolume(event.target.value);
+    this.storeAndSetVolume(event.target.value);
+  }
+
+  adjustVolumeByScroll(event: any) {
+    event.preventDefault();
+    let currentVolume = this.playerService.getVolume();
+
+    let newVolume;
+    if (event.deltaY > 0) {
+      newVolume = Math.max(0, currentVolume - 0.05);
+    } else {
+      newVolume = Math.min(1, currentVolume + 0.05);
+    }
+
+    this.volumeInput.nativeElement.value = String(newVolume);
+    this.storeAndSetVolume(newVolume);
+    this.setVolumeIcon();
   }
 
   onVolumeSet() {
@@ -31,12 +54,12 @@ export class VolumeComponent {
   setVolumeIcon() {
     let volume = this.playerService.getVolume();
     if (volume == 0) {
-      this.volumeIcon = mdiVolumeOff;
+      this.volumeIcon.set(mdiVolumeOff);
     } else {
       if (volume <= 0.5) {
-        this.volumeIcon = mdiVolumeLow;
+        this.volumeIcon.set(mdiVolumeLow);
       } else {
-        this.volumeIcon = mdiVolumeHigh;
+        this.volumeIcon.set(mdiVolumeHigh);
       }
     }
   }
@@ -44,9 +67,9 @@ export class VolumeComponent {
   onMuteToggle() {
     let volume = this.playerService.getVolume();
     if (volume == 0) {
-      this.playerService.setVolume(0.5);
+      this.storeAndSetVolume(0.5);
     } else {
-      this.playerService.setVolume(0);
+      this.storeAndSetVolume(0);
     }
 
     this.setVolumeIcon();
@@ -55,6 +78,11 @@ export class VolumeComponent {
 
   public toggleMenu() {
     this.showVolumeMenu = !this.showVolumeMenu;
+  }
+
+  private storeAndSetVolume(volume: number) {
+    this.playerService.setVolume(volume);
+    localStorage.setItem('volume', volume.toString());
   }
 }
 
