@@ -11,11 +11,10 @@ import { mdiDotsVertical, mdiFastForward, mdiInformation, mdiPause, mdiPlay, mdi
 import { VolumeComponent } from './volume/volume.component';
 
 @Component({
-  selector: 'app-player',
-  standalone: true,
-  imports: [VolumeComponent, IconComponent, RouterLink, ButtonComponent],
-  templateUrl: './player.component.html',
-  styleUrl: `./player.component.css`,
+    selector: 'app-player',
+    imports: [VolumeComponent, IconComponent, RouterLink, ButtonComponent],
+    templateUrl: './player.component.html',
+    styleUrl: `./player.component.css`
 })
 export class PlayerComponent implements AfterViewInit {
   @ViewChild('player') player!: ElementRef<HTMLAudioElement>;

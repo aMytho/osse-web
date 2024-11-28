@@ -6,12 +6,11 @@ import { ButtonComponent } from '../../button/button.component';
 import { FormsModule } from '@angular/forms';
 
 @Component({
-  selector: 'app-add-to-playlist',
-  standalone: true,
-  imports: [ButtonComponent, FormsModule],
-  templateUrl: './add-to-playlist.component.html',
-  styles: ``,
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'app-add-to-playlist',
+    imports: [ButtonComponent, FormsModule],
+    templateUrl: './add-to-playlist.component.html',
+    styles: ``,
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AddToPlaylistComponent implements OnInit {
   @Input('track') track!: Track;

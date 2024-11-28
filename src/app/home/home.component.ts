@@ -14,10 +14,9 @@ import { Subscription } from 'rxjs';
 import { HeaderComponent } from '../shared/ui/header/header.component';
 
 @Component({
-  selector: 'app-home',
-  standalone: true,
-  imports: [IconComponent, TrackComponent, CommonModule, HeaderComponent],
-  templateUrl: './home.component.html'
+    selector: 'app-home',
+    imports: [IconComponent, TrackComponent, CommonModule, HeaderComponent],
+    templateUrl: './home.component.html'
 })
 export class HomeComponent implements OnInit, OnDestroy {
   public bg: string = "#";

@@ -6,12 +6,11 @@ import { FormsModule } from '@angular/forms';
 import { ToastService } from '../toast-container/toast.service';
 
 @Component({
-  selector: 'app-settings',
-  standalone: true,
-  imports: [HeaderComponent, ButtonComponent, FormsModule],
-  templateUrl: './settings.component.html',
-  styles: ``,
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'app-settings',
+    imports: [HeaderComponent, ButtonComponent, FormsModule],
+    templateUrl: './settings.component.html',
+    styles: ``,
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SettingsComponent implements OnInit {
   public scanInProgress: WritableSignal<boolean> = signal(false);

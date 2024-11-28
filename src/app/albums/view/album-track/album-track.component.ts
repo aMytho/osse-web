@@ -2,12 +2,11 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from 
 import { Track } from '../../../shared/services/track/track';
 
 @Component({
-  selector: 'app-album-track',
-  standalone: true,
-  imports: [],
-  templateUrl: './album-track.component.html',
-  styles: ``,
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'app-album-track',
+    imports: [],
+    templateUrl: './album-track.component.html',
+    styles: ``,
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AlbumTrackComponent {
   @Input()

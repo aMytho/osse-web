@@ -2,12 +2,11 @@ import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, C
 import { ModalService } from './modal.service';
 
 @Component({
-  selector: 'app-modal',
-  standalone: true,
-  imports: [],
-  templateUrl: './modal.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  styleUrl: './modal.styles.css'
+    selector: 'app-modal',
+    imports: [],
+    templateUrl: './modal.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    styleUrl: './modal.styles.css'
 })
 export class ModalComponent implements AfterViewInit {
   @Output() onClosed = new EventEmitter();

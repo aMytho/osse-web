@@ -6,12 +6,11 @@ import { HeaderComponent } from '../shared/ui/header/header.component';
 import { OsseAlbum } from '../shared/services/album/osse-album';
 
 @Component({
-  selector: 'app-albums',
-  standalone: true,
-  imports: [RouterLink, HeaderComponent],
-  templateUrl: './albums.component.html',
-  styles: ``,
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'app-albums',
+    imports: [RouterLink, HeaderComponent],
+    templateUrl: './albums.component.html',
+    styles: ``,
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AlbumsComponent implements OnInit {
   albums: WritableSignal<Album[]> = signal([]);

@@ -4,10 +4,9 @@ import { IconComponent } from '../../shared/ui/icon/icon.component';
 import { mdiClose, mdiDotsVertical, mdiPlaylistPlus, mdiStar, mdiTrashCan } from '@mdi/js';
 
 @Component({
-  selector: 'app-track',
-  standalone: true,
-  imports: [IconComponent],
-  templateUrl: './track.component.html'
+    selector: 'app-track',
+    imports: [IconComponent],
+    templateUrl: './track.component.html'
 })
 export class TrackComponent {
   @Input() track!: Track;

@@ -14,12 +14,11 @@ import { FormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 
 @Component({
-  selector: 'app-view',
-  standalone: true,
-  imports: [HeaderComponent, IconComponent, AlbumTrackComponent, FormsModule],
-  templateUrl: './view.component.html',
-  styles: ``,
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'app-view',
+    imports: [HeaderComponent, IconComponent, AlbumTrackComponent, FormsModule],
+    templateUrl: './view.component.html',
+    styles: ``,
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ViewComponent implements OnInit {
   public album!: WritableSignal<Album>;

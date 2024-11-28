@@ -7,12 +7,11 @@ import { Track } from '../shared/services/track/track';
 import { ToastService } from '../toast-container/toast.service';
 
 @Component({
-  selector: 'app-track-list',
-  standalone: true,
-  templateUrl: './track-list.component.html',
-  styles: ``,
-  imports: [HomeComponent, HeaderComponent],
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'app-track-list',
+    templateUrl: './track-list.component.html',
+    styles: ``,
+    imports: [HomeComponent, HeaderComponent],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TrackListComponent implements AfterViewInit, OnInit {
   @ViewChild('search') searchBar!: ElementRef;

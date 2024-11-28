@@ -14,11 +14,10 @@ import { TrackService } from '../../shared/services/track/track.service';
 import { ToastService } from '../../toast-container/toast.service';
 
 @Component({
-  selector: 'app-playlist-view',
-  standalone: true,
-  imports: [HeaderComponent, ButtonComponent, IconComponent, CommonModule, FormsModule],
-  templateUrl: './playlist-view.component.html',
-  styles: ``
+    selector: 'app-playlist-view',
+    imports: [HeaderComponent, ButtonComponent, IconComponent, CommonModule, FormsModule],
+    templateUrl: './playlist-view.component.html',
+    styles: ``
 })
 export class PlaylistViewComponent {
   @Input({ transform: numberAttribute })

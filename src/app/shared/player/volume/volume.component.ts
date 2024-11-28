@@ -4,12 +4,11 @@ import { mdiVolumeOff, mdiVolumeLow, mdiVolumeHigh } from '@mdi/js';
 import { IconComponent } from '../../ui/icon/icon.component';
 
 @Component({
-  selector: 'app-volume',
-  standalone: true,
-  imports: [IconComponent],
-  templateUrl: './volume.component.html',
-  styles: ``,
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'app-volume',
+    imports: [IconComponent],
+    templateUrl: './volume.component.html',
+    styles: ``,
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class VolumeComponent {
   @ViewChild('volume') volumeInput!: ElementRef<HTMLInputElement>;

@@ -8,12 +8,11 @@ import { IconComponent } from '../shared/ui/icon/icon.component';
 import { mdiPlus, mdiRefresh } from '@mdi/js';
 
 @Component({
-  selector: 'app-playlist',
-  standalone: true,
-  imports: [RouterLink, HeaderComponent, IconComponent],
-  templateUrl: './playlist.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  styles: ``
+    selector: 'app-playlist',
+    imports: [RouterLink, HeaderComponent, IconComponent],
+    templateUrl: './playlist.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    styles: ``
 })
 export class PlaylistComponent implements OnInit {
   public playlists: WritableSignal<Playlist[]> = signal([]);
