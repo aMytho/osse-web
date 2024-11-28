@@ -8,8 +8,10 @@ import { ButtonComponent } from '../../shared/ui/button/button.component';
 import { EditPlaylist } from './editPlaylistModel';
 import { FormsModule } from '@angular/forms';
 import { IconComponent } from '../../shared/ui/icon/icon.component';
-import { mdiPencil, mdiTrashCan } from '@mdi/js';
+import { mdiPencil, mdiPlaylistPlay, mdiTrashCan } from '@mdi/js';
 import { PlaylistService } from '../../shared/services/playlist/playlist.service';
+import { TrackService } from '../../shared/services/track/track.service';
+import { ToastService } from '../../toast-container/toast.service';
 
 @Component({
   selector: 'app-playlist-view',
@@ -26,6 +28,7 @@ export class PlaylistViewComponent {
 
   pencil = mdiPencil;
   trash = mdiTrashCan;
+  play = mdiPlaylistPlay;
 
   public playlist!: Playlist;
   public showEditMenu = false;
@@ -34,7 +37,9 @@ export class PlaylistViewComponent {
 
   constructor(
     private configService: ConfigService, private router: Router,
-    private playlistService: PlaylistService
+    private playlistService: PlaylistService,
+    private trackService: TrackService,
+    private notificationService: ToastService
   ) { }
 
   public delete() {
@@ -60,6 +65,14 @@ export class PlaylistViewComponent {
       this.getPlaylist(this.playlist.id);
       this.showEditMenu = false;
     }
+  }
+
+  public addTracksToQueue() {
+    for (let track of this.playlist.tracks) {
+      this.trackService.addTrack(track);
+    }
+
+    this.notificationService.info('Added ' + this.playlist.tracks.length + ' tracks');
   }
 
   private async getPlaylist(id: number) {

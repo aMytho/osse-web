@@ -6,6 +6,9 @@
     <button (click)="showEditMenu = !showEditMenu"
       class="font-semibold text-lg text-white p-2 rounded-md bg-transparent">Edit <app-icon
         [icon]="pencil"></app-icon></button>
+    <button (click)="addTracksToQueue()"
+      class="font-semibold text-lg text-white p-2 rounded-md bg-transparent">Play<app-icon
+        [icon]="play"></app-icon></button>
   </div>
   @if (showEditMenu) {
   <form #form="ngForm" (ngSubmit)="edit()" class="mt-2 bg-slate-400 bg-opacity-15 p-4 rounded-lg w-full">
