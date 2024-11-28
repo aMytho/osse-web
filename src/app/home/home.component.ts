@@ -6,7 +6,7 @@ import { PlayerService } from '../shared/player/player.service';
 import { PlaybackState } from '../shared/player/state-change';
 import { ConfigService } from '../shared/services/config/config.service';
 import { IconComponent } from '../shared/ui/icon/icon.component';
-import { mdiFastForward, mdiInformation, mdiPause, mdiPlay, mdiRepeat, mdiRewind, mdiShuffle, mdiSilverwareForkKnife } from '@mdi/js';
+import { mdiFastForward, mdiInformation, mdiPause, mdiPlay, mdiRepeat, mdiRewind, mdiShuffle, mdiSilverwareForkKnife, mdiDeleteSweep } from '@mdi/js';
 import { ModalService } from '../shared/ui/modal/modal.service';
 import { AddToPlaylistComponent } from '../shared/ui/modals/add-to-playlist/add-to-playlist.component';
 import { CommonModule } from '@angular/common';
@@ -36,6 +36,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   shuffle = mdiShuffle;
   info = mdiInformation;
   consume = mdiSilverwareForkKnife;
+  clear = mdiDeleteSweep;
 
   get playerIcon() {
     if (this.playing) {
@@ -103,6 +104,10 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   public toggleConsume() {
     this.trackService.consume = !this.trackService.consume;
+  }
+
+  public clearTracks() {
+    this.trackService.clearTracks();
   }
 
   public get consumeState() {

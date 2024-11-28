@@ -13,6 +13,10 @@
     <div class="text-center text-white mt-auto">
       <hr class="my-2">
       <div class="flex justify-around text-xl gap-x-4">
+        <button (click)="clearTracks()" class="rounded-full px-2 py-1 hover:bg-emerald-300 hover:bg-opacity-15"
+          title="Clear Tracks">
+          <app-icon rotate="90" [icon]="clear"></app-icon>
+        </button>
         <button class="rounded-full px-2 py-1 hover:bg-emerald-300 hover:bg-opacity-15" title="Repeat">
           <app-icon rotate="90" [icon]="repeat"></app-icon>
         </button>

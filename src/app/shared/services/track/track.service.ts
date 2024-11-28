@@ -48,11 +48,15 @@ export class TrackService {
     }
   }
 
+  // Removes all tracks and stops playback
   public clearTracks() {
     while (this.tracks.length != 0) {
       this.tracks.pop();
     }
+
     this.index = 0;
+    this.playerService.pause();
+    this.playerService.clearTrack();
   }
 
   public moveToNextTrack() {
