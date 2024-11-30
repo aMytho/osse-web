@@ -3,7 +3,6 @@ import { PlayerService } from './player.service';
 import { PointState } from './point-state';
 import { ConfigService } from '../services/config/config.service';
 import { RouterLink } from '@angular/router';
-import { ButtonComponent } from '../ui/button/button.component';
 import { PlaybackState } from './state-change';
 import { TrackService } from '../services/track/track.service';
 import { IconComponent } from '../ui/icon/icon.component';
@@ -11,10 +10,10 @@ import { mdiDotsVertical, mdiFastForward, mdiInformation, mdiPause, mdiPlay, mdi
 import { VolumeComponent } from './volume/volume.component';
 
 @Component({
-    selector: 'app-player',
-    imports: [VolumeComponent, IconComponent, RouterLink, ButtonComponent],
-    templateUrl: './player.component.html',
-    styleUrl: `./player.component.css`
+  selector: 'app-player',
+  imports: [VolumeComponent, IconComponent, RouterLink],
+  templateUrl: './player.component.html',
+  styleUrl: `./player.component.css`
 })
 export class PlayerComponent implements AfterViewInit {
   @ViewChild('player') player!: ElementRef<HTMLAudioElement>;

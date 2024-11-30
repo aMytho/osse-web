@@ -1,17 +1,16 @@
 import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, OnInit, ViewChild, WritableSignal, signal } from '@angular/core';
 import { TrackService } from '../shared/services/track/track.service';
-import { HomeComponent } from '../home/home.component';
 import { HeaderComponent } from '../shared/ui/header/header.component';
 import { ConfigService } from '../shared/services/config/config.service';
 import { Track } from '../shared/services/track/track';
 import { ToastService } from '../toast-container/toast.service';
 
 @Component({
-    selector: 'app-track-list',
-    templateUrl: './track-list.component.html',
-    styles: ``,
-    imports: [HomeComponent, HeaderComponent],
-    changeDetection: ChangeDetectionStrategy.OnPush
+  selector: 'app-track-list',
+  templateUrl: './track-list.component.html',
+  styles: ``,
+  imports: [HeaderComponent],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TrackListComponent implements AfterViewInit, OnInit {
   @ViewChild('search') searchBar!: ElementRef;
