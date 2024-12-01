@@ -1,3 +1,7 @@
 <div class="mt-4">
   <img src="{{albumUrl()}}" alt="Album art">
+
+  <div class="flex place-content-end gap-x-2 mt-2">
+    <app-button text="Close" [border]="false" (click)="close()"></app-button>
+  </div>
 </div>

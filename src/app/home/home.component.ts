@@ -12,11 +12,12 @@ import { AddToPlaylistComponent } from '../shared/ui/modals/add-to-playlist/add-
 import { CommonModule } from '@angular/common';
 import { Subscription } from 'rxjs';
 import { HeaderComponent } from '../shared/ui/header/header.component';
+import { AlbumArtFullscreenComponent } from '../shared/ui/modals/album-art-fullscreen/album-art-fullscreen.component';
 
 @Component({
-    selector: 'app-home',
-    imports: [IconComponent, TrackComponent, CommonModule, HeaderComponent],
-    templateUrl: './home.component.html'
+  selector: 'app-home',
+  imports: [IconComponent, TrackComponent, CommonModule, HeaderComponent],
+  templateUrl: './home.component.html'
 })
 export class HomeComponent implements OnInit, OnDestroy {
   public bg: string = "#";
@@ -107,6 +108,17 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   public clearTracks() {
     this.trackService.clearTracks();
+  }
+
+
+  public showAlbumArt() {
+    let url = this.configService.get('apiURL') + 'tracks/cover?id=' + this.trackService.activeTrack?.id;
+
+    this.modalService.setDynamicModal(AlbumArtFullscreenComponent, [{
+      name: 'url',
+      val: url
+    }], 'Album Art');
+    this.modalService.show();
   }
 
   public get consumeState() {
