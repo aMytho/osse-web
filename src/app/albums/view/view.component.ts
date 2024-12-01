@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnInit, WritableSignal, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, WritableSignal, computed, signal } from '@angular/core';
 import { AlbumTrackComponent } from './album-track/album-track.component';
 import { Album } from '../../shared/services/album/Album';
 import { ConfigService } from '../../shared/services/config/config.service';
@@ -12,13 +12,15 @@ import { mdiFilter, mdiSearchWeb } from '@mdi/js';
 import { AlbumFilter } from './album-filter';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
+import { ModalService } from '../../shared/ui/modal/modal.service';
+import { AlbumArtFullscreenComponent } from '../../shared/ui/modals/album-art-fullscreen/album-art-fullscreen.component';
 
 @Component({
-    selector: 'app-view',
-    imports: [HeaderComponent, IconComponent, AlbumTrackComponent, FormsModule],
-    templateUrl: './view.component.html',
-    styles: ``,
-    changeDetection: ChangeDetectionStrategy.OnPush
+  selector: 'app-view',
+  imports: [HeaderComponent, IconComponent, AlbumTrackComponent, FormsModule],
+  templateUrl: './view.component.html',
+  styles: ``,
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ViewComponent implements OnInit {
   public album!: WritableSignal<Album>;
@@ -37,7 +39,8 @@ export class ViewComponent implements OnInit {
     private trackService: TrackService,
     private notificationService: ToastService,
     private backgroundImageService: BackgroundImageService,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private modalService: ModalService
   ) { }
 
   public addAll() {
@@ -110,6 +113,16 @@ export class ViewComponent implements OnInit {
     let artist = ([...artists.entries()]).reduce((a, e) => e[1] > a[1] ? e : a);
     await this.album().tracks[artist[0]].getArtist();
     this.albumTrackArtist.set((this.album().tracks[artist[0]].artist())!.name + ' (Inferred)');
+  }
+
+  public showAlbumArt() {
+    let url = this.configService.get('apiURL') + 'tracks/cover?id=' + this.album().tracks[0]?.track.id;
+
+    this.modalService.setDynamicModal(AlbumArtFullscreenComponent, [{
+      name: 'url',
+      val: url
+    }], 'Album Art');
+    this.modalService.show();
   }
 
   ngOnInit(): void {
