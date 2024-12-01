@@ -114,7 +114,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
 
   public showAlbumArt() {
-    if (this.playing) {
+    if (this.trackService.activeTrack) {
       let url = this.configService.get('apiURL') + 'tracks/cover?id=' + this.trackService.activeTrack?.id;
 
       this.modalService.setDynamicModal(AlbumArtFullscreenComponent, [{
