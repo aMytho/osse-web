@@ -13,6 +13,7 @@ import { CommonModule } from '@angular/common';
 import { Subscription } from 'rxjs';
 import { HeaderComponent } from '../shared/ui/header/header.component';
 import { AlbumArtFullscreenComponent } from '../shared/ui/modals/album-art-fullscreen/album-art-fullscreen.component';
+import { ToastService } from '../toast-container/toast.service';
 
 @Component({
   selector: 'app-home',
@@ -50,7 +51,8 @@ export class HomeComponent implements OnInit, OnDestroy {
     private trackService: TrackService,
     private playerService: PlayerService,
     private configService: ConfigService,
-    private modalService: ModalService
+    private modalService: ModalService,
+    private notificationService: ToastService
   ) { }
 
   public onPlayerToggle() {
@@ -112,13 +114,17 @@ export class HomeComponent implements OnInit, OnDestroy {
 
 
   public showAlbumArt() {
-    let url = this.configService.get('apiURL') + 'tracks/cover?id=' + this.trackService.activeTrack?.id;
+    if (this.playing) {
+      let url = this.configService.get('apiURL') + 'tracks/cover?id=' + this.trackService.activeTrack?.id;
 
-    this.modalService.setDynamicModal(AlbumArtFullscreenComponent, [{
-      name: 'url',
-      val: url
-    }], 'Album Art');
-    this.modalService.show();
+      this.modalService.setDynamicModal(AlbumArtFullscreenComponent, [{
+        name: 'url',
+        val: url
+      }], 'Album Art');
+      this.modalService.show();
+    } else {
+      this.notificationService.info('You must have a track playing to view album art.');
+    }
   }
 
   public get consumeState() {
