@@ -31,16 +31,15 @@
   <app-header [type]="2" [text]="'Tracks'"></app-header>
   <div class="text-white bg-slate-500 bg-opacity-15 rounded-lg p-4">
     @if (playlist) {
-    @for (track of playlist.tracks; track track.id) {
-    <div class="text-lg">
-      {{track.title}}
+
+    <div
+      class="grid 2xl:grid-cols-3 lg:grid-cols-2 grid-cols-1 gap-x-5 gap-y-8 border-t border-gray-600 mt-2 pt-4 px-1 rounded-t-lg">
+      @for (track of playlist.tracks; track track.id) {
+      <app-album-track [track]="track" (addTrack)="addTrack($event)"></app-album-track>
+      } @empty {
+      <p class="text-white">No Tracks in this playlist.</p>
+      }
     </div>
-    <div class="italic">
-      {{track.artist()?.name}}
-    </div>
-    } @empty {
-    <p class="text-white">No Tracks in this playlist.</p>
-    }
     }
   </div>
 </div>

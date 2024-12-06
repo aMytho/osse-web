@@ -12,12 +12,14 @@ import { mdiPencil, mdiPlaylistPlay, mdiTrashCan } from '@mdi/js';
 import { PlaylistService } from '../../shared/services/playlist/playlist.service';
 import { TrackService } from '../../shared/services/track/track.service';
 import { ToastService } from '../../toast-container/toast.service';
+import { AlbumTrackComponent } from '../../albums/view/album-track/album-track.component';
+import { Track } from '../../shared/services/track/track';
 
 @Component({
-    selector: 'app-playlist-view',
-    imports: [HeaderComponent, ButtonComponent, IconComponent, CommonModule, FormsModule],
-    templateUrl: './playlist-view.component.html',
-    styles: ``
+  selector: 'app-playlist-view',
+  imports: [HeaderComponent, ButtonComponent, IconComponent, CommonModule, FormsModule, AlbumTrackComponent],
+  templateUrl: './playlist-view.component.html',
+  styles: ``
 })
 export class PlaylistViewComponent {
   @Input({ transform: numberAttribute })
@@ -64,6 +66,10 @@ export class PlaylistViewComponent {
       this.getPlaylist(this.playlist.id);
       this.showEditMenu = false;
     }
+  }
+
+  public addTrack(track: Track) {
+    this.trackService.addTrack(track);
   }
 
   public addTracksToQueue() {
