@@ -6,11 +6,11 @@ import { FormsModule } from '@angular/forms';
 import { ToastService } from '../toast-container/toast.service';
 
 @Component({
-    selector: 'app-settings',
-    imports: [HeaderComponent, ButtonComponent, FormsModule],
-    templateUrl: './settings.component.html',
-    styles: ``,
-    changeDetection: ChangeDetectionStrategy.OnPush
+  selector: 'app-settings',
+  imports: [HeaderComponent, ButtonComponent, FormsModule],
+  templateUrl: './settings.component.html',
+  styles: ``,
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SettingsComponent implements OnInit {
   public scanInProgress: WritableSignal<boolean> = signal(false);
@@ -41,15 +41,20 @@ export class SettingsComponent implements OnInit {
       // Save the URL
       this.configService.save("apiURL", this.url());
       this.notificationService.info("URL saved as " + this.configService.get("apiURL"));
+      this.requestSettings();
     } catch (e) {
       alert('Failed to reach server. URL not set. Confirm that the URL is correct and that the server is running.');
     }
   }
 
-  async ngOnInit(): Promise<void> {
+  public async requestSettings() {
     let req = await fetch(this.configService.get('apiURL') + 'config/directories');
     let res = await req.json();
 
     this.directories.set(res);
+  }
+
+  async ngOnInit(): Promise<void> {
+    await this.requestSettings();
   }
 }
