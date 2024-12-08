@@ -9,8 +9,8 @@ import { ModalService } from './shared/ui/modal/modal.service';
 export const appConfig: ApplicationConfig = {
   providers: [
     provideRouter(routes, withComponentInputBinding()),
-    {provide: ConfigService},
-    {provide: TrackService},
-    {provide: ModalService},
+    { provide: ConfigService },
+    { provide: TrackService },
+    { provide: ModalService },
   ]
-};
+}

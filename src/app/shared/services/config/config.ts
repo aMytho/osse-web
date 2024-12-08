@@ -1,3 +1,3 @@
 export interface OsseConfig {
-    apiURL: string;
+  apiURL: string;
 }

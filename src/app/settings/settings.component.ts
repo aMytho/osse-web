@@ -4,6 +4,7 @@ import { ButtonComponent } from '../shared/ui/button/button.component';
 import { ConfigService } from '../shared/services/config/config.service';
 import { FormsModule } from '@angular/forms';
 import { ToastService } from '../toast-container/toast.service';
+import { fetcher } from '../shared/util/fetcher';
 
 @Component({
   selector: 'app-settings',
@@ -37,7 +38,7 @@ export class SettingsComponent implements OnInit {
 
     // Check if the server is running
     try {
-      await fetch(this.url() + "ping");
+      await fetch(this.url() + 'api/ping');
       // Save the URL
       this.configService.save("apiURL", this.url());
       this.notificationService.info("URL saved as " + this.configService.get("apiURL"));
@@ -48,10 +49,13 @@ export class SettingsComponent implements OnInit {
   }
 
   public async requestSettings() {
-    let req = await fetch(this.configService.get('apiURL') + 'config/directories');
-    let res = await req.json();
+    try {
+      let res = await fetcher('config/directories');
+      this.directories.set(await res.json());
+    } catch (e) {
+      this.notificationService.error('Failed to reach server. Check that the URL is correct and that the server is running.');
+    }
 
-    this.directories.set(res);
   }
 
   async ngOnInit(): Promise<void> {

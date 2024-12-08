@@ -44,6 +44,6 @@ export class ApiService {
   }
 
   public get url() {
-    return this.configService.get('apiURL');
+    return this.configService.get('apiURL') + '/api/';
   }
 }

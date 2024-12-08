@@ -4,13 +4,14 @@ import { RouterLink } from '@angular/router';
 import { Album } from '../shared/services/album/Album';
 import { HeaderComponent } from '../shared/ui/header/header.component';
 import { OsseAlbum } from '../shared/services/album/osse-album';
+import { fetcher } from '../shared/util/fetcher';
 
 @Component({
-    selector: 'app-albums',
-    imports: [RouterLink, HeaderComponent],
-    templateUrl: './albums.component.html',
-    styles: ``,
-    changeDetection: ChangeDetectionStrategy.OnPush
+  selector: 'app-albums',
+  imports: [RouterLink, HeaderComponent],
+  templateUrl: './albums.component.html',
+  styles: ``,
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AlbumsComponent implements OnInit {
   albums: WritableSignal<Album[]> = signal([]);
@@ -21,7 +22,7 @@ export class AlbumsComponent implements OnInit {
   ) { }
 
   async ngOnInit(): Promise<void> {
-    let request = await fetch(this.configService.get('apiURL') + 'albums?tracks=true');
+    let request = await fetcher('albums?tracks=true');
     let result: OsseAlbum[] = await request.json();
 
     result.sort((a, b) => a.name.localeCompare(b.name));

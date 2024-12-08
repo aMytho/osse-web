@@ -10,7 +10,8 @@ export class Album {
   private apiService: ApiService = LocatorService.injector.get(ApiService);
 
   constructor(public album: OsseAlbum) {
-    album.tracks.forEach(track => {
+    console.log(album);
+    album.tracks?.forEach(track => {
       this.trackList.push(new Track(track));
     });
 

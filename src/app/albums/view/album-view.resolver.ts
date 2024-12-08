@@ -1,16 +1,14 @@
 import { ResolveFn } from '@angular/router';
 import { Album } from '../../shared/services/album/Album';
-import { inject } from '@angular/core';
-import { ConfigService } from '../../shared/services/config/config.service';
+import { fetcher } from '../../shared/util/fetcher';
 
 export const albumViewResolver: ResolveFn<Album> = async (route, state) => {
   let id = route.paramMap.get('id');
-  let configService = inject(ConfigService);
 
-  let request = await fetch(`${configService.get('apiURL')}albums/${id}/tracks`);
+  let request = await fetcher(`albums/${id}?tracks=true`);
   if (request.ok) {
     let album = await request.json();
-    return new Album(album);
+    return new Album(album.data);
   }
 
   throw "Not Found"

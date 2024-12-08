@@ -127,10 +127,11 @@ export class ViewComponent implements OnInit {
 
   ngOnInit(): void {
     this.album = signal(this.activatedRoute.snapshot.data['album']);
+    console.log(this.album());
 
     this.filteredTracks.set(this.album().tracks);
 
-    this.bg.set(this.configService.get('apiURL') + "tracks/cover?id=" + this.album().tracks[0].id);
+    this.bg.set(this.configService.get('apiURL') + "api/tracks/cover?id=" + this.album().tracks[0]?.id);
     this.backgroundImageService.setBG(this.bg());
 
     this.sortTracks();
