@@ -23,11 +23,11 @@ export class SettingsComponent implements OnInit {
   public scan() {
     this.scanInProgress.set(true);
 
-    fetch(this.configService.get('apiURL') + 'tracks/scan', {
+    fetcher('tracks/scan', {
       method: 'POST'
     }).then(_v => {
       this.scanInProgress.set(false);
-      alert('Scan Complete');
+      alert('Scan has started.');
     });
   }
 
