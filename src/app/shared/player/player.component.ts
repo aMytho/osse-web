@@ -196,7 +196,7 @@ export class PlayerComponent implements AfterViewInit {
       }
       this.artistTitle = val.artist?.name ?? '';
       // Set the cover bg
-      this.bg = this.configService.get('apiURL') + "tracks/cover?id=" + val.id;
+      this.bg = this.configService.get('apiURL') + "api/tracks/" + val.id + '/cover';
       this.setTitleAnimationByScreenSize();
     });
     this.playerService.bufferReset.subscribe(() => {

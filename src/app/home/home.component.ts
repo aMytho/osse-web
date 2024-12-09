@@ -115,7 +115,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   public showAlbumArt() {
     if (this.trackService.activeTrack) {
-      let url = this.configService.get('apiURL') + 'tracks/cover?id=' + this.trackService.activeTrack?.id;
+      let url = this.configService.get('apiURL') + 'api/tracks/' + this.trackService.activeTrack?.id + '/cover';
 
       this.modalService.setDynamicModal(AlbumArtFullscreenComponent, [{
         name: 'url',
@@ -137,7 +137,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.trackUpdated = this.playerService.trackUpdated.subscribe((val) => {
       this.title = val.title;
       this.artist = val.artist?.name || '';
-      this.bg = this.configService.get('apiURL', 'localhost:3000') + "tracks/cover?id=" + val.id;
+      this.bg = this.configService.get('apiURL', 'localhost:3000') + "tracks/" + val.id + '/cover';
     });
     this.stateChanged = this.playerService.stateChanged.subscribe((val) => {
       if (val == PlaybackState.Paused) {

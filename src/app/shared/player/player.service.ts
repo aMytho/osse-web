@@ -45,7 +45,7 @@ export class PlayerService {
     // Not all formats list the end duration at the start of the track
     this.audioPlayer.setAttribute("data-duration", track.duration.toString());
     this.audioPlayer.preload = "metadata";
-    this.audioPlayer.src = this.configService.get("apiURL") + "stream?id=" + track.id;
+    this.audioPlayer.src = this.configService.get("apiURL") + "api/tracks/" + track.id + '/stream';
     await this.play();
     this.backgroundImageService.setBG(this.configService.get('apiURL') + 'api/tracks/' + track.id + '/cover');
 

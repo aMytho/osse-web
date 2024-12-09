@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { ConfigService } from '../config/config.service';
 import { Playlist } from './Playlist';
 import { OssePlaylist } from './osse-playlist';
 import { fetcher } from '../../util/fetcher';
@@ -8,7 +7,7 @@ import { fetcher } from '../../util/fetcher';
   providedIn: 'root'
 })
 export class PlaylistService {
-  constructor(private configService: ConfigService) { }
+  constructor() { }
 
   public async getPlaylist(id: number) {
     let req = await fetcher('playlists/' + id);
@@ -22,7 +21,7 @@ export class PlaylistService {
   }
 
   public async getAll(): Promise<Playlist[]> {
-    let req = await fetch(this.configService.get('apiURL') + 'playlists', {});
+    let req = await fetcher('playlists');
     let res = await req.json();
 
     if (req.ok) {
@@ -33,13 +32,8 @@ export class PlaylistService {
   }
 
   public async addTrackToPlaylist(playlistId: number, trackId: number) {
-    await fetch(this.configService.get('apiURL') + 'playlists-tracks', {
-      method: 'POST',
-      headers: [['Content-Type', 'application/json']],
-      body: JSON.stringify({
-        playlist_id: playlistId,
-        track_id: trackId
-      })
+    await fetcher('playlists/' + playlistId + '/tracks/' + trackId, {
+      method: 'POST'
     });
   }
 }

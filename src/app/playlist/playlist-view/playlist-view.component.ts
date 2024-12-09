@@ -70,6 +70,7 @@ export class PlaylistViewComponent {
 
   public addTrack(track: Track) {
     this.trackService.addTrack(track);
+    this.notificationService.info('Added ' + track.title);
   }
 
   public addTracksToQueue() {

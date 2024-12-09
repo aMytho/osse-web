@@ -4,6 +4,7 @@ import { HeaderComponent } from '../shared/ui/header/header.component';
 import { ConfigService } from '../shared/services/config/config.service';
 import { Track } from '../shared/services/track/track';
 import { ToastService } from '../toast-container/toast.service';
+import { fetcher } from '../shared/util/fetcher';
 
 @Component({
   selector: 'app-track-list',
@@ -41,11 +42,12 @@ export class TrackListComponent implements AfterViewInit, OnInit {
 
   async ngOnInit(): Promise<void> {
     // On load, get the first 25 tracks
-    let req = await fetch(this.configService.get('apiURL') + 'tracks/search');
+    let req = await fetcher('tracks/search');
     this.loading.set(false);
     if (!req.ok) return;
-    let tracks = await req.json();
-    tracks.tracks.forEach((track: any) => {
+
+    let tracks = (await req.json());
+    tracks.forEach((track: any) => {
       this.allTracks.push(new Track(track));
     });
     this.tracks.set(this.allTracks);
@@ -100,8 +102,7 @@ export class TrackListComponent implements AfterViewInit, OnInit {
 
     // Search for tracks
     this.loading.set(true);
-    let req = await fetch(this.configService.get('apiURL')
-      + 'tracks/search?'
+    let req = await fetcher('tracks/search?'
       + new URLSearchParams({
         track: search,
         track_offset: offset.toString()
