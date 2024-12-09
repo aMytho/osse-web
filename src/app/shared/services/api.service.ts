@@ -4,6 +4,7 @@ import { Track } from './track/track';
 import { OsseTrack } from './track/osse-track';
 import { Artist } from './artist/artist';
 import { Album } from './album/Album';
+import { fetcher } from '../util/fetcher';
 
 @Injectable({
   providedIn: 'root'
@@ -24,7 +25,7 @@ export class ApiService {
   }
 
   public async getArtist(id: number): Promise<Artist | null> {
-    let request = await fetch(`${this.configService.get('apiURL')}artists?id=${id}`);
+    let request = await fetcher(`artists/${id}`);
     if (request.ok) {
       let artist = await request.json();
       return new Artist(artist);

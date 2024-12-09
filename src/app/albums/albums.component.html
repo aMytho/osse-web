@@ -6,7 +6,7 @@
   <div class="text-lg text-white flex flex-col">
     <a routerLink="view/{{album.id}}"
       class="hover:brightness-110 border-2 border-emerald-600 rounded-lg flex flex-col justify-end h-60 w-60 bg-cover cursor-pointer"
-      style="background-image: url('{{coverUrlBase()}}{{album.tracks[0]?.id ?? -1}}');">
+      style="background-image: url('{{coverUrlBase().replace('ID', album.tracks[0]?.id?.toString() ?? '-1')}}');">
       <div class="pt-4 text-center bg-opacity-45 bg-black p-2 rounded-b-md">
         <p>{{album.name}}</p>
       </div>

@@ -116,7 +116,7 @@ export class ViewComponent implements OnInit {
   }
 
   public showAlbumArt() {
-    let url = this.configService.get('apiURL') + 'tracks/cover?id=' + this.album().tracks[0]?.track.id;
+    let url = this.configService.get('apiURL') + 'api/tracks/' + this.album().tracks[0]?.track.id + '/cover';
 
     this.modalService.setDynamicModal(AlbumArtFullscreenComponent, [{
       name: 'url',
@@ -127,11 +127,9 @@ export class ViewComponent implements OnInit {
 
   ngOnInit(): void {
     this.album = signal(this.activatedRoute.snapshot.data['album']);
-    console.log(this.album());
-
     this.filteredTracks.set(this.album().tracks);
+    this.bg.set(this.configService.get('apiURL') + 'api/tracks/' + this.album().tracks[0]?.id + '/cover');
 
-    this.bg.set(this.configService.get('apiURL') + "api/tracks/cover?id=" + this.album().tracks[0]?.id);
     this.backgroundImageService.setBG(this.bg());
 
     this.sortTracks();

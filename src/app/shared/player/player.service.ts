@@ -47,7 +47,7 @@ export class PlayerService {
     this.audioPlayer.preload = "metadata";
     this.audioPlayer.src = this.configService.get("apiURL") + "stream?id=" + track.id;
     await this.play();
-    this.backgroundImageService.setBG(this.configService.get('apiURL') + 'tracks/cover?id=' + track.id);
+    this.backgroundImageService.setBG(this.configService.get('apiURL') + 'api/tracks/' + track.id + '/cover');
 
     this.trackUpdated.emit(new TrackUpdate(this.track, this.buildTrackInfo()));
     this.bufferReset.emit();

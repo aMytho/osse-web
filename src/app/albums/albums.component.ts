@@ -15,7 +15,7 @@ import { fetcher } from '../shared/util/fetcher';
 })
 export class AlbumsComponent implements OnInit {
   albums: WritableSignal<Album[]> = signal([]);
-  coverUrlBase: WritableSignal<string> = signal(this.configService.get('apiURL') + "tracks/cover?id=");
+  coverUrlBase: WritableSignal<string> = signal(this.configService.get('apiURL') + "api/tracks/ID/cover");
 
   constructor(
     private configService: ConfigService
