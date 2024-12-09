@@ -137,7 +137,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.trackUpdated = this.playerService.trackUpdated.subscribe((val) => {
       this.title = val.title;
       this.artist = val.artist?.name || '';
-      this.bg = this.configService.get('apiURL', 'localhost:3000') + "tracks/" + val.id + '/cover';
+      this.bg = this.configService.get('apiURL') + "api/tracks/" + val.id + '/cover';
     });
     this.stateChanged = this.playerService.stateChanged.subscribe((val) => {
       if (val == PlaybackState.Paused) {

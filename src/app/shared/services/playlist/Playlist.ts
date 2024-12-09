@@ -24,7 +24,7 @@ export class Playlist {
   }
 
   public get count() {
-    return this.playlist.count;
+    return this.playlist.tracks_count;
   }
 
   public async requestTracks() {
