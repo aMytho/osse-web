@@ -46,7 +46,7 @@ export class TrackListComponent implements AfterViewInit, OnInit {
     this.loading.set(false);
     if (!req.ok) return;
 
-    let tracks = (await req.json());
+    let tracks = await req.json();
     tracks.forEach((track: any) => {
       this.allTracks.push(new Track(track));
     });
@@ -108,10 +108,10 @@ export class TrackListComponent implements AfterViewInit, OnInit {
         track_offset: offset.toString()
       }).toString());
     this.loading.set(false);
-    if (!req.ok) return;
+    if (!req.ok && req.status == 200) return;
 
     let json = await req.json();
-    for (let track of json.tracks) {
+    for (let track of json) {
       if (this.allTracks.some(v => v.id == track.id)) continue;
       this.allTracks.push(new Track(track));
     }
