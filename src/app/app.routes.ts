@@ -6,6 +6,7 @@ import { ViewComponent as AlbumView } from './albums/view/view.component';
 import { PlaylistComponent } from './playlist/playlist.component';
 import { PlaylistViewComponent } from './playlist/playlist-view/playlist-view.component';
 import { albumViewResolver } from './albums/view/album-view.resolver';
+import { LoginComponent } from './login/login.component';
 
 export const routes: Routes = [
   {
@@ -38,6 +39,10 @@ export const routes: Routes = [
   {
     path: 'home',
     component: HomeComponent
+  },
+  {
+    path: 'login',
+    component: LoginComponent
   },
   {
     path: "**",
