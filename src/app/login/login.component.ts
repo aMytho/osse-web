@@ -55,6 +55,8 @@ export class LoginComponent {
 
     if (res.ok) {
       this.router.navigateByUrl('/home');
+    } else {
+      this.notificationService.error('Login error. Check that the username and password are correct.');
     }
   }
 }
