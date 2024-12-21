@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { EventEmitter, Injectable } from '@angular/core';
 import { Artist } from './artist';
 
 @Injectable({
@@ -6,6 +6,8 @@ import { Artist } from './artist';
 })
 export class ArtistStoreService {
   public artists: Artist[] = [];
+  public fetchingArists: number[] = [];
+  public artistFetched = new EventEmitter<number>();
 
   constructor() { }
 
@@ -21,5 +23,17 @@ export class ArtistStoreService {
 
   public artistIsLoaded(id: number) {
     return this.artists.some((a) => a.id == id);
+  }
+
+  public addFetchingArtist(id: number) {
+    this.fetchingArists.push(id);
+  }
+
+  public removeFetchingArtist(id: number) {
+    this.fetchingArists = this.fetchingArists.filter((a) => a != id);
+  }
+
+  public isFetchingArtist(id: number) {
+    return this.fetchingArists.includes(id);
   }
 }

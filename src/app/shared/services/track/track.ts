@@ -48,17 +48,37 @@ export class Track {
     if (!this.hasArtist()) {
       return;
     }
+
     // Check if it already exists in the store
     if (this.artistStore.artistIsLoaded(this.track.artist_id as number)) {
       this.setArtist();
       return;
     }
 
+    // We need to fetch artist. Check the fetch list to make sure we don't make multiple reqeuests for the same artist.
+    if (this.artistStore.isFetchingArtist(this.track.artist_id as number)) {
+      await new Promise<void>((resolve, _reject) => {
+        let sub = this.artistStore.artistFetched.subscribe((_v) => {
+          sub.unsubscribe();
+          resolve();
+        });
+      });
+
+      this.setArtist();
+
+      return;
+    }
+
+    // Not fetching artist, start fetching artist
+    this.artistStore.addFetchingArtist(this.track.artist_id as number);
     let artist = await this.apiService.getArtist(this.track.artist_id as number);
     if (artist) {
       this.artistStore.setArtist(artist);
       this.setArtist();
     }
+
+    this.artistStore.removeFetchingArtist(this.track.artist_id as number);
+    this.artistStore.artistFetched.emit(this.track.artist_id as number);
   }
 
   private setArtist() {
