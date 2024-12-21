@@ -16,11 +16,13 @@ export async function fetcher(url: string, args: Partial<FetcherArgs> = { method
   let headers = new Headers(args.headers);
   headers.append('X-XSRF-TOKEN', token);
   headers.append('Content-Type', 'application/json');
+  headers.append('Accept', 'application/json');
 
   return fetch(LocatorService.injector.get(ConfigService).get('apiURL') + 'api/' + url, {
     method: args.method,
     headers: headers,
-    body: args.body
+    body: args.body,
+    credentials: 'include'
   });
 }
 

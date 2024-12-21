@@ -49,13 +49,13 @@ export class SettingsComponent implements OnInit {
   }
 
   public async requestSettings() {
-    try {
-      let res = await fetcher('config/directories');
+    let res = await fetcher('config/directories');
+
+    if (res.ok) {
       this.directories.set(await res.json());
-    } catch (e) {
+    } else {
       this.notificationService.error('Failed to reach server. Check that the URL is correct and that the server is running.');
     }
-
   }
 
   async ngOnInit(): Promise<void> {

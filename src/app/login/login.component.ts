@@ -1,11 +1,12 @@
 import { Component, signal, WritableSignal } from '@angular/core';
-import { fetcher, getCSRFToken } from '../shared/util/fetcher';
+import { fetcher, getCookie } from '../shared/util/fetcher';
 import { HeaderComponent } from '../shared/ui/header/header.component';
 import { ButtonComponent } from '../shared/ui/button/button.component';
 import { FormsModule } from '@angular/forms';
 import { ToastService } from '../toast-container/toast.service';
 import { ConfigService } from '../shared/services/config/config.service';
 import { Router } from '@angular/router';
+import { AuthService } from '../shared/services/auth/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -19,7 +20,12 @@ export class LoginComponent {
   public serverFound: WritableSignal<boolean> = signal(false);
   public url: WritableSignal<string> = signal(this.configService.get("apiURL"));
 
-  constructor(private notificationService: ToastService, private configService: ConfigService, private router: Router) { }
+  constructor(
+    private notificationService: ToastService,
+    private configService: ConfigService,
+    private router: Router,
+    private authService: AuthService
+  ) { }
 
   public async saveURL() {
     if (!this.url().endsWith("/")) {
@@ -51,9 +57,9 @@ export class LoginComponent {
         password: this.password,
       })
     });
-    console.log(res);
 
     if (res.ok) {
+      this.authService.login();
       this.router.navigateByUrl('/home');
     } else {
       this.notificationService.error('Login error. Check that the username and password are correct.');

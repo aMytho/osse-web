@@ -7,38 +7,46 @@ import { PlaylistComponent } from './playlist/playlist.component';
 import { PlaylistViewComponent } from './playlist/playlist-view/playlist-view.component';
 import { albumViewResolver } from './albums/view/album-view.resolver';
 import { LoginComponent } from './login/login.component';
+import { isLoggedIn } from './shared/services/auth/auth.guard';
 
 export const routes: Routes = [
   {
     path: 'tracks',
-    component: TrackListComponent
+    component: TrackListComponent,
+    canActivate: [isLoggedIn]
   },
   {
     path: 'albums',
-    component: AlbumsComponent
+    component: AlbumsComponent,
+    canActivate: [isLoggedIn]
   },
   {
     path: 'albums/view/:id',
     component: AlbumView,
     resolve: {
       album: albumViewResolver
-    }
+    },
+    canActivate: [isLoggedIn]
   },
   {
     path: 'playlists',
-    component: PlaylistComponent
+    component: PlaylistComponent,
+    canActivate: [isLoggedIn]
   },
   {
     path: 'playlists/view/:id',
-    component: PlaylistViewComponent
+    component: PlaylistViewComponent,
+    canActivate: [isLoggedIn]
   },
   {
     path: 'settings',
-    loadComponent: () => import('./settings/settings.component').then(c => c.SettingsComponent)
+    loadComponent: () => import('./settings/settings.component').then(c => c.SettingsComponent),
+    canActivate: [isLoggedIn]
   },
   {
     path: 'home',
-    component: HomeComponent
+    component: HomeComponent,
+    canActivate: [isLoggedIn]
   },
   {
     path: 'login',
@@ -46,6 +54,6 @@ export const routes: Routes = [
   },
   {
     path: "**",
-    redirectTo: "home"
+    redirectTo: "home",
   }
 ];
