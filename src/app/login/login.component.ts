@@ -1,5 +1,5 @@
 import { Component, signal, WritableSignal } from '@angular/core';
-import { fetcher, getCookie } from '../shared/util/fetcher';
+import { fetcher } from '../shared/util/fetcher';
 import { HeaderComponent } from '../shared/ui/header/header.component';
 import { ButtonComponent } from '../shared/ui/button/button.component';
 import { FormsModule } from '@angular/forms';
@@ -55,7 +55,8 @@ export class LoginComponent {
       body: JSON.stringify({
         username: this.username,
         password: this.password,
-      })
+      }),
+      rootURL: this.configService.get('apiURL')
     });
 
     if (res.ok) {

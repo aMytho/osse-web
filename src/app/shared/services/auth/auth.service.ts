@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { fetcher, getCookie } from '../../util/fetcher';
+import { fetcher } from '../../util/fetcher';
 
 @Injectable({
   providedIn: 'root'

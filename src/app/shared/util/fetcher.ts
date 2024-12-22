@@ -2,7 +2,7 @@ import { LocatorService } from "../../locator.service";
 import { ToastService } from "../../toast-container/toast.service";
 import { ConfigService } from "../services/config/config.service";
 
-export async function fetcher(url: string, args: Partial<FetcherArgs> = { method: 'GET', headers: [], body: null }): Promise<Response> {
+export async function fetcher(url: string, args: Partial<FetcherArgs> = { method: 'GET', headers: [], body: null, rootURL: null }): Promise<Response> {
   let token = '';
   try {
     token = await getCSRFToken() as string;
@@ -14,11 +14,11 @@ export async function fetcher(url: string, args: Partial<FetcherArgs> = { method
 
   // Add the XSRF token to the header list
   let headers = new Headers(args.headers);
-  headers.append('X-XSRF-TOKEN', token);
+  headers.append('X-XSRF-TOKEN', decodeURIComponent(token));
   headers.append('Content-Type', 'application/json');
   headers.append('Accept', 'application/json');
 
-  return fetch(LocatorService.injector.get(ConfigService).get('apiURL') + 'api/' + url, {
+  return fetch((args.rootURL ?? LocatorService.injector.get(ConfigService).get('apiURL') + 'api/') + url, {
     method: args.method,
     headers: headers,
     body: args.body,
@@ -50,14 +50,16 @@ export async function getCSRFToken() {
   return token;
 }
 
-export function getCookie(cookieName: string): string | null {
-  let match = document.cookie.match(new RegExp('(^| )' + cookieName + '=([^;]+)'));
-  if (match) return match[2];
-  return null;
+function getCookie(name: string) {
+  const value = `; ${document.cookie}`;
+  const parts = value.split(`; ${name}=`);
+  if (parts.length === 2) return parts.pop()?.split(';').shift();
+  return '';
 }
 
 export type FetcherArgs = {
   method: string,
   headers: HeadersInit,
-  body: BodyInit | null
+  body: BodyInit | null,
+  rootURL: string | null
 }
