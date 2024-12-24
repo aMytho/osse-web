@@ -3,14 +3,14 @@
     <button (click)="delete()"
       class="font-semibold text-lg text-white hover:text-red-500 p-2 rounded-md bg-transparent group">Delete <app-icon
         class="group-hover:fill-red-500" [icon]="trash"></app-icon></button>
-    <button (click)="showEditMenu = !showEditMenu"
+    <button (click)="showEditMenu.set(!showEditMenu())"
       class="font-semibold text-lg text-white p-2 rounded-md bg-transparent">Edit <app-icon
         [icon]="pencil"></app-icon></button>
     <button (click)="addTracksToQueue()"
       class="font-semibold text-lg text-white p-2 rounded-md bg-transparent">Play<app-icon
         [icon]="play"></app-icon></button>
   </div>
-  @if (showEditMenu) {
+  @if (showEditMenu()) {
   <form #form="ngForm" (ngSubmit)="edit()" class="mt-2 bg-slate-400 bg-opacity-15 p-4 rounded-lg w-full">
     <div>
       <app-header [type]="2" text="Edit Playlist"></app-header>
@@ -29,17 +29,7 @@
   <app-header [text]="playlist?.name ?? 'Loading'"></app-header>
 
   <app-header [type]="2" [text]="'Tracks'"></app-header>
-  <div class="text-white bg-slate-500 bg-opacity-15 rounded-lg p-4">
-    @if (playlist) {
-
-    <div
-      class="grid 2xl:grid-cols-3 lg:grid-cols-2 grid-cols-1 gap-x-5 gap-y-8 border-t border-gray-600 mt-2 pt-4 px-1 rounded-t-lg">
-      @for (track of playlist.tracks; track track.id) {
-      <app-album-track [track]="track" (addTrack)="addTrack($event)"></app-album-track>
-      } @empty {
-      <p class="text-white">No Tracks in this playlist.</p>
-      }
-    </div>
-    }
-  </div>
+  @if (playlist) {
+    <app-track-matrix [tracks]="playlist.tracks" [mode]="mode()" (onClick)="addTrack($event)"></app-track-matrix>
+  }
 </div>

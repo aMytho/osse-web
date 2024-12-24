@@ -1,4 +1,4 @@
-import { Component, Input, numberAttribute } from '@angular/core';
+import { Component, computed, Input, numberAttribute, Signal, signal, ViewChild, WritableSignal } from '@angular/core';
 import { Playlist } from '../../shared/services/playlist/Playlist';
 import { HeaderComponent } from '../../shared/ui/header/header.component';
 import { Router } from '@angular/router';
@@ -11,17 +11,19 @@ import { mdiPencil, mdiPlaylistPlay, mdiTrashCan } from '@mdi/js';
 import { PlaylistService } from '../../shared/services/playlist/playlist.service';
 import { TrackService } from '../../shared/services/track/track.service';
 import { ToastService } from '../../toast-container/toast.service';
-import { AlbumTrackComponent } from '../../albums/view/album-track/album-track.component';
 import { Track } from '../../shared/services/track/track';
 import { fetcher } from '../../shared/util/fetcher';
+import { TrackMatrixComponent } from '../../shared/ui/track-matrix/track-matrix.component';
+import { TrackMatrixMode } from '../../shared/ui/track-matrix/track-matrix-mode.enum';
 
 @Component({
   selector: 'app-playlist-view',
-  imports: [HeaderComponent, ButtonComponent, IconComponent, CommonModule, FormsModule, AlbumTrackComponent],
+  imports: [HeaderComponent, ButtonComponent, IconComponent, CommonModule, FormsModule, TrackMatrixComponent],
   templateUrl: './playlist-view.component.html',
   styles: ``
 })
 export class PlaylistViewComponent {
+  @ViewChild(TrackMatrixComponent) tracks!: TrackMatrixComponent;
   @Input({ transform: numberAttribute })
   set id(id: number) {
     this.getPlaylist(id);
@@ -32,9 +34,10 @@ export class PlaylistViewComponent {
   play = mdiPlaylistPlay;
 
   public playlist!: Playlist;
-  public showEditMenu = false;
+  public showEditMenu: WritableSignal<boolean> = signal(false);
   public ready = false;
   public model = new EditPlaylist('');
+  public mode: Signal<TrackMatrixMode> = computed(() => this.showEditMenu() ? TrackMatrixMode.Select : TrackMatrixMode.View);
 
   constructor(
     private router: Router,
@@ -64,7 +67,7 @@ export class PlaylistViewComponent {
 
     if (req.ok) {
       this.getPlaylist(this.playlist.id);
-      this.showEditMenu = false;
+      this.showEditMenu.set(false);
     }
   }
 
