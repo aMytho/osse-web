@@ -1,4 +1,4 @@
-import { Component, ElementRef, Injector, ViewChild } from '@angular/core';
+import { Component, ElementRef, Injector, signal, ViewChild, WritableSignal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { NavigationComponent } from './navigation/navigation.component';
 import { PlayerComponent } from './shared/player/player.component';
@@ -10,14 +10,14 @@ import { ModalComponent } from './shared/ui/modal/modal.component';
 import { LocatorService } from './locator.service';
 
 @Component({
-    selector: 'app-root',
-    imports: [RouterOutlet, NavigationComponent, PlayerComponent, ToastContainerComponent, ModalComponent],
-    templateUrl: './app.component.html',
-    styleUrl: './app.component.css'
+  selector: 'app-root',
+  imports: [RouterOutlet, NavigationComponent, PlayerComponent, ToastContainerComponent, ModalComponent],
+  templateUrl: './app.component.html',
+  styleUrl: './app.component.css'
 })
 export class AppComponent {
   title = 'Osse';
-  playerState: boolean = false;
+  playerState: WritableSignal<boolean> = signal(false);
   @ViewChild('outlet') outlet!: ElementRef;
 
   public get bg() {
@@ -36,11 +36,7 @@ export class AppComponent {
       this.outlet.nativeElement.style.setProperty('--bg', `url('${v}')`);
     });
     this.playerService.stateChanged.subscribe((s) => {
-      if (s == PlaybackState.Playing) {
-        this.playerState = true;
-      } else {
-        this.playerState = false;
-      }
+      this.playerState.set(s == PlaybackState.Playing);
     });
   }
 }
