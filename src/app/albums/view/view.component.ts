@@ -1,5 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnInit, WritableSignal, computed, signal } from '@angular/core';
-import { AlbumTrackComponent } from './album-track/album-track.component';
+import { ChangeDetectionStrategy, Component, OnInit, WritableSignal, signal } from '@angular/core';
 import { Album } from '../../shared/services/album/Album';
 import { ConfigService } from '../../shared/services/config/config.service';
 import { TrackService } from '../../shared/services/track/track.service';
@@ -14,10 +13,11 @@ import { FormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { ModalService } from '../../shared/ui/modal/modal.service';
 import { AlbumArtFullscreenComponent } from '../../shared/ui/modals/album-art-fullscreen/album-art-fullscreen.component';
+import { TrackMatrixComponent } from '../../shared/ui/track-matrix/track-matrix.component';
 
 @Component({
   selector: 'app-view',
-  imports: [HeaderComponent, IconComponent, AlbumTrackComponent, FormsModule],
+  imports: [HeaderComponent, IconComponent, FormsModule, TrackMatrixComponent],
   templateUrl: './view.component.html',
   styles: ``,
   changeDetection: ChangeDetectionStrategy.OnPush
