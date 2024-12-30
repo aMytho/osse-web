@@ -1,0 +1,17 @@
+<div class="text-white">
+  <p>Select a playlist to add <span class="font-semibold">{{tracks.length}}</span> tracks to.</p>
+  <form class="mt-2">
+    <label for="playlist-add">Playlist: </label>
+    <select [ngModel]="model()" (ngModelChange)="model.set($event)" name="playlist" class="text-black p-2 rounded-md"
+      required>
+      @for (playlist of playlists(); track playlist.id;) {
+      <option [value]="playlist.id">{{playlist.name}}</option>
+      }
+    </select>
+  </form>
+
+  <div class="flex place-content-end gap-x-2 mt-4">
+    <app-button text="Cancel" [border]="false" (click)="close()"></app-button>
+    <app-button text="Save" type="submit" [disabled]="model() == -1" (click)="onSave()"></app-button>
+  </div>
+</div>

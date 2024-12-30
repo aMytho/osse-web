@@ -2,24 +2,23 @@ import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, C
 import { ModalService } from './modal.service';
 
 @Component({
-    selector: 'app-modal',
-    imports: [],
-    templateUrl: './modal.component.html',
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    styleUrl: './modal.styles.css'
+  selector: 'app-modal',
+  imports: [],
+  templateUrl: './modal.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  styleUrl: './modal.styles.css'
 })
 export class ModalComponent implements AfterViewInit {
-  @Output() onClosed = new EventEmitter();
   // Parent Modal
   @ViewChild('modal') modal!: ElementRef<HTMLDialogElement>;
   // VCR (dynamic content)
-  @ViewChild('vcr', {static: true, read: ViewContainerRef}) vcr!: ViewContainerRef;
+  @ViewChild('vcr', { static: true, read: ViewContainerRef }) vcr!: ViewContainerRef;
   title: string = '';
   // Active component
   component!: ComponentRef<any>;
   cdr = inject(ChangeDetectorRef);
 
-  constructor(private modalService: ModalService) {}
+  constructor(private modalService: ModalService) { }
 
   public open() {
     this.modal.nativeElement.showModal();
@@ -29,7 +28,7 @@ export class ModalComponent implements AfterViewInit {
     this.modal.nativeElement.close();
     this.component.destroy();
     this.title = '';
-    this.onClosed.emit();
+    this.modalService.onClose.emit();
   }
 
   ngAfterViewInit(): void {
@@ -41,7 +40,7 @@ export class ModalComponent implements AfterViewInit {
       this.title = v[1];
 
       // Set any input props
-      (v[2] ?? []).forEach((input: {name: string, val: any}) => {
+      (v[2] ?? []).forEach((input: { name: string, val: any }) => {
         this.component.instance[`${input.name}`] = input.val;
       });
 

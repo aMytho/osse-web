@@ -36,4 +36,13 @@ export class PlaylistService {
       method: 'POST'
     });
   }
+
+  public addTracksToPlaylist(playlistId: number, trackIds: number[]) {
+    return fetcher('playlists/' + playlistId + '/track-set', {
+      method: 'POST',
+      body: JSON.stringify({
+        'track-ids': trackIds
+      })
+    });
+  }
 }
