@@ -3,9 +3,8 @@
     <button (click)="delete()"
       class="font-semibold text-lg text-white hover:text-red-500 p-2 rounded-md bg-transparent group">Delete <app-icon
         class="group-hover:fill-red-500" [icon]="trash"></app-icon></button>
-    <button (click)="showEditMenu.set(!showEditMenu())"
-      class="font-semibold text-lg text-white p-2 rounded-md bg-transparent">Edit <app-icon
-        [icon]="pencil"></app-icon></button>
+    <button (click)="toggleEditMenu()" class="font-semibold text-lg text-white p-2 rounded-md bg-transparent">Edit
+      <app-icon [icon]="pencil"></app-icon></button>
     <button (click)="addTracksToQueue()"
       class="font-semibold text-lg text-white p-2 rounded-md bg-transparent">Play<app-icon
         [icon]="play"></app-icon></button>
@@ -30,6 +29,6 @@
 
   <app-header [type]="2" [text]="'Tracks'"></app-header>
   @if (playlist) {
-    <app-track-matrix [tracks]="playlist.tracks" [mode]="mode()" (onClick)="addTrack($event)"></app-track-matrix>
+  <app-track-matrix [tracks]="playlist.tracks" (onClick)="addTrack($event)"></app-track-matrix>
   }
 </div>

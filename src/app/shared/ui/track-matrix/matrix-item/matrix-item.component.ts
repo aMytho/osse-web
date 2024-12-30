@@ -1,4 +1,4 @@
-import { Component, input, Input, InputSignal, output, signal, WritableSignal } from '@angular/core';
+import { Component, input, InputSignal, output, signal, WritableSignal } from '@angular/core';
 import { Track } from '../../../services/track/track';
 import { TrackMatrixMode } from '../track-matrix-mode.enum';
 import { CommonModule } from '@angular/common';
@@ -10,8 +10,7 @@ import { CommonModule } from '@angular/common';
   styles: ``
 })
 export class MatrixItemComponent {
-  @Input()
-  public track!: Track;
+  public track = input.required<Track>();
   public TrackMatrixMode = TrackMatrixMode;
   public mode: InputSignal<TrackMatrixMode> = input<TrackMatrixMode>(TrackMatrixMode.View);
   public selected: WritableSignal<boolean> = signal(false);
@@ -22,5 +21,17 @@ export class MatrixItemComponent {
   public toggleSelected() {
     this.selected.set(!this.selected());
     this.onSelectToggle.emit(this.selected());
+  }
+
+  public determineClickTypeAndEmitEvent(event: MouseEvent) {
+    if (event.ctrlKey) {
+      this.toggleSelected();
+    } else {
+      this.onClick.emit();
+    }
+  }
+
+  public setSelected(selected: boolean) {
+    this.selected.set(selected);
   }
 }

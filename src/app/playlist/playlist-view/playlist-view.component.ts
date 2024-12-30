@@ -1,4 +1,4 @@
-import { Component, computed, Input, numberAttribute, Signal, signal, ViewChild, WritableSignal } from '@angular/core';
+import { Component, Input, numberAttribute, signal, ViewChild, WritableSignal } from '@angular/core';
 import { Playlist } from '../../shared/services/playlist/Playlist';
 import { HeaderComponent } from '../../shared/ui/header/header.component';
 import { Router } from '@angular/router';
@@ -37,7 +37,6 @@ export class PlaylistViewComponent {
   public showEditMenu: WritableSignal<boolean> = signal(false);
   public ready = false;
   public model = new EditPlaylist('');
-  public mode: Signal<TrackMatrixMode> = computed(() => this.showEditMenu() ? TrackMatrixMode.Select : TrackMatrixMode.View);
 
   constructor(
     private router: Router,
@@ -89,6 +88,11 @@ export class PlaylistViewComponent {
     await this.playlist.requestTracks();
     this.model.name = this.playlist.name;
     this.ready = true;
+  }
+
+  public toggleEditMenu() {
+    this.showEditMenu.set(!this.showEditMenu());
+    this.tracks.setMode(this.showEditMenu() ? TrackMatrixMode.Select : TrackMatrixMode.View);
   }
 }
 

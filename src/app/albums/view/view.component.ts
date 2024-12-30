@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnInit, WritableSignal, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnDestroy, OnInit, ViewChild, WritableSignal, signal } from '@angular/core';
 import { Album } from '../../shared/services/album/Album';
 import { ConfigService } from '../../shared/services/config/config.service';
 import { TrackService } from '../../shared/services/track/track.service';
@@ -7,32 +7,43 @@ import { HeaderComponent } from '../../shared/ui/header/header.component';
 import { ToastService } from '../../toast-container/toast.service';
 import { BackgroundImageService } from '../../shared/ui/background-image.service';
 import { IconComponent } from '../../shared/ui/icon/icon.component';
-import { mdiFilter, mdiSearchWeb } from '@mdi/js';
+import { mdiDeleteSweep, mdiFilter, mdiPencil, mdiPlaylistPlay, mdiSearchWeb } from '@mdi/js';
 import { AlbumFilter } from './album-filter';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { ModalService } from '../../shared/ui/modal/modal.service';
 import { AlbumArtFullscreenComponent } from '../../shared/ui/modals/album-art-fullscreen/album-art-fullscreen.component';
 import { TrackMatrixComponent } from '../../shared/ui/track-matrix/track-matrix.component';
+import { CommonModule } from '@angular/common';
+import { TrackMatrixMode } from '../../shared/ui/track-matrix/track-matrix-mode.enum';
+import { AddMultipleTracksToPlaylistComponent } from '../../shared/ui/modals/add-multiple-tracks-to-playlist/add-multiple-tracks-to-playlist.component';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-view',
-  imports: [HeaderComponent, IconComponent, FormsModule, TrackMatrixComponent],
+  imports: [HeaderComponent, IconComponent, FormsModule, TrackMatrixComponent, CommonModule],
   templateUrl: './view.component.html',
   styles: ``,
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ViewComponent implements OnInit {
+export class ViewComponent implements OnInit, OnDestroy {
+  @ViewChild(TrackMatrixComponent) matrix!: TrackMatrixComponent;
   public album!: WritableSignal<Album>;
   public filteredTracks: WritableSignal<Track[]> = signal([]);
   public filterType = AlbumFilter;
   public chosenFilter: WritableSignal<AlbumFilter> = signal(AlbumFilter.TrackNumber);
   public albumTrackArtist: WritableSignal<string> = signal('');
-  public bg = signal("");
+  public bg = signal('');
   public duration = 0;
+  public editing: WritableSignal<boolean> = signal(false);
 
   search = mdiSearchWeb;
   filter = mdiFilter;
+  pencil = mdiPencil;
+  clear = mdiDeleteSweep;
+  play = mdiPlaylistPlay;
+
+  private modalSubscription!: Subscription;
 
   constructor(
     private configService: ConfigService,
@@ -125,6 +136,42 @@ export class ViewComponent implements OnInit {
     this.modalService.show();
   }
 
+  public handleModeChange(mode: TrackMatrixMode) {
+    if (mode == TrackMatrixMode.Select) {
+      this.editing.set(true);
+    } else {
+      this.editing.set(false);
+    }
+  }
+
+  public handleEmptySelection() {
+    this.matrix.setMode(TrackMatrixMode.View);
+  }
+
+  /**
+  * Removes all selected tracks.
+  */
+  public clearSelectedTracks() {
+    this.matrix.clearSelectedTracks();
+  }
+
+  public playSelectedTracks() {
+    let tracks = this.matrix.getSelectedTracks();
+    for (const track of tracks) {
+      this.trackService.addTrack(track);
+    }
+
+    this.notificationService.info('Added ' + tracks.length + ' tracks.');
+  }
+
+  public addSelectedTracksToPlaylist() {
+    this.modalService.setDynamicModal(AddMultipleTracksToPlaylistComponent, [{
+      name: 'tracks',
+      val: this.matrix.getSelectedTracks()
+    }], 'Add to Playlist');
+    this.modalService.show();
+  }
+
   ngOnInit(): void {
     this.album = signal(this.activatedRoute.snapshot.data['album']);
     this.filteredTracks.set(this.album().tracks);
@@ -136,6 +183,14 @@ export class ViewComponent implements OnInit {
     this.artistFromTracks();
 
     this.duration = this.album().tracks.reduce((acc, t) => t.duration + acc, 0) % 60;
+
+    this.modalSubscription = this.modalService.onClose.subscribe((_) => {
+      this.clearSelectedTracks();
+    });
+  }
+
+  public ngOnDestroy(): void {
+    this.modalSubscription.unsubscribe();
   }
 }
 
