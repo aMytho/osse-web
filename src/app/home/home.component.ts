@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, signal, WritableSignal } from '@angular/core';
 import { TrackComponent } from './track/track.component';
 import { TrackService } from '../shared/services/track/track.service';
 import { Track } from '../shared/services/track/track';
@@ -6,7 +6,7 @@ import { PlayerService } from '../shared/player/player.service';
 import { PlaybackState } from '../shared/player/state-change';
 import { ConfigService } from '../shared/services/config/config.service';
 import { IconComponent } from '../shared/ui/icon/icon.component';
-import { mdiFastForward, mdiInformation, mdiPause, mdiPlay, mdiRepeat, mdiRewind, mdiShuffle, mdiSilverwareForkKnife, mdiDeleteSweep } from '@mdi/js';
+import { mdiFastForward, mdiInformation, mdiRepeat, mdiRewind, mdiShuffle, mdiSilverwareForkKnife, mdiDeleteSweep } from '@mdi/js';
 import { ModalService } from '../shared/ui/modal/modal.service';
 import { AddToPlaylistComponent } from '../shared/ui/modals/add-to-playlist/add-to-playlist.component';
 import { CommonModule } from '@angular/common';
@@ -21,11 +21,11 @@ import { ToastService } from '../toast-container/toast.service';
   templateUrl: './home.component.html'
 })
 export class HomeComponent implements OnInit, OnDestroy {
-  public bg: string = "#";
-  public tracks: Track[] = [];
+  public bg: WritableSignal<string> = signal("#");
+  public tracks: WritableSignal<Track[]> = signal([]);
   public playing: boolean = false;
-  public title: string = 'No Track Found';
-  public artist: string = '';
+  public title: WritableSignal<string> = signal('No Track Found');
+  public artist: WritableSignal<string> = signal('');
 
   private trackUpdated!: Subscription;
   private playbackEnded!: Subscription;
@@ -38,14 +38,6 @@ export class HomeComponent implements OnInit, OnDestroy {
   info = mdiInformation;
   consume = mdiSilverwareForkKnife;
   clear = mdiDeleteSweep;
-
-  get playerIcon() {
-    if (this.playing) {
-      return mdiPause;
-    } else {
-      return mdiPlay;
-    }
-  }
 
   constructor(
     private trackService: TrackService,
@@ -101,7 +93,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   public shuffleTracks() {
     this.trackService.shuffle();
-    this.tracks = this.trackService.tracks;
+    this.tracks.set(this.trackService.tracks);
   }
 
   public toggleConsume() {
@@ -132,12 +124,12 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.tracks = this.trackService.tracks;
+    this.tracks.set(this.trackService.tracks);
 
     this.trackUpdated = this.playerService.trackUpdated.subscribe((val) => {
-      this.title = val.title;
-      this.artist = val.artist?.name || '';
-      this.bg = this.configService.get('apiURL') + "api/tracks/" + val.id + '/cover';
+      this.title.set(val.title);
+      this.artist.set(val.artist?.name || '');
+      this.bg.set(this.configService.get('apiURL') + "api/tracks/" + val.id + '/cover');
     });
     this.stateChanged = this.playerService.stateChanged.subscribe((val) => {
       if (val == PlaybackState.Paused) {
@@ -147,9 +139,9 @@ export class HomeComponent implements OnInit, OnDestroy {
       }
     });
     this.playbackEnded = this.playerService.playbackEnded.subscribe(_ => {
-      this.title = "";
-      this.artist = "";
-      this.bg = "#";
+      this.title.set('');
+      this.artist.set('');
+      this.bg.set("#");
       this.playing = false;
     });
 

@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, computed, ElementRef, signal, ViewChild, WritableSignal } from '@angular/core';
 import { PlayerService } from './player.service';
 import { PointState } from './point-state';
 import { ConfigService } from '../services/config/config.service';
@@ -6,7 +6,7 @@ import { RouterLink } from '@angular/router';
 import { PlaybackState } from './state-change';
 import { TrackService } from '../services/track/track.service';
 import { IconComponent } from '../ui/icon/icon.component';
-import { mdiDotsVertical, mdiFastForward, mdiInformation, mdiPause, mdiPlay, mdiRepeat, mdiRewind, mdiSilverwareForkKnife } from '@mdi/js';
+import { mdiDotsVertical, mdiFastForward, mdiPause, mdiPlay, mdiRewind } from '@mdi/js';
 import { VolumeComponent } from './volume/volume.component';
 
 @Component({
@@ -22,33 +22,23 @@ export class PlayerComponent implements AfterViewInit {
   @ViewChild('rendered') rendered!: ElementRef<HTMLDivElement>;
   @ViewChild('trackTitleElement') trackTitleElement!: ElementRef<HTMLParagraphElement>;
 
-  public bg: string = "#";
-  public currentTime: string = '';
-  public totalDuration: string = '';
-  public trackTitle: string = '';
-  public artistTitle: string = '';
+  public bg: WritableSignal<string> = signal("#");
+  public currentTime: WritableSignal<string> = signal('');
+  public totalDuration: WritableSignal<string> = signal('');
+  public trackTitle: WritableSignal<string> = signal('');
+  public artistTitle: WritableSignal<string> = signal('');
   private isDragging = false;
   private abortMouseMove = new AbortController();
   private seekDuration = 0;
-  public playing: boolean = false;
+  public playing: WritableSignal<boolean> = signal(false);
+  public playerIcon = computed(() => this.playing() ? mdiPause : mdiPlay);
   private resizeTimer = 0;
 
   play = mdiPlay;
   pause = mdiPause;
   forward = mdiFastForward;
   back = mdiRewind;
-  repeat = mdiRepeat;
-  consume = mdiSilverwareForkKnife;
-  info = mdiInformation;
   verticalDots = mdiDotsVertical;
-
-  get playerIcon() {
-    if (this.playing) {
-      return mdiPause;
-    } else {
-      return mdiPlay;
-    }
-  }
 
   constructor(
     private playerService: PlayerService, private configService: ConfigService,
@@ -70,9 +60,9 @@ export class PlayerComponent implements AfterViewInit {
   public onPlayerToggle() {
     // If no track, don't respond to button click
     if (!this.trackService.activeTrack) return;
-    this.playing = !this.playing;
+    this.playing.set(!this.playing());
 
-    if (!this.playing) {
+    if (!this.playing()) {
       this.playerService.pause();
       return;
     } else {
@@ -187,34 +177,34 @@ export class PlayerComponent implements AfterViewInit {
   ngAfterViewInit(): void {
     this.playerService.setAudioPlayer(this.player.nativeElement);
     this.playerService.trackUpdated.subscribe((val) => {
-      this.totalDuration = val.getDuration();
-      this.currentTime = val.getCurrentTime();
-      this.trackTitle = val.title;
+      this.totalDuration.set(val.getDuration());
+      this.currentTime.set(val.getCurrentTime());
+      this.trackTitle.set(val.title);
       // If the user is not seeking, update the position
       if (!this.isDragging) {
         this.point.nativeElement.style.left = Math.floor((val.currentSecond / val.totalSeconds) * 100) + "%";
       }
-      this.artistTitle = val.artist?.name ?? '';
+      this.artistTitle.set(val.artist?.name ?? '');
       // Set the cover bg
-      this.bg = this.configService.get('apiURL') + "api/tracks/" + val.id + '/cover';
+      this.bg.set(this.configService.get('apiURL') + "api/tracks/" + val.id + '/cover');
       this.setTitleAnimationByScreenSize();
     });
     this.playerService.bufferReset.subscribe(() => {
       this.setGradient(0, "transparent", 100);
     });
     this.playerService.playbackEnded.subscribe(_ => {
-      this.totalDuration = "";
-      this.currentTime = "";
-      this.trackTitle = "";
-      this.artistTitle = "";
-      this.bg = "#";
+      this.totalDuration.set('');
+      this.currentTime.set('');
+      this.trackTitle.set('');
+      this.artistTitle.set('');
+      this.bg.set('#');
     });
 
     this.playerService.stateChanged.subscribe((val) => {
       if (val == PlaybackState.Paused) {
-        this.playing = false;
+        this.playing.set(false);
       } else {
-        this.playing = true;
+        this.playing.set(true);
       }
     });
 

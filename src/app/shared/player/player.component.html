@@ -2,14 +2,14 @@
   <div class="min-h-14 h-full w-full flex lg:justify-between md:gap-x-8 gap-x-4 items-center">
     <div class="flex gap-x-4 items-center basis-1/4">
       <a class="bg-slate-300 rounded-md backdrop-blur-sm w-14 h-14 p-2 inline-block bg-cover drop-shadow-glow max-md:hidden"
-        style="background-image: url('{{bg}}');" routerLink="/"></a>
+        style="background-image: url('{{bg()}}');" routerLink="/"></a>
       <div class="grow shrink">
         <div id="track-title-container" class="w-full relative whitespace-nowrap overflow-hidden font-semibold text-lg">
-          <p class="whitespace-nowrap w-min" #trackTitleElement>
-            {{trackTitle}}
+          <p class="whitespace-nowrap w-min overflow-hidden overflow-ellipsis" #trackTitleElement>
+            {{trackTitle()}}
           </p>
         </div>
-        <p class="italic">{{artistTitle}}</p>
+        <p class="italic whitespace-nowrap overflow-hidden overflow-ellipsis">{{artistTitle()}}</p>
       </div>
     </div>
     <div class="lg:basis-1/4 basis-3/4">
@@ -21,7 +21,7 @@
           <app-icon [icon]="back"></app-icon>
         </button>
         <button (click)="onPlayerToggle()" class="rounded-full px-2 py-1 hover:bg-emerald-300 hover:bg-opacity-15">
-          <app-icon [icon]="playerIcon"></app-icon>
+          <app-icon [icon]="playerIcon()"></app-icon>
         </button>
         <button (click)="onNextTrack()" class="rounded-full px-2 py-1 hover:bg-emerald-300 hover:bg-opacity-15">
           <app-icon [icon]="forward"></app-icon>
@@ -30,7 +30,7 @@
       </div>
     </div>
     <div class="basis-1/4 flex gap-x-4 max-lg:hidden">
-      <p>{{ currentTime || '0:00' }}</p>
+      <p>{{ currentTime() || '0:00' }}</p>
       <div class="w-full flex flex-col items-center justify-around gap-y-1">
         <div #progressContainer id="progressContainer" (mousedown)="onSetPosition($event)"
           class="relative w-full z-10 h-2 flex items-center bg-slate-700 bg-opacity-40 cursor-pointer">
@@ -40,7 +40,7 @@
             (mousedown)="onMouseDown($event)" (drag)="onMouseMove($event)"></div>
         </div>
       </div>
-      <p>{{ totalDuration || '0:00' }}</p>
+      <p>{{ totalDuration() || '0:00' }}</p>
     </div>
   </div>
 </div>

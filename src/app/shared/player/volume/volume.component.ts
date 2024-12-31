@@ -1,19 +1,19 @@
-import { ChangeDetectionStrategy, Component, ElementRef, ViewChild, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ElementRef, ViewChild, WritableSignal, signal } from '@angular/core';
 import { PlayerService } from '../player.service';
 import { mdiVolumeOff, mdiVolumeLow, mdiVolumeHigh } from '@mdi/js';
 import { IconComponent } from '../../ui/icon/icon.component';
 
 @Component({
-    selector: 'app-volume',
-    imports: [IconComponent],
-    templateUrl: './volume.component.html',
-    styles: ``,
-    changeDetection: ChangeDetectionStrategy.OnPush
+  selector: 'app-volume',
+  imports: [IconComponent],
+  templateUrl: './volume.component.html',
+  styles: ``,
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class VolumeComponent {
   @ViewChild('volume') volumeInput!: ElementRef<HTMLInputElement>;
   volumeIcon = signal(mdiVolumeOff);
-  public showVolumeMenu: boolean = false;
+  public showVolumeMenu: WritableSignal<boolean> = signal(false);
 
   constructor(private playerService: PlayerService) {
     this.playerService.stateChanged.subscribe((_v) => this.setVolumeIcon());
@@ -47,7 +47,7 @@ export class VolumeComponent {
 
   onVolumeSet() {
     this.setVolumeIcon();
-    this.showVolumeMenu = false;
+    this.showVolumeMenu.set(false);
   }
 
   setVolumeIcon() {
@@ -76,7 +76,7 @@ export class VolumeComponent {
   }
 
   public toggleMenu() {
-    this.showVolumeMenu = !this.showVolumeMenu;
+    this.showVolumeMenu.set(!this.showVolumeMenu());
   }
 
   private storeAndSetVolume(volume: number) {
