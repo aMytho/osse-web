@@ -49,6 +49,11 @@ export class Track {
       return;
     }
 
+    if (this.track.artist != null) {
+      this.artist.set(new Artist(this.track.artist));
+      return;
+    }
+
     // Check if it already exists in the store
     if (this.artistStore.artistIsLoaded(this.track.artist_id as number)) {
       this.setArtist();

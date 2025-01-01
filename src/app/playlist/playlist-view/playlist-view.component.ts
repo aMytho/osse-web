@@ -35,7 +35,7 @@ export class PlaylistViewComponent {
 
   public playlist!: Playlist;
   public showEditMenu: WritableSignal<boolean> = signal(false);
-  public ready = false;
+  public ready: WritableSignal<boolean> = signal(false);
   public model = new EditPlaylist('');
 
   constructor(
@@ -85,9 +85,8 @@ export class PlaylistViewComponent {
 
   private async getPlaylist(id: number) {
     this.playlist = await this.playlistService.getPlaylist(id);
-    await this.playlist.requestTracks();
     this.model.name = this.playlist.name;
-    this.ready = true;
+    this.ready.set(true);
   }
 
   public toggleEditMenu() {

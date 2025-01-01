@@ -14,9 +14,7 @@ export class Album {
       this.trackList.push(new Track(track));
     });
 
-    if (this.album.artist_id != null) {
-      this.apiService.getArtist(this.album.artist_id).then(val => this.artistInfo = val as Artist);
-    }
+    this.getArtistIfExists();
   }
 
   public get id() {
@@ -33,5 +31,16 @@ export class Album {
 
   public get artist() {
     return this.artistInfo ?? null;
+  }
+
+  private getArtistIfExists() {
+    if (this.album.artist_id != null) {
+      if (this.album.artist != null) {
+        this.artistInfo = new Artist(this.album.artist);
+        return;
+      }
+
+      this.apiService.getArtist(this.album.artist_id).then(val => this.artistInfo = val as Artist);
+    }
   }
 }

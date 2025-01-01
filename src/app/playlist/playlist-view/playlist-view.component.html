@@ -1,4 +1,4 @@
-<div [ngClass]="{'animate-pulse pointer-events-none': !ready}">
+<div [ngClass]="{'animate-pulse pointer-events-none': !ready()}">
   <div class="bg-slate-400 bg-opacity-15 px-4 rounded-lg w-full flex justify-around gap-x-2">
     <button (click)="delete()"
       class="font-semibold text-lg text-white hover:text-red-500 p-2 rounded-md bg-transparent group">Delete <app-icon
