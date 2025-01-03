@@ -5,6 +5,7 @@ import { ApiService } from "../api.service";
 import { ArtistStoreService } from "../artist/artist-store.service";
 import { OsseTrack } from "./osse-track";
 import { Artist } from "../artist/artist";
+import { v4 as uuid } from 'uuid';
 
 export class Track {
   public track!: OsseTrack;
@@ -12,9 +13,15 @@ export class Track {
   private apiService: ApiService = LocatorService.injector.get(ApiService);
   public bufferSize: number = 0;
   public artist: WritableSignal<Artist | null> = signal(null);
+  /**
+  * Generates a random uuid. Use for a unique identifier instead of track ID. This changes each time this class is created.
+  * Track IDs should be used for server communication only.
+  */
+  public uuid: string;
 
   constructor(track: OsseTrack) {
     this.track = track;
+    this.uuid = uuid();
 
     // Grab the artist info
     this.getArtist();
