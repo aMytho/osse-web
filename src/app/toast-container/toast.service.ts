@@ -13,7 +13,7 @@ export class ToastService {
 
     setTimeout(() => {
       this.toasts.splice(this.toasts.length - 1, 1);
-    }, 5000);
+    }, 6000);
   }
 
   public error(message: string) {
@@ -21,7 +21,7 @@ export class ToastService {
 
     setTimeout(() => {
       this.toasts.splice(this.toasts.length - 1, 1);
-    }, 5000);
+    }, 7000);
   }
 
   private generateId(): number {

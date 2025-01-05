@@ -33,7 +33,7 @@ export class TrackMatrixComponent {
       this.selectedTracks.push(track);
       this.onTrackSelected.emit(track);
     } else {
-      this.selectedTracks = this.selectedTracks.filter((t) => t != track);
+      this.selectedTracks = this.selectedTracks.filter((t) => t.uuid != track.uuid);
     }
 
     this.checkForEmptySelection();
