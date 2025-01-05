@@ -60,7 +60,7 @@ export class LoginComponent {
     });
 
     if (res.ok) {
-      this.authService.login();
+      await this.authService.attemptLogin();
       this.router.navigateByUrl('/home');
     } else {
       this.notificationService.error('Login error. Check that the username and password are correct.');

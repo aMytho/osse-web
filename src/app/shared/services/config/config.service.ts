@@ -11,7 +11,9 @@ export class ConfigService {
   constructor() {
     // Get the ENV and populate any variables. Localstorage has priority
     this.config = {
-      apiURL: localStorage.getItem('apiURL') ?? environment.apiUrl
+      apiURL: localStorage.getItem('apiURL') ?? environment.apiURL,
+      version: environment.version,
+      broadcastURL: environment.broadcastURL
     };
   }
 
