@@ -28,7 +28,8 @@
           class="rounded-full px-2 py-1 hover:bg-emerald-300 hover:bg-opacity-15">
           <app-icon [active]="consumeState" pull="left" [icon]="consume"></app-icon>
         </button>
-        <button title="Info" class="rounded-full px-2 py-1 hover:bg-emerald-300 hover:bg-opacity-15">
+        <button (click)="showTrackInfo()" title="Info"
+          class="rounded-full px-2 py-1 hover:bg-emerald-300 hover:bg-opacity-15">
           <app-icon [icon]="info"></app-icon>
         </button>
       </div>

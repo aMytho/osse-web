@@ -14,6 +14,7 @@ import { Subscription } from 'rxjs';
 import { HeaderComponent } from '../shared/ui/header/header.component';
 import { AlbumArtFullscreenComponent } from '../shared/ui/modals/album-art-fullscreen/album-art-fullscreen.component';
 import { ToastService } from '../toast-container/toast.service';
+import { TrackInfoComponent } from '../shared/ui/modals/track-info/track-info.component';
 
 @Component({
   selector: 'app-home',
@@ -121,6 +122,18 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   public get consumeState() {
     return this.trackService.consume;
+  }
+
+  showTrackInfo() {
+    if (this.trackService.activeTrack) {
+      this.modalService.setDynamicModal(TrackInfoComponent, [{
+        name: 'trackInfo',
+        val: this.trackService.activeTrack
+      }], 'Track Info');
+      this.modalService.show();
+    } else {
+      this.notificationService.info('You must have a track playing to view track info.');
+    }
   }
 
   ngOnInit(): void {
