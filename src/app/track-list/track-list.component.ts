@@ -1,10 +1,10 @@
-import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, OnInit, ViewChild, WritableSignal, signal } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, OnDestroy, OnInit, ViewChild, WritableSignal, signal } from '@angular/core';
 import { TrackService } from '../shared/services/track/track.service';
 import { HeaderComponent } from '../shared/ui/header/header.component';
-import { ConfigService } from '../shared/services/config/config.service';
 import { Track } from '../shared/services/track/track';
 import { ToastService } from '../toast-container/toast.service';
 import { fetcher } from '../shared/util/fetcher';
+import { fromEvent, Subscription, throttleTime } from 'rxjs';
 
 @Component({
   selector: 'app-track-list',
@@ -13,34 +13,34 @@ import { fetcher } from '../shared/util/fetcher';
   imports: [HeaderComponent],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class TrackListComponent implements AfterViewInit, OnInit {
+export class TrackListComponent implements AfterViewInit, OnInit, OnDestroy {
   @ViewChild('search') searchBar!: ElementRef;
   public loading: WritableSignal<boolean> = signal(true);
   public tracks: WritableSignal<Track[]> = signal([]);
   private allTracks: Track[] = [];
   private timeout: number = 0;
-  private scrollTimeout: number = 0;
+  private scrollSubscription!: Subscription;
 
   constructor(
     private trackService: TrackService,
-    private configService: ConfigService,
     private notificationService: ToastService
   ) { }
 
   ngAfterViewInit(): void {
     this.searchBar.nativeElement.focus();
-    window.addEventListener('scroll', () => {
-      const endOfPage = window.innerHeight + window.pageYOffset >= (document.body.offsetHeight * 0.8);
-      if (endOfPage) {
-        clearTimeout(this.scrollTimeout);
-        this.scrollTimeout = setTimeout(() => {
-          this.requestTracks(this.searchBar.nativeElement.value);
-        }, 500);
-      }
-    })
   }
 
   async ngOnInit(): Promise<void> {
+    // Listen for scroll events
+    this.scrollSubscription = fromEvent(window, 'scroll')
+      .pipe(throttleTime(500))
+      .subscribe(() => {
+        const endOfPage = window.innerHeight + window.pageYOffset >= (document.body.offsetHeight * 0.8);
+        if (endOfPage) {
+          this.requestTracks(this.searchBar.nativeElement.value);
+        }
+      })
+
     // On load, get the first 25 tracks
     let req = await fetcher('tracks/search');
     this.loading.set(false);
@@ -121,5 +121,11 @@ export class TrackListComponent implements AfterViewInit, OnInit {
   public getMatchingTracks(search: string): Track[] {
     let regex = new RegExp(search, 'i');
     return this.allTracks.filter((v) => regex.test(v.track.title));
+  }
+
+  ngOnDestroy(): void {
+    if (this.scrollSubscription) {
+      this.scrollSubscription.unsubscribe();
+    }
   }
 }
