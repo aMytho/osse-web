@@ -46,11 +46,13 @@ export class PlaylistViewComponent {
   ) { }
 
   public delete() {
-    fetcher('playlists/' + this.playlist.id, {
-      method: 'DELETE',
-    }).then((_r) => {
-      this.router.navigate(['/playlists']);
-    })
+    if (confirm(`Are you sure you want to delete ${this.playlist.name}?`)) {
+      fetcher('playlists/' + this.playlist.id, {
+        method: 'DELETE',
+      }).then((_r) => {
+        this.router.navigate(['/playlists']);
+      })
+    }
   }
 
   public async edit() {

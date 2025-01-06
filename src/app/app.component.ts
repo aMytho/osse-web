@@ -20,10 +20,6 @@ export class AppComponent {
   playerState: WritableSignal<boolean> = signal(false);
   @ViewChild('outlet') outlet!: ElementRef;
 
-  public get bg() {
-    return this.backgroundImageService.background;
-  }
-
   constructor(
     private backgroundImageService: BackgroundImageService,
     private playerService: PlayerService,
