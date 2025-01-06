@@ -1,6 +1,6 @@
 import { WritableSignal, signal } from "@angular/core";
 import { LocatorService } from "../../../locator.service";
-import { getDuration } from "../../util/time";
+import { getNicelyFormattedTime } from "../../util/time";
 import { ApiService } from "../api.service";
 import { ArtistStoreService } from "../artist/artist-store.service";
 import { OsseTrack } from "./osse-track";
@@ -44,7 +44,7 @@ export class Track {
   }
 
   public get durationFormatted() {
-    return getDuration(this.track.duration);
+    return getNicelyFormattedTime(this.track.duration);
   }
 
   public hasArtist(): boolean {

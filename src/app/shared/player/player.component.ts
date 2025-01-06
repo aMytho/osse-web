@@ -8,6 +8,7 @@ import { IconComponent } from '../ui/icon/icon.component';
 import { mdiDotsVertical, mdiFastForward, mdiPause, mdiPlay, mdiRewind } from '@mdi/js';
 import { VolumeComponent } from './volume/volume.component';
 import { BufferUpdate } from './buffer-update.interface';
+import { getNicelyFormattedTime } from '../util/time';
 
 @Component({
   selector: 'app-player',
@@ -133,16 +134,14 @@ export class PlayerComponent implements AfterViewInit {
   }
 
   private onBufferProgress(bufferUpdate: BufferUpdate) {
-    const duration = bufferUpdate.durationEstimate;
-    const trueDuration = bufferUpdate.duration;
-    const buffered = bufferUpdate.buffered;
+    const { duration, buffered } = bufferUpdate;
 
-    this.point.nativeElement.style.animationDuration = trueDuration + "s";
+    this.point.nativeElement.style.animationDuration = duration + "s";
 
     if (duration > 0) {
       for (let i = 0; i < buffered.length; i++) {
-        let start = buffered.start(i) / trueDuration * 100;
-        let end = buffered.end(i) / trueDuration * 100;
+        let start = buffered.start(i) / duration * 100;
+        let end = buffered.end(i) / duration * 100;
         this.setGradient(Math.floor(start), "var(--point-buffered)", Math.floor(end));
       }
     }
@@ -165,21 +164,30 @@ export class PlayerComponent implements AfterViewInit {
    */
   ngAfterViewInit(): void {
     this.playerService.trackUpdated.subscribe((val) => {
-      this.totalDuration.set(val.getDuration());
-      this.currentTime.set(val.getCurrentTime());
+      this.totalDuration.set(val.durationFormatted);
       this.trackTitle.set(val.title);
-      // If the user is not seeking, update the position
-      if (!this.isDragging) {
-        this.point.nativeElement.style.left = Math.floor((val.currentSecond / val.totalSeconds) * 100) + "%";
-      }
       this.artistTitle.set(val.artist?.name ?? '');
       // Set the cover bg
       this.bg.set(this.configService.get('apiURL') + "api/tracks/" + val.id + '/cover');
       this.setTitleAnimationByScreenSize();
     });
+
+    this.playerService.trackPositionUpdate.subscribe((val) => {
+      this.currentTime.set(getNicelyFormattedTime(val.currentTimeSeconds))
+
+      // If the user is not seeking, update the position
+      if (!this.isDragging) {
+        this.point.nativeElement.style.left = Math.floor((val.currentTimeSeconds / val.totalTimeSeconds) * 100) + "%";
+      }
+
+      // Set the duration as we may have a more accurate total duration.
+      this.totalDuration.set(getNicelyFormattedTime(val.totalTimeSeconds));
+    });
+
     this.playerService.bufferReset.subscribe(() => {
       this.setGradient(0, "transparent", 100);
     });
+
     this.playerService.playbackEnded.subscribe(_ => {
       this.totalDuration.set('');
       this.currentTime.set('');

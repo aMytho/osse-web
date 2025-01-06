@@ -1,11 +1,9 @@
 export interface BufferUpdate {
   /**
-   * Duration from the scan.
+   * Duration from the audio player.
+   * This is usually inaccurate at the early parts of the song when it is not entirely downloaded.
+   * It is usually accurate at the end when the entire song is downloaded.
   */
   duration: number;
-  /**
-   * Browser duration estimate. May not be accurate.
-  */
-  durationEstimate: number;
   buffered: TimeRanges;
 }
