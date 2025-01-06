@@ -4,7 +4,7 @@ import { HeaderComponent } from '../shared/ui/header/header.component';
 import { Track } from '../shared/services/track/track';
 import { ToastService } from '../toast-container/toast.service';
 import { fetcher } from '../shared/util/fetcher';
-import { fromEvent, Subscription, throttleTime } from 'rxjs';
+import { debounceTime, fromEvent, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-track-list',
@@ -33,7 +33,7 @@ export class TrackListComponent implements AfterViewInit, OnInit, OnDestroy {
   async ngOnInit(): Promise<void> {
     // Listen for scroll events
     this.scrollSubscription = fromEvent(window, 'scroll')
-      .pipe(throttleTime(500))
+      .pipe(debounceTime(500))
       .subscribe(() => {
         const endOfPage = window.innerHeight + window.pageYOffset >= (document.body.offsetHeight * 0.8);
         if (endOfPage) {
