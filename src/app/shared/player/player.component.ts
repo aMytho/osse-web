@@ -170,6 +170,7 @@ export class PlayerComponent implements AfterViewInit {
       // Set the cover bg
       this.bg.set(this.configService.get('apiURL') + "api/tracks/" + val.id + '/cover');
       this.setTitleAnimationByScreenSize();
+      this.setGradient(0, "transparent", 100);
     });
 
     this.playerService.trackPositionUpdate.subscribe((val) => {
@@ -184,16 +185,13 @@ export class PlayerComponent implements AfterViewInit {
       this.totalDuration.set(getNicelyFormattedTime(val.totalTimeSeconds));
     });
 
-    this.playerService.bufferReset.subscribe(() => {
-      this.setGradient(0, "transparent", 100);
-    });
-
     this.playerService.playbackEnded.subscribe(_ => {
       this.totalDuration.set('');
       this.currentTime.set('');
       this.trackTitle.set('');
       this.artistTitle.set('');
       this.bg.set('#');
+      this.setGradient(0, "transparent", 100);
     });
 
     this.playerService.bufferUpdated.subscribe((ev) => this.onBufferProgress(ev));

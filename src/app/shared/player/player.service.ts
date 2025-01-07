@@ -19,7 +19,6 @@ export class PlayerService {
   public trackPositionUpdate = new EventEmitter<TrackPosition>();
   public stateChanged = new EventEmitter<PlaybackState>();
   public playbackEnded = new EventEmitter();
-  public bufferReset = new EventEmitter();
   public bufferUpdated = new EventEmitter<BufferUpdate>();
   private audioPlayer = new Audio();
   private track!: Track | null;
@@ -49,7 +48,6 @@ export class PlayerService {
     this.audioPlayer.addEventListener('ended', (_ev) => {
       this.isPlayingSignal.set(false);
       this.playbackEnded.emit();
-      this.bufferReset.emit();
     });
     this.audioPlayer.addEventListener('progress', (_ev) => {
       this.durationSignal.update((oldDuration: number) => {
@@ -81,7 +79,6 @@ export class PlayerService {
     // We do this last. It may slow down the player if it is first since it makes a network request.
     // Browsers are async, but our server isn't (yet).
     this.backgroundImageService.setBG(this.configService.get('apiURL') + 'api/tracks/' + track.id + '/cover');
-    console.log(this.track.duration, this.audioPlayer);
   }
 
   public play(time: number = this.audioPlayer.currentTime) {
@@ -112,27 +109,11 @@ export class PlayerService {
     }
   }
 
-  /**
-   * Causes the service to emit all track info to all subscribed listeners
-   */
-  public requestTrackState() {
-    if (this.track) {
-      this.trackUpdated.emit(new TrackUpdate(this.track, this.buildTrackInfo()));
-    }
-
-    if (!this.audioPlayer.paused) {
-      this.stateChanged.emit(PlaybackState.Playing);
-    } else {
-      this.stateChanged.emit(PlaybackState.Paused);
-    }
-  }
-
   public clearTrack() {
     this.audioPlayer.src = "#";
     this.audioPlayer.currentTime = 0;
     this.track = null;
     this.isPlayingSignal.set(false);
-    this.bufferReset.emit();
     this.playbackEnded.emit();
   }
 

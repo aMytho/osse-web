@@ -150,7 +150,12 @@ export class HomeComponent implements OnInit, OnDestroy {
       this.playing = false;
     });
 
-    this.playerService.requestTrackState();
+    // Get the initial value of the current track
+    if (this.trackService.activeTrack) {
+      this.title.set(this.trackService.activeTrack.title);
+      this.artist.set(this.trackService.activeTrack.artist()?.name ?? '');
+      this.bg.set(this.configService.get('apiURL') + "api/tracks/" + this.trackService.activeTrack.id + '/cover');
+    }
   }
 
   ngOnDestroy(): void {
