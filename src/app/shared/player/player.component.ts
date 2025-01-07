@@ -98,8 +98,7 @@ export class PlayerComponent implements AfterViewInit {
     this.abortMouseMove.abort();
     this.abortMouseMove = new AbortController();
     this.setPointState(PointState.Play);
-    let duration = this.playerService.duration;
-    this.playerService.play(this.seekDuration * duration());
+    this.playerService.play(this.seekDuration * this.playerService.duration());
     this.isDragging = false;
   }
 

@@ -91,7 +91,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   public toggleConsume() {
-    this.trackService.consume.set(!this.trackService.consume());
+    this.trackService.consume.update((v) => !v);
   }
 
   public clearTracks() {
