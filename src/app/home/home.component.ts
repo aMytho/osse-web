@@ -85,26 +85,18 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.modalService.show();
   }
 
-  public get trackProgress() {
-    if (this.trackService.activeTrack) {
-      return this.trackService.trackListProgress;
-    }
-    return '';
-  }
-
   public shuffleTracks() {
     this.trackService.shuffle();
     this.tracks.set(this.trackService.tracks);
   }
 
   public toggleConsume() {
-    this.trackService.consume = !this.trackService.consume;
+    this.trackService.consume.update((v) => !v);
   }
 
   public clearTracks() {
     this.trackService.clearTracks();
   }
-
 
   public showAlbumArt() {
     if (this.trackService.activeTrack) {
@@ -121,7 +113,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   public get consumeState() {
-    return this.trackService.consume;
+    return this.trackService.consume.asReadonly();
   }
 
   showTrackInfo() {
@@ -158,7 +150,12 @@ export class HomeComponent implements OnInit, OnDestroy {
       this.playing = false;
     });
 
-    this.playerService.requestTrackState();
+    // Get the initial value of the current track
+    if (this.trackService.activeTrack) {
+      this.title.set(this.trackService.activeTrack.title);
+      this.artist.set(this.trackService.activeTrack.artist()?.name ?? '');
+      this.bg.set(this.configService.get('apiURL') + "api/tracks/" + this.trackService.activeTrack.id + '/cover');
+    }
   }
 
   ngOnDestroy(): void {

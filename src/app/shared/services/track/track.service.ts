@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, signal, WritableSignal } from '@angular/core';
 import { Track } from './track';
 import { PlayerService } from '../../player/player.service';
 
@@ -17,27 +17,32 @@ export class TrackService {
   /**
    * If true, track is removed on end playback
   */
-  public consume: boolean = false;
+  public consume: WritableSignal<boolean> = signal(false);
 
   constructor(private playerService: PlayerService) {
+    // When playback ends, wait 250 ms.
+    // We need the player to clear the UI first. It subscribes to the same event.
+    // Then, progress to the next track (if any)
     this.playerService.playbackEnded.subscribe(_ => {
-      if (this.tracks.length <= 0) return;
+      setTimeout(() => {
+        if (this.tracks.length <= 0) return;
 
-      if (this.consume) {
-        this.tracks.splice(this.index, 1);
-        this.moveToLastTrack();
-      } else {
-        this.moveToNextTrack();
-      }
-    });
+        if (this.consume()) {
+          this.tracks.splice(this.index, 1);
+          if (this.tracks.length == 0) {
+            this.playerService.clearTrack();
+          } else {
+            this.moveToLastTrack();
+          }
+        } else {
+          this.moveToNextTrack();
+        }
+      }, 250);
+    })
   }
 
   get activeTrack() {
     return this.tracks[this.index];
-  }
-
-  get trackListProgress() {
-    return `Track ${this.index + 1} of ${this.tracks.length} tracks`;
   }
 
   public addTrack(track: Track) {

@@ -25,7 +25,12 @@
       }
     </ul>
     <div class="mt-2">
-      <app-button text="Start Scan" [disabled]="scanInProgress() || scanTimeout()" (click)="scan()"></app-button>
+      <app-button text="Start Scan" [disabled]="scanInProgress() || waitingForScanConfirmation()"
+        (click)="scan()"></app-button>
+
+      @if (waitingForScanConfirmation()) {
+      <p class="animate-pulse font-semibold text-xl">Waiting for scan scart confirmation...</p>
+      }
 
       @if (scanInProgress()) {
       <p class="animate-pulse font-semibold text-xl">Scan in progress. This may take some time. Please do not leave this
@@ -37,7 +42,7 @@
       }
 
       @if (scanComplete()) {
-      <p class="my-4 font-semibold text-xl text-green-500">{{scanComplete()}}</p>
+      <p class="my-4 font-semibold text-xl text-green-500">Scan Complete! You can safely leave this page.</p>
       }
     </div>
   </div>

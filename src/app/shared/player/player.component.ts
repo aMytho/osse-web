@@ -3,11 +3,12 @@ import { PlayerService } from './player.service';
 import { PointState } from './point-state';
 import { ConfigService } from '../services/config/config.service';
 import { RouterLink } from '@angular/router';
-import { PlaybackState } from './state-change';
 import { TrackService } from '../services/track/track.service';
 import { IconComponent } from '../ui/icon/icon.component';
 import { mdiDotsVertical, mdiFastForward, mdiPause, mdiPlay, mdiRewind } from '@mdi/js';
 import { VolumeComponent } from './volume/volume.component';
+import { BufferUpdate } from './buffer-update.interface';
+import { getNicelyFormattedTime } from '../util/time';
 
 @Component({
   selector: 'app-player',
@@ -16,7 +17,6 @@ import { VolumeComponent } from './volume/volume.component';
   styleUrl: `./player.component.css`
 })
 export class PlayerComponent implements AfterViewInit {
-  @ViewChild('player') player!: ElementRef<HTMLAudioElement>;
   @ViewChild('progressContainer') container!: ElementRef<HTMLDivElement>;
   @ViewChild('point') point!: ElementRef<HTMLDivElement>;
   @ViewChild('rendered') rendered!: ElementRef<HTMLDivElement>;
@@ -30,12 +30,9 @@ export class PlayerComponent implements AfterViewInit {
   private isDragging = false;
   private abortMouseMove = new AbortController();
   private seekDuration = 0;
-  public playing: WritableSignal<boolean> = signal(false);
-  public playerIcon = computed(() => this.playing() ? mdiPause : mdiPlay);
+  public playerIcon = computed(() => this.playerService.isPlaying() ? mdiPause : mdiPlay);
   private resizeTimer = 0;
 
-  play = mdiPlay;
-  pause = mdiPause;
   forward = mdiFastForward;
   back = mdiRewind;
   verticalDots = mdiDotsVertical;
@@ -60,14 +57,8 @@ export class PlayerComponent implements AfterViewInit {
   public onPlayerToggle() {
     // If no track, don't respond to button click
     if (!this.trackService.activeTrack) return;
-    this.playing.set(!this.playing());
 
-    if (!this.playing()) {
-      this.playerService.pause();
-      return;
-    } else {
-      this.playerService.play();
-    }
+    this.playerService.toggle();
   }
 
   public onNextTrack() {
@@ -107,8 +98,7 @@ export class PlayerComponent implements AfterViewInit {
     this.abortMouseMove.abort();
     this.abortMouseMove = new AbortController();
     this.setPointState(PointState.Play);
-    let duration = Number(this.player.nativeElement.getAttribute("data-duration"));
-    this.player.nativeElement.currentTime = this.seekDuration * duration;
+    this.playerService.play(this.seekDuration * this.playerService.duration());
     this.isDragging = false;
   }
 
@@ -142,18 +132,15 @@ export class PlayerComponent implements AfterViewInit {
     }
   }
 
-  private onBufferProgress(_ev: ProgressEvent<EventTarget>) {
-    // Browser estimate
-    const duration = this.player.nativeElement.duration;
-    // DB record
-    const trueDuration = Number(this.player.nativeElement.getAttribute("data-duration"));
-    const buffered = this.player.nativeElement.buffered;
-    this.point.nativeElement.style.animationDuration = trueDuration + "s";
+  private onBufferProgress(bufferUpdate: BufferUpdate) {
+    const { duration, buffered } = bufferUpdate;
+
+    this.point.nativeElement.style.animationDuration = duration + "s";
 
     if (duration > 0) {
       for (let i = 0; i < buffered.length; i++) {
-        let start = buffered.start(i) / trueDuration * 100;
-        let end = buffered.end(i) / trueDuration * 100;
+        let start = buffered.start(i) / duration * 100;
+        let end = buffered.end(i) / duration * 100;
         this.setGradient(Math.floor(start), "var(--point-buffered)", Math.floor(end));
       }
     }
@@ -175,39 +162,37 @@ export class PlayerComponent implements AfterViewInit {
    * When the audio player is fully loaded, send the audio element to player service
    */
   ngAfterViewInit(): void {
-    this.playerService.setAudioPlayer(this.player.nativeElement);
     this.playerService.trackUpdated.subscribe((val) => {
-      this.totalDuration.set(val.getDuration());
-      this.currentTime.set(val.getCurrentTime());
+      this.totalDuration.set(val.durationFormatted);
       this.trackTitle.set(val.title);
-      // If the user is not seeking, update the position
-      if (!this.isDragging) {
-        this.point.nativeElement.style.left = Math.floor((val.currentSecond / val.totalSeconds) * 100) + "%";
-      }
       this.artistTitle.set(val.artist?.name ?? '');
       // Set the cover bg
       this.bg.set(this.configService.get('apiURL') + "api/tracks/" + val.id + '/cover');
       this.setTitleAnimationByScreenSize();
-    });
-    this.playerService.bufferReset.subscribe(() => {
       this.setGradient(0, "transparent", 100);
     });
+
+    this.playerService.trackPositionUpdate.subscribe((val) => {
+      this.currentTime.set(getNicelyFormattedTime(val.currentTimeSeconds))
+
+      // If the user is not seeking, update the position
+      if (!this.isDragging) {
+        this.point.nativeElement.style.left = Math.floor((val.currentTimeSeconds / val.totalTimeSeconds) * 100) + "%";
+      }
+
+      // Set the duration as we may have a more accurate total duration.
+      this.totalDuration.set(getNicelyFormattedTime(val.totalTimeSeconds));
+    });
+
     this.playerService.playbackEnded.subscribe(_ => {
       this.totalDuration.set('');
       this.currentTime.set('');
       this.trackTitle.set('');
       this.artistTitle.set('');
       this.bg.set('#');
+      this.setGradient(0, "transparent", 100);
     });
 
-    this.playerService.stateChanged.subscribe((val) => {
-      if (val == PlaybackState.Paused) {
-        this.playing.set(false);
-      } else {
-        this.playing.set(true);
-      }
-    });
-
-    this.player.nativeElement.addEventListener("progress", this.onBufferProgress.bind(this));
+    this.playerService.bufferUpdated.subscribe((ev) => this.onBufferProgress(ev));
   }
 }

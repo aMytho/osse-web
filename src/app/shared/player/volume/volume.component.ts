@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, ElementRef, ViewChild, WritableSignal, signal } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, ViewChild, WritableSignal, signal } from '@angular/core';
 import { PlayerService } from '../player.service';
 import { mdiVolumeOff, mdiVolumeLow, mdiVolumeHigh } from '@mdi/js';
 import { IconComponent } from '../../ui/icon/icon.component';
@@ -10,15 +10,12 @@ import { IconComponent } from '../../ui/icon/icon.component';
   styles: ``,
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class VolumeComponent {
+export class VolumeComponent implements AfterViewInit {
   @ViewChild('volume') volumeInput!: ElementRef<HTMLInputElement>;
   volumeIcon = signal(mdiVolumeOff);
   public showVolumeMenu: WritableSignal<boolean> = signal(false);
 
-  constructor(private playerService: PlayerService) {
-    this.playerService.stateChanged.subscribe((_v) => this.setVolumeIcon());
-    this.playerService.playerLoaded.subscribe((_v) => this.setInitialVolume());
-  }
+  constructor(private playerService: PlayerService) { }
 
   setInitialVolume(): void {
     this.storeAndSetVolume(Number(localStorage.getItem('volume') ?? 0));
@@ -82,6 +79,11 @@ export class VolumeComponent {
   private storeAndSetVolume(volume: number) {
     this.playerService.setVolume(volume);
     localStorage.setItem('volume', volume.toString());
+  }
+
+  ngAfterViewInit(): void {
+    this.playerService.stateChanged.subscribe((_v) => this.setVolumeIcon());
+    this.setInitialVolume();
   }
 }
 

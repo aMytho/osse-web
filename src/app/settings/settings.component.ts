@@ -18,7 +18,7 @@ import { ScanChannels } from '../shared/services/echo/channels/scan';
 })
 export class SettingsComponent implements OnInit, OnDestroy {
   public scanInProgress: WritableSignal<boolean> = signal(false);
-  public scanTimeout: WritableSignal<boolean> = signal(false);
+  public waitingForScanConfirmation: WritableSignal<boolean> = signal(false);
   public directories: WritableSignal<string[]> = signal([]);
   public url: WritableSignal<string> = signal(this.configService.get("apiURL"));
   public scanFailMessage: WritableSignal<string> = signal('');
@@ -28,13 +28,11 @@ export class SettingsComponent implements OnInit, OnDestroy {
   constructor(private configService: ConfigService, private notificationService: ToastService, private echoService: EchoService) { }
 
   public scan() {
-    this.scanTimeout.set(true);
+    this.waitingForScanConfirmation.set(true);
 
     fetcher('scan', {
       method: 'POST'
-    });
-
-    setTimeout(() => this.scanTimeout.set(false));
+    }).finally(() => this.waitingForScanConfirmation.set(false));
   }
 
   public async saveURL() {
