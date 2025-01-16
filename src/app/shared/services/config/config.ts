@@ -10,5 +10,9 @@ export interface OsseConfig {
   /**
    * URL for events
    */
-  broadcastURL: string
+  broadcastURL: string;
+  /**
+  * Show album/track art in the background on certain pages.
+  */
+  showCoverBackgrounds: boolean;
 }

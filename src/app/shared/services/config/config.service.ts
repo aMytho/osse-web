@@ -13,16 +13,17 @@ export class ConfigService {
     this.config = {
       apiURL: localStorage.getItem('apiURL') ?? environment.apiURL,
       version: environment.version,
-      broadcastURL: environment.broadcastURL
+      broadcastURL: environment.broadcastURL,
+      showCoverBackgrounds: Boolean(localStorage.getItem('showCoverBackgrounds') ?? environment.showCoverBackgrounds)
     };
   }
 
-  public get(key: keyof OsseConfig, defaultVal?: any) {
+  public get<T extends keyof OsseConfig>(key: T, defaultVal?: any): OsseConfig[T] {
     return this.config[key] ?? defaultVal ?? null;
   }
 
-  public save(key: keyof OsseConfig, val: any) {
-    localStorage.setItem(key, val);
+  public save<T extends keyof OsseConfig>(key: T, val: OsseConfig[T]) {
+    localStorage.setItem(key, String(val));
     this.config[key] = val;
   }
 }

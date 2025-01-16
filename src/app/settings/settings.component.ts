@@ -8,6 +8,7 @@ import { fetcher } from '../shared/util/fetcher';
 import { EchoService } from '../shared/services/echo/echo.service';
 import { merge, Subscription } from 'rxjs';
 import { ScanChannels } from '../shared/services/echo/channels/scan';
+import { BackgroundImageService } from '../shared/ui/background-image.service';
 
 @Component({
   selector: 'app-settings',
@@ -24,8 +25,14 @@ export class SettingsComponent implements OnInit, OnDestroy {
   public scanFailMessage: WritableSignal<string> = signal('');
   public scanComplete: WritableSignal<boolean> = signal(false);
   private subscription!: Subscription;
+  public showBackgrounds: WritableSignal<boolean> = signal(false);
 
-  constructor(private configService: ConfigService, private notificationService: ToastService, private echoService: EchoService) { }
+  constructor(
+    private configService: ConfigService,
+    private notificationService: ToastService,
+    private echoService: EchoService,
+    private backgroundImageService: BackgroundImageService
+  ) { }
 
   public scan() {
     this.waitingForScanConfirmation.set(true);
@@ -49,6 +56,15 @@ export class SettingsComponent implements OnInit, OnDestroy {
       this.requestSettings();
     } catch (e) {
       alert('Failed to reach server. URL not set. Confirm that the URL is correct and that the server is running.');
+    }
+  }
+
+  public saveBackgroundCoverPreference() {
+    this.configService.save('showCoverBackgrounds', this.showBackgrounds());
+    this.notificationService.info('Saved Preferences!');
+
+    if (!this.configService.get('showCoverBackgrounds')) {
+      this.backgroundImageService.clearBG();
     }
   }
 
@@ -86,6 +102,8 @@ export class SettingsComponent implements OnInit, OnDestroy {
     });
 
     this.subscription = merge(scanStarted$, scanProgressed$, scanCompleted$, scanFailed$).subscribe();
+
+    this.showBackgrounds.set(this.configService.get('showCoverBackgrounds'));
   }
 
   ngOnDestroy(): void {

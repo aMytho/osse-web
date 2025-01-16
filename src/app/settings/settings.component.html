@@ -46,4 +46,24 @@
       }
     </div>
   </div>
+  <div class=mt-4>
+    <app-header [type]="2" text="Preferences"></app-header>
+
+    <p class="my-2 ml-2">Background Images</p>
+    <p class="my-2 ml-2">
+      When a track or album is playing, Osse will dispay the cover art in the background.
+      This may cause contrast issues with certain covers. This can be disabled if you so choose.</p>
+
+    <form #showBackgroundsForm="ngForm" (ngSubmit)="saveBackgroundCoverPreference()" class="ml-2 flex flex-col gap-y-2">
+      <label class="inline-flex items-center space-x-2">
+        <span>Show Background Covers: </span>
+        <input type="checkbox" name="show-background-covers" id="show-background-covers" [checked]="showBackgrounds()"
+          (input)="showBackgrounds.set(!showBackgrounds())"
+          class="h-5 w-5 text-blue-600 border-gray-300 rounded focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+      </label> <br>
+
+      <app-button type="submit" text="Save" [disabled]="!showBackgroundsForm.form.valid || false"></app-button>
+    </form>
+  </div>
+
 </div>
