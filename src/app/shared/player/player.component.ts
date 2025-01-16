@@ -9,6 +9,7 @@ import { mdiDotsVertical, mdiFastForward, mdiPause, mdiPlay, mdiRewind } from '@
 import { VolumeComponent } from './volume/volume.component';
 import { BufferUpdate } from './buffer-update.interface';
 import { getNicelyFormattedTime } from '../util/time';
+import { MediaSessionService } from './media-session.service';
 
 @Component({
   selector: 'app-player',
@@ -39,7 +40,7 @@ export class PlayerComponent implements AfterViewInit {
 
   constructor(
     private playerService: PlayerService, private configService: ConfigService,
-    private trackService: TrackService
+    private trackService: TrackService, private mediaSessionService: MediaSessionService
   ) {
     // Make sure the mouse up is accessible in global contexts
     this.onMouseUp = this.onMouseUp.bind(this);

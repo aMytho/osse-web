@@ -123,7 +123,7 @@ export class ViewComponent implements OnInit, OnDestroy {
     // Get the artist with the highest track occurence and set it to the album artist
     let artist = ([...artists.entries()]).reduce((a, e) => e[1] > a[1] ? e : a);
     await this.album().tracks[artist[0]].getArtist();
-    this.albumTrackArtist.set((this.album().tracks[artist[0]].artist())!.name + ' (Inferred)');
+    this.albumTrackArtist.set((this.album().tracks[artist[0]].artist())?.name + ' (Inferred)');
   }
 
   public showAlbumArt() {

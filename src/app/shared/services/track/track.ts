@@ -6,11 +6,13 @@ import { ArtistStoreService } from "../artist/artist-store.service";
 import { OsseTrack } from "./osse-track";
 import { Artist } from "../artist/artist";
 import { v4 as uuid } from 'uuid';
+import { ConfigService } from "../config/config.service";
 
 export class Track {
   public track!: OsseTrack;
   private artistStore: ArtistStoreService = LocatorService.injector.get(ArtistStoreService);
   private apiService: ApiService = LocatorService.injector.get(ApiService);
+  private configService: ConfigService = LocatorService.injector.get(ConfigService);
   public bufferSize: number = 0;
   public artist: WritableSignal<Artist | null> = signal(null);
   /**
@@ -104,5 +106,9 @@ export class Track {
 
   public get discNumber() {
     return this.track.disc_number;
+  }
+
+  get cover() {
+    return this.configService.get('apiURL') + "api/tracks/" + this.id + '/cover'
   }
 }

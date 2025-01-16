@@ -41,6 +41,10 @@ export class TrackUpdate {
   get id() {
     return this.track.track.id;
   }
+
+  get cover() {
+    return this.track.cover;
+  }
 }
 
 export interface TrackPlayerInfo {
