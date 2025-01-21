@@ -16,12 +16,12 @@
     </div>
     <label for="name" class="text-white font-semibold">Playlist Name: </label>
     <input [(ngModel)]="model.name" required minlength="1" id="name" name="name"
-      class="mx-2 p-2 rounded-md bg-opacity-25"> <br>
+      class="mx-2 mb-2 p-2 rounded-md bg-opacity-25"> <br>
 
     <p class="text-red-500 font-semibold my-2" [hidden]="!(model.name.length == 0)">The playlist name must be at least 1
       character.</p>
 
-    <app-button type="submit" class="mt-2" text="Save" [disabled]="!form.form.valid || false"></app-button>
+    <app-button type="submit" class="mt-4" text="Save" [disabled]="!form.form.valid || false"></app-button>
   </form>
   }
   <div class="mt-4"></div>
