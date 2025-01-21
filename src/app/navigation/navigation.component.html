@@ -3,18 +3,23 @@
   <div class="flex flex-row flex-wrap sm:flex-col gap-x-4 sm:gap-y-4 grow justify-end"
     [ngClass]="{'max-sm:hidden': !mobileMenuOpen()}">
     <a class="border-solid border-transparent border hover:border-emerald-300 rounded-lg hover:bg-emerald-300 hover:bg-opacity-15 cursor-pointer p-2 max-sm:basis-full"
-      routerLink="/home" routerLinkActive="bg-emerald-200 bg-opacity-15" ariaCurrentWhenActive="page">Home</a>
+      routerLink="/home" routerLinkActive="bg-emerald-200 bg-opacity-15" ariaCurrentWhenActive="page"
+      (click)="mobileMenuOpen.set(false)">Home</a>
     <a class="border-solid border-transparent border hover:border-emerald-300 rounded-lg hover:bg-emerald-300 hover:bg-opacity-15 cursor-pointer p-2 max-sm:basis-full"
-      routerLink="/tracks" routerLinkActive="bg-emerald-200 bg-opacity-15" ariaCurrentWhenActive="page">Tracks</a>
+      routerLink="/tracks" routerLinkActive="bg-emerald-200 bg-opacity-15" ariaCurrentWhenActive="page"
+      (click)="mobileMenuOpen.set(false)">Tracks</a>
     <a class="border-solid border-transparent border hover:border-emerald-300 rounded-lg hover:bg-emerald-300 hover:bg-opacity-15 cursor-pointer p-2 max-sm:basis-full"
-      routerLink="/playlists" routerLinkActive="bg-emerald-200 bg-opacity-15" ariaCurrentWhenActive="page">Playlists</a>
+      routerLink="/playlists" routerLinkActive="bg-emerald-200 bg-opacity-15" ariaCurrentWhenActive="page"
+      (click)="mobileMenuOpen.set(false)">Playlists</a>
     <a class="border-solid border-transparent border hover:border-emerald-300 rounded-lg hover:bg-emerald-300 hover:bg-opacity-15 cursor-pointer p-2 max-sm:basis-full"
-      routerLink="/albums" routerLinkActive="bg-emerald-200 bg-opacity-15" ariaCurrentWhenActive="page">Albums</a>
+      routerLink="/albums" routerLinkActive="bg-emerald-200 bg-opacity-15" ariaCurrentWhenActive="page"
+      (click)="mobileMenuOpen.set(false)">Albums</a>
   </div>
   <div class="flex flex-col gap-y-4 text-center grow sm:justify-end max-sm:pl-2"
     [ngClass]="{'max-sm:hidden': !mobileMenuOpen()}">
     <a class="border-solid border-transparent border hover:border-emerald-300 rounded-lg hover:bg-emerald-300 hover:bg-opacity-15 cursor-pointer p-2"
-      routerLink="/settings" routerLinkActive="bg-emerald-200 bg-opacity-15" ariaCurrentWhenActive="page">
+      (click)="mobileMenuOpen.set(false)" routerLink="/settings" routerLinkActive="bg-emerald-200 bg-opacity-15"
+      ariaCurrentWhenActive="page">
       <app-icon class="cursor-pointer text-white hover:text-emerald-300" [icon]="gear"></app-icon>
     </a>
   </div>
