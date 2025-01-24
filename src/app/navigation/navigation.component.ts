@@ -1,7 +1,7 @@
 import { Component, computed, signal, WritableSignal } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { IconComponent } from '../shared/ui/icon/icon.component';
-import { mdiCog, mdiFolderHome, mdiHome, mdiMenu, mdiMenuClose } from '@mdi/js';
+import { mdiCog, mdiHome, mdiMenu, mdiMenuClose } from '@mdi/js';
 import { CommonModule } from '@angular/common';
 
 

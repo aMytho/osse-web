@@ -5,9 +5,10 @@
   @for (album of albums(); track $index) {
   <div class="text-lg text-white flex flex-col">
     <a routerLink="view/{{album.id}}"
-      class="hover:brightness-110 border-2 border-emerald-600 rounded-lg flex flex-col justify-end h-60 w-60 bg-cover cursor-pointer"
-      style="background-image: url('{{coverUrlBase().replace('ID', album.tracks[0]?.id?.toString() ?? '-1')}}');">
-      <div class="pt-4 text-center bg-opacity-45 bg-black p-2 rounded-b-md">
+      class="relative overflow-clip hover:brightness-110 border-2 border-emerald-600 rounded-lg h-60 w-60">
+      <img class="rounded-lg" [src]="coverUrlBase().replace('ID', album.tracks[0]?.id?.toString() ?? '-1')"
+        alt="cover art for {{album.name}}" loading="lazy" class="bg-cover">
+      <div class="absolute bottom-0 w-full pt-4 p-2 text-center bg-opacity-45 bg-black rounded-b-md">
         <p>{{album.name}}</p>
       </div>
     </a>
