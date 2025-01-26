@@ -2,7 +2,6 @@ import { EventEmitter, Injectable } from '@angular/core';
 import { fetcher } from '../../util/fetcher';
 import { EchoService } from '../echo/echo.service';
 import { AuthResponse } from './auth.interface';
-import { PlayerService } from '../../player/player.service';
 import { TrackService } from '../track/track.service';
 import { BackgroundImageService } from '../../ui/background-image.service';
 
@@ -70,7 +69,6 @@ export class AuthService {
     this.isLoggedIn = true;
 
     // Listen for events.
-    // TODO: This should probably be done elsewhere.
     this.echoService.connect(userAuth.broadcastKey);
     this.echoService.listenForScanStarted();
     this.echoService.listenForScanProgressed();
@@ -85,6 +83,8 @@ export class AuthService {
     this.backgroundImageService.clearBG();
     this.echoService.disconnect();
     await fetcher('logout', { method: 'POST' });
+    // Delete xsrf token.
+    document.cookie = "XSRF-TOKEN=;expires=" + new Date(0).toUTCString();
 
     this.isLoggedIn = false;
     this.authStateChanged.emit(false);
