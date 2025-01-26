@@ -18,7 +18,8 @@ export class LoginComponent {
   public username: string = '';
   public password: string = '';
   public serverFound: WritableSignal<boolean> = signal(false);
-  public url: WritableSignal<string> = signal(this.configService.get("apiURL"));
+  public url: WritableSignal<string> = signal(window.location.hostname + ':8000');
+  public protocol: WritableSignal<string> = signal('http://');
 
   constructor(
     private notificationService: ToastService,
@@ -34,9 +35,9 @@ export class LoginComponent {
 
     // Check if the server URL is right.
     try {
-      await fetch(this.url() + 'api/ping');
+      await fetch(this.protocol().concat(this.url()) + 'api/ping');
       // Save the URL
-      this.configService.save("apiURL", this.url());
+      this.configService.save("apiURL", this.protocol().concat(this.url()));
       this.notificationService.info("URL saved as " + this.configService.get("apiURL"));
       this.serverFound.set(true);
     } catch (e) {

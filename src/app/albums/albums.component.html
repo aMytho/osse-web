@@ -1,13 +1,13 @@
 <app-header text="Albums"></app-header>
 @if (albums().length != 0) {
 <div
-  class="w-full flex flex-wrap items-center justify-around gap-x-12 gap-y-6 pl-16 bg-slate-500 bg-opacity-15 rounded-lg p-4">
+  class="w-full flex flex-wrap items-center justify-around gap-x-12 gap-y-6 sm:pl-16 bg-slate-500 bg-opacity-15 rounded-lg p-4">
   @for (album of albums(); track $index) {
   <div class="text-lg text-white flex flex-col">
     <a routerLink="view/{{album.id}}"
       class="relative overflow-clip hover:brightness-110 border-2 border-emerald-600 rounded-lg h-60 w-60">
       <img [src]="coverUrlBase().replace('ID', album.tracks[0]?.id?.toString() ?? '-1')"
-        alt="cover art for {{album.name}}" loading="lazy" class="rounded-lg object-cover w-full h-full">
+        alt="" loading="lazy" class="rounded-t-lg object-cover w-full h-full rounded-b-md">
       <div class="absolute bottom-0 w-full pt-4 p-2 text-center bg-opacity-45 bg-black rounded-b-md">
         <p>{{album.name}}</p>
       </div>

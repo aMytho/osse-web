@@ -31,6 +31,10 @@ export class MatrixItemComponent {
     }
   }
 
+  public emitOnClickEvent() {
+    this.onClick.emit();
+  }
+
   public setSelected(selected: boolean) {
     this.selected.set(selected);
   }

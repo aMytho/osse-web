@@ -1,6 +1,6 @@
 <div class="h-full text-white">
   @if (mode() == TrackMatrixMode.View) {
-  <button (click)="determineClickTypeAndEmitEvent($event)"
+  <button (click)="determineClickTypeAndEmitEvent($event)" (contextmenu)="toggleSelected(); $event.preventDefault()"
     class="flex gap-x-2 items-center rounded-md px-4 py-2 hover:bg-slate-700 w-full h-full border-x border-emerald-300">
     @if (track().trackNumber != null) {
     <p class="font-extralight">{{track().trackNumber}}</p>
