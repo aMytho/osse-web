@@ -2,23 +2,24 @@ import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, ViewChil
 import { PlayerService } from '../player.service';
 import { mdiVolumeOff, mdiVolumeLow, mdiVolumeHigh } from '@mdi/js';
 import { IconComponent } from '../../ui/icon/icon.component';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-volume',
-  imports: [IconComponent],
+  imports: [IconComponent, CommonModule],
   templateUrl: './volume.component.html',
   styles: ``,
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class VolumeComponent implements AfterViewInit {
   @ViewChild('volume') volumeInput!: ElementRef<HTMLInputElement>;
-  volumeIcon = signal(mdiVolumeOff);
+  volumeIcon = signal(mdiVolumeHigh);
   public showVolumeMenu: WritableSignal<boolean> = signal(false);
 
   constructor(private playerService: PlayerService) { }
 
   setInitialVolume(): void {
-    this.storeAndSetVolume(Number(localStorage.getItem('volume') ?? 0));
+    this.storeAndSetVolume(Number(localStorage.getItem('volume') ?? 1));
     this.volumeInput.nativeElement.value = String(this.playerService.getVolume());
   }
 

@@ -6,14 +6,15 @@ import { RouterLink } from '@angular/router';
 import { TrackService } from '../services/track/track.service';
 import { IconComponent } from '../ui/icon/icon.component';
 import { mdiDotsVertical, mdiFastForward, mdiPause, mdiPlay, mdiRewind } from '@mdi/js';
-import { VolumeComponent } from './volume/volume.component';
 import { BufferUpdate } from './buffer-update.interface';
 import { getNicelyFormattedTime } from '../util/time';
 import { MediaSessionService } from './media-session.service';
+import { PopoverControlsComponent } from './popover-controls/popover-controls.component';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-player',
-  imports: [VolumeComponent, IconComponent, RouterLink],
+  imports: [PopoverControlsComponent, IconComponent, RouterLink, CommonModule],
   templateUrl: './player.component.html',
   styleUrl: `./player.component.css`
 })
@@ -28,6 +29,7 @@ export class PlayerComponent implements AfterViewInit {
   public totalDuration: WritableSignal<string> = signal('');
   public trackTitle: WritableSignal<string> = signal('');
   public artistTitle: WritableSignal<string> = signal('');
+  public showPopoverControls: WritableSignal<boolean> = signal(false);
   private isDragging = false;
   private abortMouseMove = new AbortController();
   private seekDuration = 0;
@@ -68,6 +70,10 @@ export class PlayerComponent implements AfterViewInit {
 
   public onPreviousTrack() {
     this.trackService.moveToLastTrack();
+  }
+
+  public togglePopover() {
+    this.showPopoverControls.update((v) => !v);
   }
 
   onMouseDown(ev: MouseEvent) {
