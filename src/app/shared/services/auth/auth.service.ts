@@ -2,6 +2,9 @@ import { EventEmitter, Injectable } from '@angular/core';
 import { fetcher } from '../../util/fetcher';
 import { EchoService } from '../echo/echo.service';
 import { AuthResponse } from './auth.interface';
+import { PlayerService } from '../../player/player.service';
+import { TrackService } from '../track/track.service';
+import { BackgroundImageService } from '../../ui/background-image.service';
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +14,7 @@ export class AuthService {
   private statusChecked = false;
   public authStateChanged = new EventEmitter<boolean>();
 
-  constructor(private echoService: EchoService) {
+  constructor(private echoService: EchoService, private trackService: TrackService, private backgroundImageService: BackgroundImageService) {
     // Check if we are logged in by requesting the current user. If this fails, we know we are not logged in.
     this.checkLoginStatus();
   }
@@ -77,9 +80,13 @@ export class AuthService {
     this.authStateChanged.emit(true);
   }
 
-  public logout(): void {
-    this.isLoggedIn = false;
+  public async logout() {
+    this.trackService.clearTracks();
+    this.backgroundImageService.clearBG();
     this.echoService.disconnect();
+    await fetcher('logout', { method: 'POST' });
+
+    this.isLoggedIn = false;
     this.authStateChanged.emit(false);
   }
 }

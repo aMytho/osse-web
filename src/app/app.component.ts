@@ -8,22 +8,26 @@ import { PlayerService } from './shared/player/player.service';
 import { PlaybackState } from './shared/player/state-change';
 import { ModalComponent } from './shared/ui/modal/modal.component';
 import { LocatorService } from './locator.service';
+import { AuthService } from './shared/services/auth/auth.service';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, NavigationComponent, PlayerComponent, ToastContainerComponent, ModalComponent],
+  imports: [RouterOutlet, NavigationComponent, PlayerComponent, ToastContainerComponent, ModalComponent, CommonModule],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
 export class AppComponent {
   title = 'Osse';
   playerState: WritableSignal<boolean> = signal(false);
+  showPlayer: WritableSignal<boolean> = signal(false);
   @ViewChild('outlet') outlet!: ElementRef;
 
   constructor(
     private backgroundImageService: BackgroundImageService,
     private playerService: PlayerService,
-    private injector: Injector
+    private injector: Injector,
+    private authService: AuthService
   ) {
     // Allow shared injector for accessing services
     LocatorService.injector = this.injector;
@@ -34,6 +38,7 @@ export class AppComponent {
     this.playerService.stateChanged.subscribe((s) => {
       this.playerState.set(s == PlaybackState.Playing);
     });
+    this.authService.authStateChanged.subscribe((v) => this.showPlayer.set(v));
   }
 }
 
