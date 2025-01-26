@@ -22,6 +22,12 @@
       ariaCurrentWhenActive="page">
       <app-icon class="cursor-pointer text-white hover:text-emerald-300" [icon]="gear"></app-icon>
     </a>
+    @if (showLogoutButton()) {
+      <button class="border-solid border-transparent border hover:border-emerald-300 rounded-lg hover:bg-emerald-300 hover:bg-opacity-15 cursor-pointer p-2"
+        (click)="mobileMenuOpen.set(false); logout();" ariaCurrentWhenActive="page">
+        <app-icon class="cursor-pointer text-white hover:text-emerald-300" [icon]="exit"></app-icon>
+      </button>
+    }
   </div>
   <div class="hidden max-sm:flex gap-y-4 text-center grow justify-between sm:justify-end max-sm:pl-2"
     [ngClass]="{'max-sm:flex-col': mobileMenuOpen()}">

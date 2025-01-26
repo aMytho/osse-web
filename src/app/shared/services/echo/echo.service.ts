@@ -98,4 +98,8 @@ export class EchoService implements ScanEvents {
     this.echo.private('scan')
       .listen('ScanFailed', (ev: ScanFailedResult) => this.emitEvent(ScanChannels.ScanFailed, ev));
   }
+
+  public disconnect() {
+    this.echo.disconnect();
+  }
 }

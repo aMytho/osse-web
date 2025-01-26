@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { EventEmitter, Injectable } from '@angular/core';
 import { fetcher } from '../../util/fetcher';
 import { EchoService } from '../echo/echo.service';
 import { AuthResponse } from './auth.interface';
@@ -9,6 +9,7 @@ import { AuthResponse } from './auth.interface';
 export class AuthService {
   private isLoggedIn = false;
   private statusChecked = false;
+  public authStateChanged = new EventEmitter<boolean>();
 
   constructor(private echoService: EchoService) {
     // Check if we are logged in by requesting the current user. If this fails, we know we are not logged in.
@@ -72,6 +73,14 @@ export class AuthService {
     this.echoService.listenForScanProgressed();
     this.echoService.listenForScanCompleted();
     this.echoService.listenForScanFailed();
+
+    this.authStateChanged.emit(true);
+  }
+
+  public logout(): void {
+    this.isLoggedIn = false;
+    this.echoService.disconnect();
+    this.authStateChanged.emit(false);
   }
 }
 
