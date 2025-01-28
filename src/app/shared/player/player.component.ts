@@ -1,20 +1,21 @@
-import { AfterViewInit, Component, computed, ElementRef, signal, ViewChild, WritableSignal } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, signal, ViewChild, WritableSignal } from '@angular/core';
 import { PlayerService } from './player.service';
 import { PointState } from './point-state';
 import { ConfigService } from '../services/config/config.service';
 import { RouterLink } from '@angular/router';
-import { TrackService } from '../services/track/track.service';
 import { IconComponent } from '../ui/icon/icon.component';
-import { mdiDotsVertical, mdiFastForward, mdiPause, mdiPlay, mdiRewind } from '@mdi/js';
+import { mdiDotsVertical } from '@mdi/js';
 import { BufferUpdate } from './buffer-update.interface';
 import { getNicelyFormattedTime } from '../util/time';
 import { MediaSessionService } from './media-session.service';
 import { PopoverControlsComponent } from './popover-controls/popover-controls.component';
 import { CommonModule } from '@angular/common';
+import { TrackControlsComponent } from './track-controls/track-controls.component';
+import { PlayPauseComponent } from './track-controls/play-pause/play-pause.component';
 
 @Component({
   selector: 'app-player',
-  imports: [PopoverControlsComponent, IconComponent, RouterLink, CommonModule],
+  imports: [PopoverControlsComponent, TrackControlsComponent, PlayPauseComponent, IconComponent, RouterLink, CommonModule],
   templateUrl: './player.component.html',
   styleUrl: `./player.component.css`
 })
@@ -33,16 +34,13 @@ export class PlayerComponent implements AfterViewInit {
   private isDragging = false;
   private abortMouseMove = new AbortController();
   private seekDuration = 0;
-  public playerIcon = computed(() => this.playerService.isPlaying() ? mdiPause : mdiPlay);
   private resizeTimer = 0;
 
-  forward = mdiFastForward;
-  back = mdiRewind;
   verticalDots = mdiDotsVertical;
 
   constructor(
     private playerService: PlayerService, private configService: ConfigService,
-    private trackService: TrackService, private mediaSessionService: MediaSessionService
+    private mediaSessionService: MediaSessionService
   ) {
     // Make sure the mouse up is accessible in global contexts
     this.onMouseUp = this.onMouseUp.bind(this);
@@ -55,21 +53,6 @@ export class PlayerComponent implements AfterViewInit {
         this.setTitleAnimationByScreenSize();
       }, 150);
     })
-  }
-
-  public onPlayerToggle() {
-    // If no track, don't respond to button click
-    if (!this.trackService.activeTrack) return;
-
-    this.playerService.toggle();
-  }
-
-  public onNextTrack() {
-    this.trackService.moveToNextTrack();
-  }
-
-  public onPreviousTrack() {
-    this.trackService.moveToLastTrack();
   }
 
   public togglePopover() {

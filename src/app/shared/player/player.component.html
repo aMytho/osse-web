@@ -5,7 +5,8 @@
         <a class="bg-slate-300 rounded-md backdrop-blur-sm w-14 h-14 p-2 inline-block bg-cover drop-shadow-glow max-md:hidden"
           style="background-image: url('{{bg()}}');" routerLink="/"></a>
         <div class="grow shrink">
-          <div id="track-title-container" class="w-full relative whitespace-nowrap overflow-hidden font-semibold text-lg">
+          <div id="track-title-container"
+            class="w-full relative whitespace-nowrap overflow-hidden font-semibold text-lg">
             <p class="whitespace-nowrap w-min overflow-hidden overflow-ellipsis" #trackTitleElement>
               {{trackTitle()}}
             </p>
@@ -13,18 +14,11 @@
           <p class="italic whitespace-nowrap overflow-hidden overflow-ellipsis">{{artistTitle()}}</p>
         </div>
       </div>
-      <div class="lg:basis-1/4 basis-3/4">
-        <div class="flex gap-x-3 text-lg max-lg:justify-center">
-          <button (click)="onPreviousTrack()" class="rounded-full px-2 py-1 hover:bg-emerald-300 hover:bg-opacity-15">
-            <app-icon [icon]="back"></app-icon>
-          </button>
-          <button (click)="onPlayerToggle()" class="rounded-full px-2 py-1 hover:bg-emerald-300 hover:bg-opacity-15">
-            <app-icon [icon]="playerIcon()"></app-icon>
-          </button>
-          <button (click)="onNextTrack()" class="rounded-full px-2 py-1 hover:bg-emerald-300 hover:bg-opacity-15">
-            <app-icon [icon]="forward"></app-icon>
-          </button>
-        </div>
+      <div class="lg:basis-1/4 basis-3/4 max-sm:hidden">
+        <app-track-controls></app-track-controls>
+      </div>
+      <div class="sm:hidden">
+        <app-play-pause></app-play-pause>
       </div>
       <div class="basis-1/4 flex gap-x-4 max-lg:hidden">
         <p>{{ currentTime() || '0:00' }}</p>
@@ -41,10 +35,10 @@
       </div>
     </div>
     <div class="w-min flex items-center">
-        <button (click)="togglePopover()" class="rounded-full px-2 py-1 hover:bg-emerald-300 hover:bg-opacity-15"
-          title="Toggle advanced controls">
-          <app-icon [icon]="verticalDots"></app-icon>
-        </button>
+      <button (click)="togglePopover()" class="rounded-full px-2 py-1 hover:bg-emerald-300 hover:bg-opacity-15"
+        title="Toggle advanced controls">
+        <app-icon [icon]="verticalDots"></app-icon>
+      </button>
     </div>
   </div>
   <div class="absolute bottom-20 w-full pr-16" [ngClass]="{'hidden': !showPopoverControls()}">
