@@ -6,7 +6,7 @@ import { CommonModule } from '@angular/common';
   selector: 'app-toast-container',
   imports: [CommonModule],
   templateUrl: './toast-container.component.html',
-  styles: ``
+  styleUrl: `./toast-container.component.css`
 })
 export class ToastContainerComponent {
   constructor(private toastService: ToastService) { }
@@ -14,5 +14,9 @@ export class ToastContainerComponent {
 
   public get toasts() {
     return this.toastService.toasts;
+  }
+
+  public removeToast(id: string) {
+    this.toastService.removeToast(id);
   }
 }

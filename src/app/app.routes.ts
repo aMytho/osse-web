@@ -30,12 +30,12 @@ export const routes: Routes = [
   },
   {
     path: 'playlists',
-    component: PlaylistComponent,
+    loadComponent: () => import('./playlist/playlist.component').then(c => c.PlaylistComponent),
     canActivate: [isLoggedIn]
   },
   {
     path: 'playlists/view/:id',
-    component: PlaylistViewComponent,
+    loadComponent: () => import('./playlist/playlist-view/playlist-view.component').then(c => c.PlaylistViewComponent),
     canActivate: [isLoggedIn]
   },
   {
