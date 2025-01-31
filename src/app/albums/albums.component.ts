@@ -16,6 +16,7 @@ import { fetcher } from '../shared/util/fetcher';
 export class AlbumsComponent implements OnInit {
   albums: WritableSignal<Album[]> = signal([]);
   coverUrlBase: WritableSignal<string> = signal(this.configService.get('apiURL') + "api/tracks/ID/cover");
+  loading: WritableSignal<boolean> = signal(true);
 
   constructor(
     private configService: ConfigService
@@ -27,5 +28,6 @@ export class AlbumsComponent implements OnInit {
 
     result.sort((a, b) => a.name.localeCompare(b.name));
     this.albums.set(result.map((a) => new Album(a)));
+    this.loading.set(false);
   }
 }
