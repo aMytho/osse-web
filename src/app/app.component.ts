@@ -10,10 +10,11 @@ import { ModalComponent } from './shared/ui/modal/modal.component';
 import { LocatorService } from './locator.service';
 import { AuthService } from './shared/services/auth/auth.service';
 import { CommonModule } from '@angular/common';
+import { LoadingComponent } from './shared/ui/loading/loading.component';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, NavigationComponent, PlayerComponent, ToastContainerComponent, ModalComponent, CommonModule],
+  imports: [RouterOutlet, NavigationComponent, PlayerComponent, ToastContainerComponent, ModalComponent, LoadingComponent, CommonModule],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
