@@ -1,12 +1,12 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Track } from '../../shared/services/track/track';
 import { IconComponent } from '../../shared/ui/icon/icon.component';
-import { mdiClose, mdiDotsVertical, mdiPlaylistPlus, mdiStar, mdiTrashCan } from '@mdi/js';
+import { mdiClose, mdiDotsVertical, mdiPlay, mdiPlaylistPlus, mdiStar, mdiTrashCan } from '@mdi/js';
 
 @Component({
-    selector: 'app-track',
-    imports: [IconComponent],
-    templateUrl: './track.component.html'
+  selector: 'app-track',
+  imports: [IconComponent],
+  templateUrl: './track.component.html'
 })
 export class TrackComponent {
   @Input() track!: Track;
@@ -20,10 +20,7 @@ export class TrackComponent {
   trash = mdiTrashCan;
   cancel = mdiClose;
   playlist = mdiPlaylistPlus;
-
-  public onDoubleClick() {
-    this.onPlay.emit();
-  }
+  play = mdiPlay;
 
   public toggleView() {
     if (this.mode == 'view') {
@@ -34,16 +31,23 @@ export class TrackComponent {
   }
 
   public toggleViewWithEvent(ev: Event) {
-      ev.preventDefault();
-      this.toggleView();
+    ev.preventDefault();
+    this.toggleView();
   }
 
   public removeTrack() {
     this.onRemove.emit();
+    this.toggleView();
   }
 
   public addToPlaylist() {
     this.onPlaylistAdd.emit(this.track);
+    this.toggleView();
+  }
+
+  public playTrack() {
+    this.onPlay.emit();
+    this.toggleView();
   }
 }
 
