@@ -17,8 +17,9 @@
           title="Clear Tracks">
           <app-icon rotate="90" [icon]="clear"></app-icon>
         </button>
-        <button class="rounded-full px-2 py-1 hover:bg-emerald-300 hover:bg-opacity-15" title="Repeat">
-          <app-icon rotate="90" [icon]="repeat"></app-icon>
+        <button (click)="toggleRepeat()" class="rounded-full px-2 py-1 hover:bg-emerald-300 hover:bg-opacity-15"
+          [title]="repeatTooltip()">
+          <app-icon [active]="repeatActive()" rotate="90" [icon]="repeat()"></app-icon>
         </button>
         <button (click)="shuffleTracks()" title="Shuffle"
           class="rounded-full px-2 py-1 hover:bg-emerald-300 hover:bg-opacity-15">

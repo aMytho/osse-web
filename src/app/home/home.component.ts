@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, signal, WritableSignal } from '@angular/core';
+import { Component, computed, OnDestroy, OnInit, signal, WritableSignal } from '@angular/core';
 import { TrackComponent } from './track/track.component';
 import { TrackService } from '../shared/services/track/track.service';
 import { Track } from '../shared/services/track/track';
@@ -6,7 +6,7 @@ import { PlayerService } from '../shared/player/player.service';
 import { PlaybackState } from '../shared/player/state-change';
 import { ConfigService } from '../shared/services/config/config.service';
 import { IconComponent } from '../shared/ui/icon/icon.component';
-import { mdiFastForward, mdiInformation, mdiRepeat, mdiRewind, mdiShuffle, mdiSilverwareForkKnife, mdiDeleteSweep } from '@mdi/js';
+import { mdiFastForward, mdiInformation, mdiRepeat, mdiRewind, mdiShuffle, mdiSilverwareForkKnife, mdiDeleteSweep, mdiRepeatOff, mdiRepeatOnce } from '@mdi/js';
 import { ModalService } from '../shared/ui/modal/modal.service';
 import { AddToPlaylistComponent } from '../shared/ui/modals/add-to-playlist/add-to-playlist.component';
 import { CommonModule } from '@angular/common';
@@ -15,6 +15,7 @@ import { HeaderComponent } from '../shared/ui/header/header.component';
 import { AlbumArtFullscreenComponent } from '../shared/ui/modals/album-art-fullscreen/album-art-fullscreen.component';
 import { ToastService } from '../toast-container/toast.service';
 import { TrackInfoComponent } from '../shared/ui/modals/track-info/track-info.component';
+import { Repeat } from '../shared/services/track/repeat.enum';
 
 @Component({
   selector: 'app-home',
@@ -27,6 +28,25 @@ export class HomeComponent implements OnInit, OnDestroy {
   public playing: boolean = false;
   public title: WritableSignal<string> = signal('No Track Found');
   public artist: WritableSignal<string> = signal('');
+  public repeat = computed(() => {
+    switch (this.trackService.repeat()) {
+      case Repeat.None: return mdiRepeatOff;
+      case Repeat.Once: return mdiRepeatOnce;
+      case Repeat.Loop: return mdiRepeat;
+    }
+  });
+  public repeatActive = computed(() => {
+    let repeat = this.trackService.repeat();
+    return repeat == Repeat.Once || repeat == Repeat.Loop;
+  });
+  public repeatTooltip = computed(() => {
+    switch (this.trackService.repeat()) {
+      case Repeat.None: return 'Repeat Off';
+      case Repeat.Once: return 'Repeat Once';
+      case Repeat.Loop: return 'Repeat Until Stopped';
+    }
+  });
+
 
   private trackUpdated!: Subscription;
   private playbackEnded!: Subscription;
@@ -34,7 +54,6 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   forward = mdiFastForward;
   back = mdiRewind;
-  repeat = mdiRepeat;
   shuffle = mdiShuffle;
   info = mdiInformation;
   consume = mdiSilverwareForkKnife;
@@ -92,6 +111,16 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   public toggleConsume() {
     this.trackService.consume.update((v) => !v);
+  }
+
+  public toggleRepeat() {
+    this.trackService.repeat.update((v) => {
+      switch (v) {
+        case Repeat.None: return Repeat.Once;
+        case Repeat.Once: return Repeat.Loop;
+        case Repeat.Loop: return Repeat.None;
+      }
+    });
   }
 
   public clearTracks() {

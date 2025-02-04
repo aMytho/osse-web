@@ -3,8 +3,6 @@ import { TrackListComponent } from './track-list/track-list.component';
 import { AlbumsComponent } from './albums/albums.component';
 import { HomeComponent } from './home/home.component';
 import { ViewComponent as AlbumView } from './albums/view/view.component';
-import { PlaylistComponent } from './playlist/playlist.component';
-import { PlaylistViewComponent } from './playlist/playlist-view/playlist-view.component';
 import { albumViewResolver } from './albums/view/album-view.resolver';
 import { LoginComponent } from './login/login.component';
 import { isLoggedIn } from './shared/services/auth/auth.guard';
