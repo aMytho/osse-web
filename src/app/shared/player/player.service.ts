@@ -24,6 +24,7 @@ export class PlayerService {
   private track!: Track | null;
 
   private durationSignal: WritableSignal<number> = signal(0);
+  private currenTimeSignal: WritableSignal<number> = signal(0);
   private isPlayingSignal: WritableSignal<boolean> = signal(false);
 
   constructor(
@@ -31,6 +32,7 @@ export class PlayerService {
     private backgroundImageService: BackgroundImageService
   ) {
     this.audioPlayer.addEventListener('timeupdate', (_ev) => {
+      this.currenTimeSignal.set(this.audioPlayer.currentTime);
       this.trackPositionUpdate.emit({
         currentTimeSeconds: this.audioPlayer.currentTime,
         totalTimeSeconds: Math.max(this.track?.duration ?? 0, isNaN(this.audioPlayer.duration) ? 0 : this.audioPlayer.duration)
@@ -127,6 +129,10 @@ export class PlayerService {
 
   get duration() {
     return this.durationSignal.asReadonly();
+  }
+
+  get currentTime() {
+    return this.currenTimeSignal.asReadonly();
   }
 
   get isPlaying() {
