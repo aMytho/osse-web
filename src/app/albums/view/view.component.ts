@@ -7,7 +7,7 @@ import { HeaderComponent } from '../../shared/ui/header/header.component';
 import { ToastService } from '../../toast-container/toast.service';
 import { BackgroundImageService } from '../../shared/ui/background-image.service';
 import { IconComponent } from '../../shared/ui/icon/icon.component';
-import { mdiDeleteSweep, mdiFilter, mdiPencil, mdiPlaylistPlay, mdiSearchWeb } from '@mdi/js';
+import { mdiClose, mdiFilter, mdiPencil, mdiPlaylistPlay, mdiSearchWeb } from '@mdi/js';
 import { AlbumFilter } from './album-filter';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
@@ -40,7 +40,7 @@ export class ViewComponent implements OnInit, OnDestroy {
   search = mdiSearchWeb;
   filter = mdiFilter;
   pencil = mdiPencil;
-  clear = mdiDeleteSweep;
+  close = mdiClose;
   play = mdiPlaylistPlay;
 
   private modalSubscription!: Subscription;
