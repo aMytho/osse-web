@@ -1,5 +1,4 @@
 import { Routes } from '@angular/router';
-import { TrackListComponent } from './track-list/track-list.component';
 import { HomeComponent } from './home/home.component';
 import { albumViewResolver } from './albums/view/album-view.resolver';
 import { LoginComponent } from './login/login.component';
@@ -8,7 +7,7 @@ import { isLoggedIn } from './shared/services/auth/auth.guard';
 export const routes: Routes = [
   {
     path: 'tracks',
-    component: TrackListComponent,
+    loadComponent: () => import('./track-list/track-list.component').then(c => c.TrackListComponent),
     canActivate: [isLoggedIn],
     title: 'Osse - Track Search'
   },
