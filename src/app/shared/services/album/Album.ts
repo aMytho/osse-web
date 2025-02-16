@@ -6,7 +6,7 @@ import { OsseAlbum } from "./osse-album";
 
 export class Album {
   private trackList: Track[] = [];
-  private artistInfo!: Artist;
+  private artistInfo: Artist[] = [];
   private apiService: ApiService = LocatorService.injector.get(ApiService);
 
   constructor(public album: OsseAlbum) {
@@ -34,13 +34,15 @@ export class Album {
   }
 
   private getArtistIfExists() {
-    if (this.album.artist_id != null) {
-      if (this.album.artist != null) {
-        this.artistInfo = new Artist(this.album.artist);
-        return;
-      }
+    // If we loaded the artists, init the Artist classes.
+    if (this.album.artists != null) {
+      this.artistInfo = this.album.artists.map((a) => new Artist(a));
+      return;
+    }
 
-      this.apiService.getArtist(this.album.artist_id).then(val => this.artistInfo = val as Artist);
+    // If artists exist but were not loaded, load them async
+    for (let artistId of this.album.artist_ids ?? []) {
+      this.apiService.getArtist(artistId).then(val => this.artistInfo.push(val as Artist));
     }
   }
 }

@@ -4,7 +4,7 @@ import { fetcher } from '../../shared/util/fetcher';
 import { LoadingService } from '../../shared/ui/loading/loading.service';
 import { inject } from '@angular/core';
 
-export const albumViewResolver: ResolveFn<Album> = async (route, state) => {
+export const albumViewResolver: ResolveFn<Album> = async (route, _state) => {
   let loadingService: LoadingService = inject(LoadingService);
   loadingService.startLoading();
   let id = route.paramMap.get('id');

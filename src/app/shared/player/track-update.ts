@@ -18,7 +18,7 @@ export class TrackUpdate {
 
   get artist() {
     if (this.track.hasArtist()) {
-      return this.track.artist();
+      return this.track.artistPrimary();
     }
 
     return null;

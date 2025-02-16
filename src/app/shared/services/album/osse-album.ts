@@ -4,11 +4,11 @@ import { OsseTrack } from "../track/osse-track";
 export interface OsseAlbum {
   id: number;
   name: string;
-  artist_id: number | null;
+  artist_ids: number[] | null;
   tracks: OsseTrack[];
 
   /**
-   * Artist data. An artist may exist, but may not be loaded.
+   * Artist data.
   */
-  artist: OsseArtist | null;
+  artists: OsseArtist[] | null;
 }

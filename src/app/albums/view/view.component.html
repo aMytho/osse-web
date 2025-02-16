@@ -9,7 +9,7 @@
     <div>
       <app-header class="font-bold text-6xl" [text]="album().name"></app-header>
       <p class="text-slate-300 italic font-light mt-1">
-        {{album().artist?.name ?? albumTrackArtist() ?? "Unknown Artist"}}
+        {{album().artist[0].name ?? albumTrackArtist() ?? "Unknown Artist"}}
       </p>
       <div class="flex flex-wrap gap-2 justify-between items-center mt-6">
         <button (click)="addAll()" class="bg-green-500 hover:bg-green-400 p-2 text-white font-semibold rounded-lg">

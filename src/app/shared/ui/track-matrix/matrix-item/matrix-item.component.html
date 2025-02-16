@@ -7,7 +7,7 @@
     }
 
     <p class="text-lg font-semibold">{{track().title}}</p>
-    <p class="font-light text-slate-300 ml-auto">{{track().artist()?.name ?? "Unknown Artist"}}</p>
+    <p class="font-light text-slate-300 ml-auto">{{track().artistPrimary()?.name ?? "Unknown Artist"}}</p>
     <p>{{track().durationFormatted}}</p>
   </button>
   } @else if (mode() == TrackMatrixMode.Select) {
@@ -18,7 +18,7 @@
       'hover:bg-slate-700': !selected()
     }">
     <p class="text-lg font-semibold">{{track().title}}</p>
-    <p class="font-light text-slate-300 ml-auto">{{track().artist()?.name ?? "Unknown Artist"}}</p>
+    <p class="font-light text-slate-300 ml-auto">{{track().artistPrimary()?.name ?? "Unknown Artist"}}</p>
   </button>
   }
 </div>
