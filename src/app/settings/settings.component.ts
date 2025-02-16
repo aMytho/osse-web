@@ -26,6 +26,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
   public scanComplete: WritableSignal<boolean> = signal(false);
   private subscription!: Subscription;
   public showBackgrounds: WritableSignal<boolean> = signal(false);
+  public logs: WritableSignal<string> = signal('');
 
   constructor(
     private configService: ConfigService,
@@ -73,8 +74,19 @@ export class SettingsComponent implements OnInit, OnDestroy {
 
     if (res.ok) {
       this.directories.set(await res.json());
+      this.requestLogs();
     } else {
       this.notificationService.error('Failed to reach server. Check that the URL is correct and that the server is running.');
+    }
+  }
+
+  private async requestLogs() {
+    let res = await fetcher('config/logs');
+
+    if (res.ok) {
+      this.logs.set(await res.text());
+    } else {
+      this.notificationService.error('Failed to access logs.');
     }
   }
 
