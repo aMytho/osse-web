@@ -182,7 +182,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     // Get the initial value of the current track
     if (this.trackService.activeTrack) {
       this.title.set(this.trackService.activeTrack.title);
-      this.artist.set(this.trackService.activeTrack.artist()?.name ?? '');
+      this.artist.set(this.trackService.activeTrack.artistPrimary()?.name ?? '');
       this.bg.set(this.configService.get('apiURL') + "api/tracks/" + this.trackService.activeTrack.id + '/cover');
     }
   }

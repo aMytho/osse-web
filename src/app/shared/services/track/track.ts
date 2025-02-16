@@ -1,4 +1,4 @@
-import { WritableSignal, signal } from "@angular/core";
+import { WritableSignal, computed, signal } from "@angular/core";
 import { LocatorService } from "../../../locator.service";
 import { getNicelyFormattedTime } from "../../util/time";
 import { ApiService } from "../api.service";
@@ -14,7 +14,29 @@ export class Track {
   private apiService: ApiService = LocatorService.injector.get(ApiService);
   private configService: ConfigService = LocatorService.injector.get(ConfigService);
   public bufferSize: number = 0;
-  public artist: WritableSignal<Artist | null> = signal(null);
+  public artists: WritableSignal<Artist[]> = signal([]);
+  public artistPrimary = computed(() => {
+    let artists = this.artists();
+    return artists.at(0);
+  });
+  public artistNames = computed(() => {
+    let names = this.artists().map((a) => a.name);
+    if (names.length == 0) {
+      return '(None)';
+    }
+
+    if (names.length == 1) {
+      return names[0];
+    }
+
+    if (names.length == 2) {
+      return names.join(' and ')
+    }
+
+    let allButLastName = names.slice(0, -1).join(', ');
+    let lastName = names[names.length - 1];
+    return `${allButLastName}, and ${lastName}`;
+  });
   /**
   * Generates a random uuid. Use for a unique identifier instead of track ID. This changes each time this class is created.
   * Track IDs should be used for server communication only.
@@ -50,7 +72,7 @@ export class Track {
   }
 
   public hasArtist(): boolean {
-    return this.track.artist_id != null;
+    return this.track.artists != null && this.track.artists.length > 0;
   }
 
   public async getArtist() {
@@ -58,46 +80,55 @@ export class Track {
       return;
     }
 
-    if (this.track.artist != null) {
-      this.artist.set(new Artist(this.track.artist));
+    // If we have the data in the request, use it.
+    if (this.track.artists != null) {
+      this.artists.set(this.track.artists.map((a) => new Artist(a)));
       return;
     }
 
-    // Check if it already exists in the store
-    if (this.artistStore.artistIsLoaded(this.track.artist_id as number)) {
-      this.setArtist();
-      return;
+    // Check if it already exists in the store.
+    for (let artistId of this.track.artist_ids ?? []) {
+      if (this.artistStore.artistIsLoaded(artistId)) {
+        this.addArtistById(artistId);
+        return;
+      }
     }
 
     // We need to fetch artist. Check the fetch list to make sure we don't make multiple reqeuests for the same artist.
-    if (this.artistStore.isFetchingArtist(this.track.artist_id as number)) {
-      await new Promise<void>((resolve, _reject) => {
-        let sub = this.artistStore.artistFetched.subscribe((_v) => {
-          sub.unsubscribe();
-          resolve();
+    for (let artistId of this.track.artist_ids ?? []) {
+      if (this.artistStore.isFetchingArtist(artistId)) {
+        await new Promise<void>((resolve, _reject) => {
+          let sub = this.artistStore.artistFetched.subscribe((_v) => {
+            sub.unsubscribe();
+            resolve();
+          });
         });
-      });
 
-      this.setArtist();
-
-      return;
+        this.addArtistById(artistId);
+        return;
+      }
     }
 
     // Not fetching artist, start fetching artist
-    this.artistStore.addFetchingArtist(this.track.artist_id as number);
-    let artist = await this.apiService.getArtist(this.track.artist_id as number);
-    if (artist) {
-      this.artistStore.setArtist(artist);
-      this.setArtist();
-    }
+    for (let artistId of this.track.artist_ids ?? []) {
+      this.artistStore.addFetchingArtist(artistId);
+      let artist = await this.apiService.getArtist(artistId);
+      if (artist) {
+        this.artistStore.setArtist(artist);
+        this.addArtistById(artistId);
+      }
 
-    this.artistStore.removeFetchingArtist(this.track.artist_id as number);
-    this.artistStore.artistFetched.emit(this.track.artist_id as number);
+      this.artistStore.removeFetchingArtist(artistId);
+      this.artistStore.artistFetched.emit(artistId);
+    }
   }
 
-  private setArtist() {
-    let artist = this.artistStore.getArtistById(this.track.artist_id as number) ?? null;
-    this.artist.set(artist);
+  private addArtistById(artistId: number) {
+    let artist = this.artistStore.getArtistById(artistId) ?? null;
+    this.artists.update((a) => {
+      a.push(artist as Artist);
+      return a;
+    });
   }
 
   public get trackNumber() {

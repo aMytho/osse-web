@@ -113,8 +113,8 @@ export class ViewComponent implements OnInit, OnDestroy {
     let artists = new Map();
     for (let i = 0; i < this.album().tracks.length; i++) {
       let track = this.album().tracks[i];
-      if (track.track.artist_id != null) {
-        artists.set(i, (artists.get(track.track.artist_id) ?? 0) + 1);
+      if (track.artistPrimary() != null) {
+        artists.set(i, (artists.get(track.artistPrimary()?.id) ?? 0) + 1);
       }
     }
 
@@ -123,7 +123,7 @@ export class ViewComponent implements OnInit, OnDestroy {
     // Get the artist with the highest track occurence and set it to the album artist
     let artist = ([...artists.entries()]).reduce((a, e) => e[1] > a[1] ? e : a);
     await this.album().tracks[artist[0]].getArtist();
-    this.albumTrackArtist.set((this.album().tracks[artist[0]].artist())?.name + ' (Inferred)');
+    this.albumTrackArtist.set((this.album().tracks[artist[0]].artistPrimary())?.name + ' (Inferred)');
   }
 
   public showAlbumArt() {
