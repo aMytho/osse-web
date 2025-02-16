@@ -30,7 +30,7 @@ export class Album {
   }
 
   public get artist() {
-    return this.artistInfo ?? null;
+    return this.artistInfo;
   }
 
   private getArtistIfExists() {

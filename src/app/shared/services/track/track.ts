@@ -19,6 +19,24 @@ export class Track {
     let artists = this.artists();
     return artists.at(0);
   });
+  public artistNames = computed(() => {
+    let names = this.artists().map((a) => a.name);
+    if (names.length == 0) {
+      return '(None)';
+    }
+
+    if (names.length == 1) {
+      return names[0];
+    }
+
+    if (names.length == 2) {
+      return names.join(' and ')
+    }
+
+    let allButLastName = names.slice(0, -1).join(', ');
+    let lastName = names[names.length - 1];
+    return `${allButLastName}, and ${lastName}`;
+  });
   /**
   * Generates a random uuid. Use for a unique identifier instead of track ID. This changes each time this class is created.
   * Track IDs should be used for server communication only.
