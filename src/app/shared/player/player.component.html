@@ -43,7 +43,7 @@
   </div>
   @if (showPopoverControls()) {
   <div class="absolute bottom-20 w-full pr-16">
-    <app-popover-controls></app-popover-controls>
+    <app-popover-controls (onClose)="showPopoverControls.set(false)"></app-popover-controls>
   </div>
   }
 </div>

@@ -8,7 +8,11 @@ export async function fetcher(url: string, args: Partial<FetcherArgs> = { method
     token = await getCSRFToken() as string;
   } catch (e) {
     console.error('Failed to get CSRF Token. Check the the server is running and that the URL is correct');
-    LocatorService.injector.get(ToastService).error('Failed to get CSRF Token. Check the the server is running and that the URL is correct');
+    // If we are not on the login page, show an error msg to the user.
+    // Login page has its own error handler.
+    if (window.location.pathname != '/login') {
+      LocatorService.injector.get(ToastService).error('Failed to get CSRF Token. Check the the server is running and that the URL is correct');
+    }
     throw 'CSRF Error';
   }
 

@@ -1,5 +1,7 @@
-<div class="bg-slate-600 p-4 rounded-md bg-opacity-95">
+<div class="bg-slate-600 p-4 rounded-md bg-opacity-95 relative">
   <p class="font-semibold text-xl">Advanced Controls</p>
+  <button (click)="onClose.emit()" aria-label="Close advanced controls" title="Close"
+    class="absolute top-4 right-4"><app-icon [icon]="close"></app-icon></button>
   <div class="flex flex-wrap gap-8">
     <div>
       <p>Duration</p>
