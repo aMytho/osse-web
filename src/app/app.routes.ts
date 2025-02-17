@@ -55,6 +55,11 @@ export const routes: Routes = [
     title: 'Osse - Login'
   },
   {
+    path: 'register',
+    loadComponent: () => import('./registration/registration.component').then(c => c.RegistrationComponent),
+    title: 'Osse - Login'
+  },
+  {
     path: "**",
     redirectTo: "home",
   }

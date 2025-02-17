@@ -1,5 +1,5 @@
 <div>
-  <app-header [type]="2" text="Login"></app-header>
+  <app-header [type]="2" text="Register"></app-header>
 
   <div>
     <p class="text-white">Welcome to the Osse music server!</p>
@@ -29,9 +29,9 @@
     </form>
 
     @if (serverFound()) {
-    <p class="text-white mt-4">Server found! Please login.</p>
+    <p class="text-white mt-4">Server found! Please create your account.</p>
 
-    <form #loginForm="ngForm" (ngSubmit)="login()" class="flex flex-wrap gap-x-2">
+    <form #loginForm="ngForm" (ngSubmit)="register()" class="flex flex-wrap gap-x-2">
       <div>
         <label for="username" class="text-white font-semibold">Username</label>
         <input id="username" [(ngModel)]="username" required minlength="1" name="username"
@@ -42,15 +42,15 @@
         <label for="password" class="text-white font-semibold">Password</label>
         <input id="password" type="password" [(ngModel)]="password" required minlength="1" name="password"
           class="text-emerald-300 m-2 p-2 rounded-md bg-opacity-15 focus:bg-opacity-30 bg-white"
-          placeholder="cassidor" />
+          placeholder="super secret password" />
       </div>
 
       <div class="basis-full">
-        <app-button type="submit" text="Login" [disabled]="!loginForm.form.valid"></app-button>
+        <app-button type="submit" text="Create Account" [disabled]="!loginForm.form.valid"></app-button>
       </div>
     </form>
     }
-    <p class="text-white mt-4 italic">Don't have an account yet? <a class="text-cyan-400 hover:text-cyan-500"
-        href="/register">Create One</a></p>
+    <p class="text-white mt-4 italic">Already have an account? <a class="text-cyan-400 hover:text-cyan-500"
+        href="/login">Login</a></p>
   </div>
 </div>
