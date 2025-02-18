@@ -22,6 +22,8 @@
     <ul class="mb-2 ml-4 list-disc list-inside">
       @for (dir of directories(); track $index) {
       <li class="my-1">{{dir}}</li>
+      } @empty {
+      <li class="my-1">No directories found...</li>
       }
     </ul>
     <div class="mt-2">
@@ -29,12 +31,20 @@
         (click)="scan()"></app-button>
 
       @if (waitingForScanConfirmation()) {
-      <p class="animate-pulse font-semibold text-xl">Waiting for scan scart confirmation...</p>
+      <p class="animate-pulse font-semibold text-xl">Waiting for scan start confirmation...</p>
       }
 
       @if (scanInProgress()) {
-      <p class="animate-pulse font-semibold text-xl">Scan in progress. This may take some time. Please do not leave this
-        page...</p>
+      <p class="animate-pulse font-semibold text-xl mt-2">Scan in progress. This may take some time...</p>
+
+      <div class="ml-2 mt-2">
+        <label for="scan-progress">Scan Progress: </label>
+        <progress id="scan-progress" [value]="scanProgress().finished_count" [max]="scanProgress().total_directories"
+          class="rounded-sm overflow-hidden accent-emerald-400"></progress>
+        <p>Scanned {{scanProgress().finished_count}} of {{scanProgress().total_directories}} directories.</p>
+        <p class="italic">While you can leave this page, we suggest waiting for the scan to finish before viewing your
+          library. Some files may be missing metadata if the scan is incomplete.</p>
+      </div>
       }
 
       @if (scanFailMessage()) {
@@ -71,10 +81,10 @@
 
     <p class="my-2 ml-2">Application Logs</p>
     <p class="my-2 ml-2">Below are the current application logs. The last 500 lines are shown.</p>
+    <p class="my-2 ml-2 italic">Warning: Logs do not auto-update. Refresh the page to view updated logs.</p>
 
-    <pre class="p-4 bg-slate-800 overflow-auto max-h-[40rem]">
-      {{logs()}}
-    </pre>
+
+    <pre class="p-4 bg-slate-800 overflow-auto max-h-[40rem]">{{logs()}}</pre>
   </div>
 
 </div>

@@ -16,6 +16,8 @@ export interface ScanProgressedResult {
   filesScanned: number;
   directoryName: string;
   filesSkipped: number;
+  totalDirectories: number;
+  scannedDirectories: number;
 }
 
 export interface ScanCompletedResult {
