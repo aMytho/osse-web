@@ -1,7 +1,6 @@
 import { EventEmitter, Injectable } from '@angular/core';
 import Echo from 'laravel-echo';
 import Pusher from 'pusher-js';
-import { ConfigService } from '../config/config.service';
 import { fetcher } from '../../util/fetcher';
 import { ScanChannels, ScanCompletedResult, ScanEvents, ScanFailedResult, ScanProgressedResult, ScanStartedResult } from './channels/scan';
 import { EchoChannel, EchoResult } from './channels';
@@ -15,23 +14,21 @@ export class EchoService implements ScanEvents {
   private pusher!: typeof Pusher;
   private echoEvent = new EventEmitter<{ channel: EchoChannel; data: EchoResult<EchoChannel> }>();
 
-  constructor(private configService: ConfigService) { }
+  constructor() { }
 
-  public connect(key: string) {
+  public connect(host: string, port: number, key: string) {
     if (!key) {
       throw "Tried to connect without a reverb key. Please authenticate first!";
     }
-
-    let url = new URL(this.configService.get('apiURL'));
 
     this.pusher = Pusher;
 
     this.echo = new Echo({
       broadcaster: 'reverb',
       key: key,
-      wsHost: url.hostname,
-      wsPort: 8080,
-      wssPort: 443,
+      wsHost: host,
+      wsPort: port,
+      wssPort: port,
       forceTLS: false,
       enabledTransports: ['ws', 'wss'],
       authorizer: (channel: any, _options: any) => ({

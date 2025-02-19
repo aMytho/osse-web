@@ -2,10 +2,21 @@
  * A successful auth response.
  */
 export interface AuthResponse {
+  /**
+   * User ID
+   */
   id: number,
   username: string,
   /**
-   * Used to access the reverb server.
+   * Auth for reverb server.
    */
   broadcastKey: string
+  /**
+   * Used to access the reverb server.
+  */
+  broadcastHost: string;
+  /**
+   * Used to access the reverb server.
+  */
+  broadcastPort: string;
 }
