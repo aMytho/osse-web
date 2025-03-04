@@ -28,7 +28,6 @@ export class ModalComponent implements AfterViewInit {
     this.modal.nativeElement.close();
     this.component.destroy();
     this.title = '';
-    this.modalService.onClose.emit();
   }
 
   ngAfterViewInit(): void {
