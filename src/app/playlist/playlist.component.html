@@ -9,13 +9,10 @@
   <div class="flex flex-col gap-y-1 bg-slate-500 bg-opacity-15 rounded-lg p-4">
     @for (playlist of playlists(); track $index) {
     <div class="text-white text-lg p-2 border-y border-emerald-300 mx-4 flex justify-between">
-      <div>
-        <p>{{playlist.name}}</p>
-      </div>
-      <div class="flex gap-x-2">
-        <p>{{playlist.count}} Tracks</p>
-        <a routerLink="view/{{playlist.id}}">View</a>
-      </div>
+      <p>
+        <a routerLink="view/{{playlist.id}}">{{playlist.name}}</a>
+        <span class="ml-2 italic font-thin text-sm"> {{playlist.count}} tracks</span>
+      </p>
     </div>
     } @empty {
     <p class="text-white">No Playlists were found.</p>

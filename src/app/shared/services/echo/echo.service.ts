@@ -47,7 +47,8 @@ export class EchoService implements ScanEvents {
               callback(error);
             });
         },
-      })
+      }),
+
     });
   }
 

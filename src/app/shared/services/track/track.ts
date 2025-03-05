@@ -131,6 +131,26 @@ export class Track {
     });
   }
 
+  /**
+  * Sometimes tracks are fetched from osse and made into classes, but the user can refer to the same instance.
+  * Later, these instances are in the same array.
+  * In cases like this, we need a fresh uuid and track instance.
+  * An example is the tracklist page. Each track is a Track class, so adding the same track to the queue will result in duplicate uuids!
+  */
+  public regenerateTrack(): Track {
+    return new Track({
+      id: this.track.id,
+      title: this.track.title,
+      size: this.track.size,
+      duration: this.track.duration,
+      track_number: this.trackNumber,
+      disc_number: this.discNumber,
+      bitrate: this.track.bitrate,
+      artist_ids: this.track.artists?.map((a) => a.id) ?? null,
+      artists: this.track.artists
+    });
+  }
+
   public get trackNumber() {
     return this.track.track_number;
   }

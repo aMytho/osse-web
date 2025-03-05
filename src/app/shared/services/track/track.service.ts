@@ -55,6 +55,11 @@ export class TrackService {
   }
 
   public addTrack(track: Track) {
+    // If the UUID is already in use, make a new uuid.
+    if (this.tracks.some((a) => a.uuid == track.uuid)) {
+      track = track.regenerateTrack();
+    }
+
     this.tracks.push(track);
     // If this is the first track added, start playback
     if (this.tracks.length - 1 == 0) {
