@@ -60,7 +60,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   clear = mdiDeleteSweep;
 
   constructor(
-    private trackService: TrackService,
+    public trackService: TrackService,
     private playerService: PlayerService,
     private configService: ConfigService,
     private modalService: ModalService,

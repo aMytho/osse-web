@@ -41,6 +41,6 @@
 <div class="bg-slate-700 bg-opacity-50 rounded-md mt-8 p-4 flex flex-col gap-y-4" *ngIf="tracks().length > 0">
   @for (track of tracks(); track track.uuid; let idx = $index) {
   <app-track (onPlay)="playTrack(idx)" (onRemove)="removeTrack(idx)" (onPlaylistAdd)="addToPlaylist($event)"
-    [track]="track"></app-track>
+    [track]="track" [activeTrack]="trackService.activeTrack?.uuid == track.uuid"></app-track>
   }
 </div>

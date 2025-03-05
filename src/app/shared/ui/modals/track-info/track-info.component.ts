@@ -11,7 +11,7 @@ import { ButtonComponent } from '../../button/button.component';
 export class TrackInfoComponent {
   @Input()
   public trackInfo!: Track;
-  @Output('onClose') onClose = new EventEmitter();
+  @Output() onClose = new EventEmitter();
 
   public close() {
     this.onClose.emit();

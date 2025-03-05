@@ -1,15 +1,17 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, input, Input, InputSignal, Output } from '@angular/core';
 import { Track } from '../../shared/services/track/track';
 import { IconComponent } from '../../shared/ui/icon/icon.component';
 import { mdiClose, mdiDotsVertical, mdiPlay, mdiPlaylistPlus, mdiStar, mdiTrashCan } from '@mdi/js';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-track',
-  imports: [IconComponent],
+  imports: [IconComponent, CommonModule],
   templateUrl: './track.component.html'
 })
 export class TrackComponent {
   @Input() track!: Track;
+  public activeTrack: InputSignal<boolean> = input<boolean>(false);
   @Output() onPlay = new EventEmitter();
   @Output() onRemove = new EventEmitter();
   @Output() onPlaylistAdd = new EventEmitter<Track>();

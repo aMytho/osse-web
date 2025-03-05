@@ -1,13 +1,23 @@
-<div tabindex="0" (dblclick)="onPlay.emit()" (contextmenu)="toggleViewWithEvent($event)"
-  class="flex justify-between border-x border-y border-r-emerald-400 border-b-emerald-400 border-r border-emerald-200 bg-opacity-10 bg-slate-400 hover:bg-emerald-400 hover:bg-opacity-10 hover:cursor-pointer p-4 rounded-lg shadow-sm shadow-cyan-950">
+<div class="flex justify-between bg-slate-400 rounded-lg shadow-sm shadow-cyan-950" [ngClass]="{
+    'hover:bg-emerald-400 hover:bg-opacity-10 bg-opacity-10': !activeTrack(),
+    'bg-emerald-400 bg-opacity-15 hover:bg-opacity-20 border-r-emerald-400 border-b-emerald-400 border-r border-emerald-200 border-2': activeTrack()
+  }">
   @if (mode == 'view') {
-  <div>
-    <h3 class="font-semibold text-lg text-slate-50">{{ track.title }}</h3>
-    <p class="text-slate-300">
-      {{track.artistPrimary()?.name ?? ''}}
-    </p>
+  <div class="flex-grow">
+    <button (click)="onPlay.emit()" class="w-full p-4" (contextmenu)="toggleViewWithEvent($event)"
+      [attr.aria-label]="'Play' + track.title + ' by ' + (track.artistPrimary()?.name ?? 'unknown artist')">
+      <p class="text-left">
+        <span class="font-semibold text-lg text-slate-50">{{ track.title }}
+        </span>
+        <span class="hidden"> - </span>
+        <br>
+        <span class="text-slate-300">
+          {{track.artistPrimary()?.name ?? ''}}
+        </span>
+      </p>
+    </button>
   </div>
-  <div class="flex gap-2">
+  <div class="flex gap-2 p-4">
     <div class="text-green-400 font-semibold text-lg">
       <app-icon class="cursor-pointer fill-white hover:fill-yellow-300" pull="left" [icon]="star"></app-icon>
     </div>
@@ -18,7 +28,7 @@
     </div>
   </div>
   } @else {
-  <div class="flex flex-wrap items-center place-items-center gap-x-2 w-full">
+  <div class="flex flex-wrap items-center place-items-center gap-x-2 w-full p-4">
     <button class="bg-green-400 hover:bg-opacity-90 p-4 rounded-xl group" (click)="playTrack()" title="Play Track"
       aria-label="Play Track" accesskey="p">
       <app-icon class="group-hover:opacity-95" [icon]="play" align="middle"></app-icon>
