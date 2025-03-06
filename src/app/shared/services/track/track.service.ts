@@ -16,6 +16,12 @@ export class TrackService {
   public tracks: Track[] = [];
   private index = 0;
   private hasRepeatedCurrentTrack: boolean = false;
+
+  /**
+   * List of cleared tracks. Used for restoration in case of accidental deletion.
+   */
+  private clearedTracks: Track[] = [];
+
   /**
    * If true, track is removed on end playback
   */
@@ -69,6 +75,9 @@ export class TrackService {
 
   // Removes all tracks and stops playback
   public clearTracks() {
+    // Store a list of the cleared tracks.
+    this.clearedTracks = this.tracks.map((t) => t);
+
     while (this.tracks.length != 0) {
       this.tracks.pop();
     }
@@ -76,6 +85,24 @@ export class TrackService {
     this.index = 0;
     this.playerService.pause();
     this.playerService.clearTrack();
+  }
+
+  /**
+   * Called when the user leaves the homepage.
+   */
+  public removeClearedTracks() {
+    this.clearedTracks = [];
+  }
+
+
+  public restoreTracks() {
+    if (this.clearedTracks.length == 0) {
+      return;
+    }
+
+    // If we ever allow this method to be called outside of the homepage, we may need to clear any existing tracks first.
+    this.clearedTracks.forEach((t) => this.addTrack(t));
+    this.clearedTracks = [];
   }
 
   public moveToNextTrack() {

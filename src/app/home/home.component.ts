@@ -6,7 +6,7 @@ import { PlayerService } from '../shared/player/player.service';
 import { PlaybackState } from '../shared/player/state-change';
 import { ConfigService } from '../shared/services/config/config.service';
 import { IconComponent } from '../shared/ui/icon/icon.component';
-import { mdiFastForward, mdiInformation, mdiRepeat, mdiRewind, mdiShuffle, mdiSilverwareForkKnife, mdiDeleteSweep, mdiRepeatOff, mdiRepeatOnce } from '@mdi/js';
+import { mdiFastForward, mdiInformation, mdiRepeat, mdiRewind, mdiShuffle, mdiSilverwareForkKnife, mdiDeleteSweep, mdiRepeatOff, mdiRepeatOnce, mdiRestore } from '@mdi/js';
 import { ModalService } from '../shared/ui/modal/modal.service';
 import { AddToPlaylistComponent } from '../shared/ui/modals/add-to-playlist/add-to-playlist.component';
 import { CommonModule } from '@angular/common';
@@ -46,7 +46,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       case Repeat.Loop: return 'Repeat Until Stopped';
     }
   });
-
+  public tracksCanBeRestored: WritableSignal<boolean> = signal(false);
 
   private trackUpdated!: Subscription;
   private playbackEnded!: Subscription;
@@ -58,6 +58,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   info = mdiInformation;
   consume = mdiSilverwareForkKnife;
   clear = mdiDeleteSweep;
+  restore = mdiRestore;
 
   constructor(
     public trackService: TrackService,
@@ -125,6 +126,12 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   public clearTracks() {
     this.trackService.clearTracks();
+    this.tracksCanBeRestored.set(true);
+  }
+
+  public restoreTracks() {
+    this.trackService.restoreTracks();
+    this.tracksCanBeRestored.set(false);
   }
 
   public showAlbumArt() {
@@ -191,5 +198,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.trackUpdated.unsubscribe();
     this.stateChanged.unsubscribe();
     this.playbackEnded.unsubscribe();
+
+    this.trackService.removeClearedTracks();
   }
 }
