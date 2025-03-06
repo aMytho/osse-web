@@ -83,8 +83,15 @@
     <p class="my-2 ml-2">Below are the current application logs. The last 500 lines are shown.</p>
     <p class="my-2 ml-2 italic">Warning: Logs do not auto-update. Refresh the page to view updated logs.</p>
 
-
+    @if (!showLogs()) {
+    <div class="bg-slate-800 h-[40rem]">
+      <button class="w-full h-full py-8" (click)="showLogs.set(true)" aria-label="Show Logs">
+        Click to show logs (verbose, may include sensitive info)
+      </button>
+    </div>
+    } @else {
     <pre class="p-4 bg-slate-800 overflow-auto max-h-[40rem]">{{logs()}}</pre>
+    }
   </div>
 
 </div>

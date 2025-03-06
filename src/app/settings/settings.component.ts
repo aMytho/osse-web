@@ -30,6 +30,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
   private subscription!: Subscription;
   public showBackgrounds: WritableSignal<boolean> = signal(false);
   public logs: WritableSignal<string> = signal('');
+  public showLogs: WritableSignal<boolean> = signal(false);
 
   constructor(
     private configService: ConfigService,

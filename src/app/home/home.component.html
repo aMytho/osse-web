@@ -19,8 +19,9 @@
           <app-icon rotate="90" [icon]="restore"></app-icon>
         </button>
         } @else {
-        <button (click)="clearTracks()" class="rounded-full px-2 py-1 hover:bg-red-300 hover:bg-opacity-15"
-          title="Clear Tracks">
+        <button (click)="clearTracks()"
+          class="rounded-full px-2 py-1 hover:bg-red-300 hover:bg-opacity-15 disabled:cursor-not-allowed"
+          title="Clear Tracks" [disabled]="tracks().length == 0">
           <app-icon rotate="90" [icon]="clear"></app-icon>
         </button>
         }
