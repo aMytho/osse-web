@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnDestroy, OnInit, ViewChild, WritableSignal, signal } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, Component, OnDestroy, OnInit, ViewChild, WritableSignal, signal } from '@angular/core';
 import { Album } from '../../shared/services/album/Album';
 import { ConfigService } from '../../shared/services/config/config.service';
 import { TrackService } from '../../shared/services/track/track.service';
@@ -18,6 +18,7 @@ import { CommonModule } from '@angular/common';
 import { TrackMatrixMode } from '../../shared/ui/track-matrix/track-matrix-mode.enum';
 import { AddMultipleTracksToPlaylistComponent } from '../../shared/ui/modals/add-multiple-tracks-to-playlist/add-multiple-tracks-to-playlist.component';
 import { Subscription } from 'rxjs';
+import { TrackInfo } from '../../shared/ui/track-matrix/track-info';
 
 @Component({
   selector: 'app-view',
@@ -26,7 +27,7 @@ import { Subscription } from 'rxjs';
   styles: ``,
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ViewComponent implements OnInit, OnDestroy {
+export class ViewComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild(TrackMatrixComponent) matrix!: TrackMatrixComponent;
   public album!: WritableSignal<Album>;
   public filteredTracks: WritableSignal<Track[]> = signal([]);
@@ -187,6 +188,10 @@ export class ViewComponent implements OnInit, OnDestroy {
     this.modalSubscription = this.modalService.onClose.subscribe((_) => {
       this.clearSelectedTracks();
     });
+  }
+
+  ngAfterViewInit(): void {
+    this.matrix.setVisibleFields(TrackInfo.allFields());
   }
 
   public ngOnDestroy(): void {

@@ -5,25 +5,39 @@ import { Track } from '../shared/services/track/track';
 import { ToastService } from '../toast-container/toast.service';
 import { fetcher } from '../shared/util/fetcher';
 import { debounceTime, fromEvent, Subscription } from 'rxjs';
+import { TrackMatrixComponent } from '../shared/ui/track-matrix/track-matrix.component';
+import { TrackMatrixMode } from '../shared/ui/track-matrix/track-matrix-mode.enum'; import { IconComponent } from "../shared/ui/icon/icon.component";
+import { mdiClose, mdiPencil, mdiPlaylistPlay } from '@mdi/js';
+import { CommonModule } from '@angular/common';
+import { AddMultipleTracksToPlaylistComponent } from '../shared/ui/modals/add-multiple-tracks-to-playlist/add-multiple-tracks-to-playlist.component';
+import { ModalService } from '../shared/ui/modal/modal.service';
 
 @Component({
   selector: 'app-track-list',
   templateUrl: './track-list.component.html',
   styles: ``,
-  imports: [HeaderComponent],
+  imports: [HeaderComponent, TrackMatrixComponent, IconComponent, CommonModule],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TrackListComponent implements AfterViewInit, OnInit, OnDestroy {
   @ViewChild('search') searchBar!: ElementRef;
+  @ViewChild(TrackMatrixComponent) matrix!: TrackMatrixComponent;
+
   public loading: WritableSignal<boolean> = signal(true);
   public tracks: WritableSignal<Track[]> = signal([]);
+  public editing: WritableSignal<boolean> = signal(false);
   private allTracks: Track[] = [];
   private timeout: number = 0;
   private scrollSubscription!: Subscription;
 
+  pencil = mdiPencil;
+  close = mdiClose;
+  play = mdiPlaylistPlay;
+
   constructor(
     private trackService: TrackService,
-    private notificationService: ToastService
+    private notificationService: ToastService,
+    private modalService: ModalService
   ) { }
 
   ngAfterViewInit(): void {
@@ -63,6 +77,23 @@ export class TrackListComponent implements AfterViewInit, OnInit, OnDestroy {
   public addTrack(track: Track) {
     this.trackService.addTrack(track);
     this.notificationService.info('Added ' + track.title);
+  }
+
+  public playSelectedTracks() {
+    let tracks = this.matrix.getSelectedTracks();
+    for (const track of tracks) {
+      this.trackService.addTrack(track);
+    }
+
+    this.notificationService.info('Added ' + tracks.length + ' tracks.');
+  }
+
+  public addSelectedTracksToPlaylist() {
+    this.modalService.setDynamicModal(AddMultipleTracksToPlaylistComponent, [{
+      name: 'tracks',
+      val: this.matrix.getSelectedTracks()
+    }], 'Add to Playlist');
+    this.modalService.show();
   }
 
   public async onInput(ev: any) {
@@ -121,6 +152,18 @@ export class TrackListComponent implements AfterViewInit, OnInit, OnDestroy {
   public getMatchingTracks(search: string): Track[] {
     let regex = new RegExp(search, 'i');
     return this.allTracks.filter((v) => regex.test(v.track.title));
+  }
+
+  public handleModeChange(mode: TrackMatrixMode) {
+    if (mode == TrackMatrixMode.Select) {
+      this.editing.set(true);
+    } else {
+      this.editing.set(false);
+    }
+  }
+
+  public handleEmptySelection() {
+    this.matrix.setMode(TrackMatrixMode.View);
   }
 
   ngOnDestroy(): void {

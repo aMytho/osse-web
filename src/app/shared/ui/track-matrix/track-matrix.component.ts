@@ -1,8 +1,8 @@
 import { Component, ViewChildren, WritableSignal, input, output, signal } from '@angular/core';
 import { Track } from '../../services/track/track';
-import { TrackMatrixAction } from './track-matrix-action.enum';
 import { MatrixItemComponent } from './matrix-item/matrix-item.component';
 import { TrackMatrixMode } from './track-matrix-mode.enum';
+import { TrackField, TrackInfo } from './track-info';
 
 @Component({
   selector: 'app-track-matrix',
@@ -15,13 +15,12 @@ export class TrackMatrixComponent {
   public tracks = input<Track[]>([]);
 
   public selectedTracks: Track[] = [];
-  public actions: TrackMatrixAction[] = [];
   public mode: WritableSignal<TrackMatrixMode> = signal<TrackMatrixMode>(TrackMatrixMode.View);
+  public visibleTrackInfo: WritableSignal<TrackField[]> = signal(TrackInfo.default());
 
   public onClick = output<Track>();
   public onModeChanged = output<TrackMatrixMode>();
-  public onEmptySelection = output();
-  public onTrackSelected = output<Track>();
+  public onEmptySelection = output(); public onTrackSelected = output<Track>();
 
   public toggleSelect(selected: boolean, track: Track) {
     if (selected) {
@@ -58,5 +57,9 @@ export class TrackMatrixComponent {
 
   public getSelectedTracks() {
     return this.selectedTracks;
+  }
+
+  public setVisibleFields(fields: TrackField[]) {
+    this.visibleTrackInfo.set(fields);
   }
 }

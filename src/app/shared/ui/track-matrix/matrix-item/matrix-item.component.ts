@@ -2,6 +2,7 @@ import { Component, input, InputSignal, output, signal, WritableSignal } from '@
 import { Track } from '../../../services/track/track';
 import { TrackMatrixMode } from '../track-matrix-mode.enum';
 import { CommonModule } from '@angular/common';
+import { TrackField, TrackInfo } from '../track-info';
 
 @Component({
   selector: 'app-matrix-item',
@@ -14,6 +15,9 @@ export class MatrixItemComponent {
   public TrackMatrixMode = TrackMatrixMode;
   public mode: InputSignal<TrackMatrixMode> = input<TrackMatrixMode>(TrackMatrixMode.View);
   public selected: WritableSignal<boolean> = signal(false);
+  public visibleTrackInfo = input<TrackField[]>();
+  public trackInfo = TrackInfo;
+  public trackField = TrackField;
 
   public onClick = output();
   public onSelectToggle = output<boolean>();
