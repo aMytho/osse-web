@@ -7,7 +7,7 @@ import { ButtonComponent } from '../../shared/ui/button/button.component';
 import { EditPlaylist } from './editPlaylistModel';
 import { FormsModule } from '@angular/forms';
 import { IconComponent } from '../../shared/ui/icon/icon.component';
-import { mdiPencil, mdiPlaylistPlay, mdiTrashCan } from '@mdi/js';
+import { mdiClose, mdiPencil, mdiPlaylistPlay, mdiTrashCan } from '@mdi/js';
 import { PlaylistService } from '../../shared/services/playlist/playlist.service';
 import { TrackService } from '../../shared/services/track/track.service';
 import { ToastService } from '../../toast-container/toast.service';
@@ -15,10 +15,11 @@ import { Track } from '../../shared/services/track/track';
 import { fetcher } from '../../shared/util/fetcher';
 import { TrackMatrixComponent } from '../../shared/ui/track-matrix/track-matrix.component';
 import { TrackMatrixMode } from '../../shared/ui/track-matrix/track-matrix-mode.enum';
+import { PlaylistAddTracksComponent } from './playlist-add-tracks/playlist-add-tracks.component';
 
 @Component({
   selector: 'app-playlist-view',
-  imports: [HeaderComponent, ButtonComponent, IconComponent, CommonModule, FormsModule, TrackMatrixComponent],
+  imports: [HeaderComponent, ButtonComponent, IconComponent, CommonModule, FormsModule, TrackMatrixComponent, PlaylistAddTracksComponent],
   templateUrl: './playlist-view.component.html',
   styles: ``
 })
@@ -32,10 +33,13 @@ export class PlaylistViewComponent {
   pencil = mdiPencil;
   trash = mdiTrashCan;
   play = mdiPlaylistPlay;
+  close = mdiClose;
 
   public playlist!: Playlist;
   public showEditMenu: WritableSignal<boolean> = signal(false);
+  public showTrackSelectionMenu: WritableSignal<boolean> = signal(false);
   public ready: WritableSignal<boolean> = signal(false);
+  public waitingOnRequest: WritableSignal<boolean> = signal(false);
   public model = new EditPlaylist('');
 
   constructor(
@@ -94,6 +98,49 @@ export class PlaylistViewComponent {
   public toggleEditMenu() {
     this.showEditMenu.set(!this.showEditMenu());
     this.tracks.setMode(this.showEditMenu() ? TrackMatrixMode.Select : TrackMatrixMode.View);
+  }
+
+  public onTrackMatrixModeChange(mode: TrackMatrixMode) {
+    this.showTrackSelectionMenu.set(mode == TrackMatrixMode.Select);
+  }
+
+  public closePlaylistTrackSelector() {
+    this.tracks.setMode(TrackMatrixMode.View);
+    this.tracks.clearSelectedTracks();
+    this.showEditMenu.set(false);
+  }
+
+  public async removeTracksFromPlaylist() {
+    let tracks = this.tracks.getSelectedTracks();
+    if (tracks.length == 0) {
+      return;
+    }
+
+    this.waitingOnRequest.set(true);
+    let req = await fetcher(`playlists/${this.playlist.id}/track-set`, {
+      method: 'DELETE',
+      body: JSON.stringify({
+        'track-ids': tracks.map((t) => t.id)
+      })
+    });
+
+    if (req.ok) {
+      this.playlist.tracks = this.playlist.tracks.filter((t) => !tracks.some((t2) => t2.id == t.id));
+      this.notificationService.info('Removed ' + tracks.length + ' tracks from ' + this.playlist.name);
+      this.showEditMenu.set(false);
+      this.tracks.clearSelectedTracks();
+      this.tracks.setMode(TrackMatrixMode.View);
+    }
+
+    this.waitingOnRequest.set(false);
+  }
+
+  addTracksToPlaylist(tracks: Track[]) {
+    this.playlist.tracks.push(...tracks);
+    this.notificationService.info('Added ' + tracks.length + ' tracks to ' + this.playlist.name);
+    this.showEditMenu.set(false);
+    this.tracks.clearSelectedTracks();
+    this.tracks.setMode(TrackMatrixMode.View);
   }
 }
 

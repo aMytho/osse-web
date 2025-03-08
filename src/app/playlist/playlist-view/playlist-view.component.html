@@ -27,8 +27,24 @@
   <div class="mt-4"></div>
   <app-header [text]="playlist?.name ?? 'Loading'"></app-header>
 
-  <app-header [type]="2" [text]="'Tracks'"></app-header>
   @if (playlist) {
-  <app-track-matrix [tracks]="playlist.tracks" (onClick)="addTrack($event)"></app-track-matrix>
+    <div [ngClass]="{'animate-pulse pointer-events-none': waitingOnRequest()}">
+      <div class="flex justify-around gap-x-2 my-2" [ngClass]="{'pointer-events-none opacity-45 my-1': !showTrackSelectionMenu()}">
+        <button (click)="closePlaylistTrackSelector()"
+          class="font-semibold text-lg text-white hover:text-red-500 p-2 rounded-md bg-transparent group">
+          Close
+          <app-icon [icon]="close"></app-icon></button>
+        <button (click)="removeTracksFromPlaylist()"
+          class="font-semibold text-lg text-white p-2 rounded-md bg-transparent">Remove from Playlist<app-icon
+            [icon]="trash"></app-icon></button>
+      </div>
+      <app-track-matrix [tracks]="playlist.tracks" (onClick)="addTrack($event)" (onModeChanged)="onTrackMatrixModeChange($event)"></app-track-matrix>
+
+    </div>
+
+    @if (showEditMenu()) {
+      <div aria-hidden="true" class="mt-8"></div>
+      <app-playlist-add-tracks (addTracks)="addTracksToPlaylist($event)" [playlistID]="playlist.id"></app-playlist-add-tracks>
+    }
   }
 </div>
