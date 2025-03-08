@@ -127,6 +127,18 @@ export class PlayerService {
     return this.audioPlayer.volume;
   }
 
+  /**
+  * Skips forard or back in a song.
+  * Handles going past the end or beggining of the song
+  */
+  public jumpDuration(duration: number, jumpForward = true) {
+    if (jumpForward) {
+      this.audioPlayer.fastSeek(this.audioPlayer.currentTime + duration);
+    } else {
+      this.audioPlayer.fastSeek(this.audioPlayer.currentTime - duration);
+    }
+  }
+
   get duration() {
     return this.durationSignal.asReadonly();
   }
