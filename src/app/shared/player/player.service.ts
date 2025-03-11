@@ -6,6 +6,7 @@ import { ConfigService } from '../services/config/config.service';
 import { BackgroundImageService } from '../ui/background-image.service';
 import { BufferUpdate } from './buffer-update.interface';
 import { TrackPosition } from './track-position.interface';
+import { WebAudioService } from './web-audio.service';
 
 @Injectable({
   providedIn: 'root'
@@ -29,8 +30,16 @@ export class PlayerService {
 
   constructor(
     private configService: ConfigService,
-    private backgroundImageService: BackgroundImageService
+    private backgroundImageService: BackgroundImageService,
+    private webAudioService: WebAudioService
   ) {
+
+    console.log(JSON.stringify(this.audioPlayer));
+    // Set up web audio
+    this.audioPlayer.crossOrigin = "use-credentials"
+    this.webAudioService.setUp(this.audioPlayer);
+    console.log(JSON.stringify(this.audioPlayer));
+
     this.audioPlayer.addEventListener('timeupdate', (_ev) => {
       this.currenTimeSignal.set(this.audioPlayer.currentTime);
       this.trackPositionUpdate.emit({
@@ -64,6 +73,7 @@ export class PlayerService {
     });
 
     this.audioPlayer.preload = "metadata";
+
   }
 
   public async setTrack(track: Track) {

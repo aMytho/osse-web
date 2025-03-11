@@ -19,25 +19,26 @@
     [ngClass]="{'max-sm:hidden': !mobileMenuOpen()}">
     <a class="border-solid border-transparent border hover:border-emerald-300 rounded-lg hover:bg-emerald-300 hover:bg-opacity-15 cursor-pointer p-2"
       (click)="mobileMenuOpen.set(false)" routerLink="/settings" routerLinkActive="bg-emerald-200 bg-opacity-15"
-      ariaCurrentWhenActive="page">
+      ariaCurrentWhenActive="page" aria-label="Settings">
       <app-icon class="cursor-pointer text-white hover:text-emerald-300" [icon]="gear"></app-icon>
     </a>
     @if (showLogoutButton()) {
-      <button class="border-solid border-transparent border hover:border-emerald-300 rounded-lg hover:bg-emerald-300 hover:bg-opacity-15 cursor-pointer p-2"
-        (click)="mobileMenuOpen.set(false); logout();" ariaCurrentWhenActive="page">
-        <app-icon class="cursor-pointer text-white hover:text-emerald-300" [icon]="exit"></app-icon>
-      </button>
+    <button
+      class="border-solid border-transparent border hover:border-emerald-300 rounded-lg hover:bg-emerald-300 hover:bg-opacity-15 cursor-pointer p-2"
+      (click)="mobileMenuOpen.set(false); logout();" ariaCurrentWhenActive="page" aria-label="Logout">
+      <app-icon class="cursor-pointer text-white hover:text-emerald-300" [icon]="exit"></app-icon>
+    </button>
     }
   </div>
   <div class="hidden max-sm:flex gap-y-4 text-center grow justify-between sm:justify-end max-sm:pl-2"
     [ngClass]="{'max-sm:flex-col': mobileMenuOpen()}">
     @if (!mobileMenuOpen()) {
     <a class="border-solid border-transparent border hover:border-emerald-300 rounded-lg hover:bg-emerald-300 hover:bg-opacity-15 cursor-pointer p-2"
-      routerLink="/home" routerLinkActive="bg-emerald-200 bg-opacity-15" ariaCurrentWhenActive="page">
+      routerLink="/home" routerLinkActive="bg-emerald-200 bg-opacity-15" ariaCurrentWhenActive="page" aria-label="Home">
       <app-icon class="cursor-pointer text-white hover:text-emerald-300" [icon]="home"></app-icon>
     </a>
     }
-    <button (click)="toggleMenu()"
+    <button (click)="toggleMenu()" aria-label="Toggle Menu"
       class="border-solid border-transparent border hover:border-emerald-300 rounded-lg hover:bg-emerald-300 hover:bg-opacity-15 cursor-pointer p-2">
       <app-icon class="cursor-pointer text-white hover:text-emerald-300" [icon]="mobileMenuIcon()"></app-icon>
     </button>
