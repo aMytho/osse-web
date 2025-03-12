@@ -6,10 +6,11 @@ import { IconComponent } from '../../ui/icon/icon.component';
 import { mdiClose } from '@mdi/js';
 import { JumpControlsComponent } from '../jump-controls/jump-controls.component';
 import { PanControlsComponent } from '../pan-controls/pan-controls.component';
+import { SpeedControlsComponent } from '../speed-controls/speed-controls.component';
 
 @Component({
   selector: 'app-popover-controls',
-  imports: [VolumeComponent, TrackControlsComponent, DurationComponent, JumpControlsComponent, PanControlsComponent, IconComponent],
+  imports: [VolumeComponent, TrackControlsComponent, DurationComponent, JumpControlsComponent, PanControlsComponent, SpeedControlsComponent, IconComponent],
   templateUrl: './popover-controls.component.html',
   styles: ``
 })

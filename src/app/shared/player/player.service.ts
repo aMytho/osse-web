@@ -23,6 +23,7 @@ export class PlayerService {
   public bufferUpdated = new EventEmitter<BufferUpdate>();
   private audioPlayer = new Audio();
   private track!: Track | null;
+  private playbackRate: number = 0;
 
   private durationSignal: WritableSignal<number> = signal(0);
   private currenTimeSignal: WritableSignal<number> = signal(0);
@@ -33,12 +34,9 @@ export class PlayerService {
     private backgroundImageService: BackgroundImageService,
     private webAudioService: WebAudioService
   ) {
-
-    console.log(JSON.stringify(this.audioPlayer));
     // Set up web audio
     this.audioPlayer.crossOrigin = "use-credentials"
     this.webAudioService.setUp(this.audioPlayer);
-    console.log(JSON.stringify(this.audioPlayer));
 
     this.audioPlayer.addEventListener('timeupdate', (_ev) => {
       this.currenTimeSignal.set(this.audioPlayer.currentTime);
@@ -76,14 +74,15 @@ export class PlayerService {
 
   }
 
-  public async setTrack(track: Track) {
-    // Set next track
+  public async setTrack(track: Track) { // Set next track
     this.track = track;
 
     // Set the real duration. Used for calculating buffer percentages later.
     // Not all formats list the end duration at the start of the track
     this.durationSignal.set(track.duration);
     this.audioPlayer.src = this.configService.get("apiURL") + "api/tracks/" + track.id + '/stream';
+    // The playback rate is reset when a new track is loaded, set it again.
+    this.audioPlayer.playbackRate = this.playbackRate;
 
     this.trackUpdated.emit(new TrackUpdate(this.track, this.buildTrackInfo()));
     await this.play();
@@ -135,6 +134,15 @@ export class PlayerService {
 
   public getVolume(): number {
     return this.audioPlayer.volume;
+  }
+
+  public setSpeed(speed: number) {
+    this.playbackRate = speed;
+    this.audioPlayer.playbackRate = this.playbackRate;
+  }
+
+  public getSpeed() {
+    return this.playbackRate;
   }
 
   /**
