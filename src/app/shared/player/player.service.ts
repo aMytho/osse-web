@@ -23,7 +23,7 @@ export class PlayerService {
   public bufferUpdated = new EventEmitter<BufferUpdate>();
   private audioPlayer = new Audio();
   private track!: Track | null;
-  private playbackRate: number = 0;
+  private playbackRate: number = 1;
 
   private durationSignal: WritableSignal<number> = signal(0);
   private currenTimeSignal: WritableSignal<number> = signal(0);
@@ -72,6 +72,7 @@ export class PlayerService {
 
     this.audioPlayer.preload = "metadata";
 
+    this.playbackRate = Number(localStorage.getItem('speed')) ?? 1;
   }
 
   public async setTrack(track: Track) { // Set next track

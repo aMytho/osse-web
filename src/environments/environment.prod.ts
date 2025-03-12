@@ -3,4 +3,6 @@ export const environment = {
   apiURL: 'http://localhost:9000/',
   broadcastURL: 'http://localhost:9003/api/broadcast',
   showCoverBackgrounds: true,
+  showVisualizer: true,
+  visualizerSamples: 1,
 }

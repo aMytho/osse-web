@@ -16,10 +16,11 @@ import { AlbumArtFullscreenComponent } from '../shared/ui/modals/album-art-fulls
 import { ToastService } from '../toast-container/toast.service';
 import { TrackInfoComponent } from '../shared/ui/modals/track-info/track-info.component';
 import { Repeat } from '../shared/services/track/repeat.enum';
+import { VisualizerComponent } from '../shared/player/visualizer/visualizer.component';
 
 @Component({
   selector: 'app-home',
-  imports: [IconComponent, TrackComponent, CommonModule, HeaderComponent],
+  imports: [IconComponent, TrackComponent, CommonModule, HeaderComponent, VisualizerComponent],
   templateUrl: './home.component.html'
 })
 export class HomeComponent implements OnInit, OnDestroy {
@@ -47,6 +48,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     }
   });
   public tracksCanBeRestored: WritableSignal<boolean> = signal(false);
+  public showVisualizer: WritableSignal<boolean> = signal(true);
 
   private trackUpdated!: Subscription;
   private playbackEnded!: Subscription;
@@ -192,6 +194,8 @@ export class HomeComponent implements OnInit, OnDestroy {
       this.artist.set(this.trackService.activeTrack.artistPrimary()?.name ?? '');
       this.bg.set(this.configService.get('apiURL') + "api/tracks/" + this.trackService.activeTrack.id + '/cover');
     }
+
+    this.showVisualizer.set(this.configService.get('showVisualizer'));
   }
 
   ngOnDestroy(): void {

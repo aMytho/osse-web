@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnDestroy, OnInit, WritableSignal, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ElementRef, OnDestroy, OnInit, ViewChild, WritableSignal, signal } from '@angular/core';
 import { HeaderComponent } from '../shared/ui/header/header.component';
 import { ButtonComponent } from '../shared/ui/button/button.component';
 import { ConfigService } from '../shared/services/config/config.service';
@@ -19,6 +19,7 @@ import { ScanProgress } from './scan-progress.interface';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SettingsComponent implements OnInit, OnDestroy {
+  @ViewChild('samples') sampleElement!: ElementRef<HTMLInputElement>;
   public scanInProgress: WritableSignal<boolean> = signal(false);
   public waitingForScanConfirmation: WritableSignal<boolean> = signal(false);
   public scanFailMessage: WritableSignal<string> = signal('');
@@ -29,6 +30,8 @@ export class SettingsComponent implements OnInit, OnDestroy {
   public url: WritableSignal<string> = signal(this.configService.get("apiURL"));
   private subscription!: Subscription;
   public showBackgrounds: WritableSignal<boolean> = signal(false);
+  public showVisualizer: WritableSignal<boolean> = signal(false);
+  public visualizerSamples: WritableSignal<number> = signal(1);
   public logs: WritableSignal<string> = signal('');
   public showLogs: WritableSignal<boolean> = signal(false);
 
@@ -71,6 +74,13 @@ export class SettingsComponent implements OnInit, OnDestroy {
     if (!this.configService.get('showCoverBackgrounds')) {
       this.backgroundImageService.clearBG();
     }
+  }
+
+  public saveVisualizerPreference() {
+    this.configService.save('showVisualizer', this.showVisualizer());
+    this.configService.save('visualizerSamples', Number(this.sampleElement.nativeElement.value));
+    this.visualizerSamples.set(Number(this.sampleElement.nativeElement.value));
+    this.notificationService.info('Saved Preferences!');
   }
 
   public async requestSettings() {
@@ -145,6 +155,8 @@ export class SettingsComponent implements OnInit, OnDestroy {
     this.subscription = merge(scanStarted$, scanProgressed$, scanCompleted$, scanFailed$).subscribe();
 
     this.showBackgrounds.set(this.configService.get('showCoverBackgrounds'));
+    this.showVisualizer.set(this.configService.get('showVisualizer'));
+    this.visualizerSamples.set(this.configService.get('visualizerSamples'));
   }
 
   ngOnDestroy(): void {
