@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, signal, ViewChild, WritableSignal } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, ViewChild } from '@angular/core';
 import { WebAudioService } from '../web-audio.service';
 import { mdiRestart } from '@mdi/js';
 import { IconComponent } from '../../ui/icon/icon.component';
@@ -16,9 +16,10 @@ export class PanControlsComponent implements AfterViewInit {
   constructor(private webAudioService: WebAudioService) { }
 
   setInitialPan(): void {
-    this.storeAndSetPan(Number(localStorage.getItem('pan') ?? 1));
+    this.storeAndSetPan(Number(localStorage.getItem('pan') ?? 0));
     this.panInput.nativeElement.value = String(this.webAudioService.getPanValue());
   }
+
   onPanChange(event: any) {
     this.storeAndSetPan(event.target.value);
   }
@@ -29,7 +30,7 @@ export class PanControlsComponent implements AfterViewInit {
 
     let newPan;
     if (event.deltaY > 0) {
-      newPan = Math.max(0, currentPan - 0.05);
+      newPan = Math.max(-1, currentPan - 0.05);
     } else {
       newPan = Math.min(1, currentPan + 0.05);
     }
