@@ -27,7 +27,6 @@ export class SettingsComponent implements OnInit, OnDestroy {
   public scanProgress: WritableSignal<ScanProgress> = signal({ active: false });
 
   public directories: WritableSignal<string[]> = signal([]);
-  public url: WritableSignal<string> = signal(this.configService.get("apiURL"));
   private subscription!: Subscription;
   public showBackgrounds: WritableSignal<boolean> = signal(false);
   public showVisualizer: WritableSignal<boolean> = signal(false);
@@ -48,23 +47,6 @@ export class SettingsComponent implements OnInit, OnDestroy {
     fetcher('scan', {
       method: 'POST'
     }).finally(() => this.waitingForScanConfirmation.set(false));
-  }
-
-  public async saveURL() {
-    if (!this.url().endsWith("/")) {
-      this.url.update(u => u + "/");
-    }
-
-    // Check if the server is running
-    try {
-      await fetch(this.url() + 'api/ping');
-      // Save the URL
-      this.configService.save("apiURL", this.url());
-      this.notificationService.info("URL saved as " + this.configService.get("apiURL"));
-      this.requestSettings();
-    } catch (e) {
-      alert('Failed to reach server. URL not set. Confirm that the URL is correct and that the server is running.');
-    }
   }
 
   public saveBackgroundCoverPreference() {
