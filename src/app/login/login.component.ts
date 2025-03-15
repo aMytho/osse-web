@@ -1,4 +1,4 @@
-import { Component, signal, WritableSignal } from '@angular/core';
+import { Component, OnInit, signal, WritableSignal } from '@angular/core';
 import { fetcher } from '../shared/util/fetcher';
 import { HeaderComponent } from '../shared/ui/header/header.component';
 import { ButtonComponent } from '../shared/ui/button/button.component';
@@ -14,12 +14,13 @@ import { AuthService } from '../shared/services/auth/auth.service';
   templateUrl: './login.component.html',
   styles: ``
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit {
   public username: string = '';
   public password: string = '';
   public serverFound: WritableSignal<boolean> = signal(false);
   public url: WritableSignal<string> = signal(window.location.hostname + ':8000');
   public protocol: WritableSignal<string> = signal('http://');
+  public showConnectionInputs: WritableSignal<boolean> = signal(false);
 
   constructor(
     private notificationService: ToastService,
@@ -41,7 +42,7 @@ export class LoginComponent {
       this.notificationService.info("URL saved as " + this.configService.get("apiURL"));
       this.serverFound.set(true);
     } catch (e) {
-      this.notificationService.error('Failed to reach server. Confirm that the URL is correct and that the server is running.');
+      this.notificationService.error('Failed to reach server. Confirm that the URL is correct.');
     }
   }
 
@@ -65,6 +66,18 @@ export class LoginComponent {
       this.router.navigateByUrl('/home');
     } else {
       this.notificationService.error('Login error. Check that the username and password are correct.');
+    }
+  }
+
+  async ngOnInit() {
+    // Try to login with the default URL.
+    try {
+      await fetch(this.configService.get('apiURL') + 'api/ping');
+      this.serverFound.set(true);
+    } catch (e) {
+      // This should only happen in dev. If it fails, show the server URL inputs.
+      this.notificationService.error('Failed to autodetect server URL. Please enter it.');
+      this.showConnectionInputs.set(true);
     }
   }
 }

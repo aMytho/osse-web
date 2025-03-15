@@ -1,5 +1,4 @@
 import { LocatorService } from "../../locator.service";
-import { ToastService } from "../../toast-container/toast.service";
 import { ConfigService } from "../services/config/config.service";
 
 export async function fetcher(url: string, args: Partial<FetcherArgs> = { method: 'GET', headers: [], body: null, rootURL: null }): Promise<Response> {
@@ -8,11 +7,6 @@ export async function fetcher(url: string, args: Partial<FetcherArgs> = { method
     token = await getCSRFToken() as string;
   } catch (e) {
     console.error('Failed to get CSRF Token. Check the the server is running and that the URL is correct');
-    // If we are not on the login page, show an error msg to the user.
-    // Login page has its own error handler.
-    if (window.location.pathname != '/login') {
-      LocatorService.injector.get(ToastService).error('Failed to get CSRF Token. Check the the server is running and that the URL is correct');
-    }
     throw 'CSRF Error';
   }
 
@@ -54,7 +48,7 @@ export async function getCSRFToken() {
   return token;
 }
 
-function getCookie(name: string) {
+export function getCookie(name: string) {
   const value = `; ${document.cookie}`;
   const parts = value.split(`; ${name}=`);
   if (parts.length === 2) return parts.pop()?.split(';').shift();

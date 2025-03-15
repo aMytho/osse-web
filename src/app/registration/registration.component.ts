@@ -1,4 +1,4 @@
-import { Component, signal, WritableSignal } from '@angular/core';
+import { Component, OnInit, signal, WritableSignal } from '@angular/core';
 import { ButtonComponent } from '../shared/ui/button/button.component';
 import { HeaderComponent } from '../shared/ui/header/header.component';
 import { ToastService } from '../toast-container/toast.service';
@@ -14,12 +14,13 @@ import { fetcher } from '../shared/util/fetcher';
   templateUrl: './registration.component.html',
   styles: ``
 })
-export class RegistrationComponent {
+export class RegistrationComponent implements OnInit {
   public username: string = '';
   public password: string = '';
   public serverFound: WritableSignal<boolean> = signal(false);
   public url: WritableSignal<string> = signal(window.location.hostname + ':8000');
   public protocol: WritableSignal<string> = signal('http://');
+  public showConnectionInputs: WritableSignal<boolean> = signal(false);
 
   constructor(
     private notificationService: ToastService,
@@ -74,6 +75,18 @@ export class RegistrationComponent {
       this.router.navigateByUrl('/home');
     } else {
       this.notificationService.error('Login error.');
+    }
+  }
+
+  async ngOnInit() {
+    // Try to login with the default URL.
+    try {
+      await fetch(this.configService.get('apiURL') + 'api/ping');
+      this.serverFound.set(true);
+    } catch (e) {
+      // This should only happen in dev. If it fails, show the server URL inputs.
+      this.notificationService.error('Failed to autodetect server URL. Please enter it.');
+      this.showConnectionInputs.set(true);
     }
   }
 }

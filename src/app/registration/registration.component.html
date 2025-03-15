@@ -3,10 +3,11 @@
 
   <div>
     <p class="text-white">Welcome to the Osse music server!</p>
-    <p class="text-white">To begin, enter the server URL. This should include the host and port. The default URL has
-      been filled in for you.</p>
 
+    @if (showConnectionInputs()) {
     <form #form="ngForm" (ngSubmit)="saveURL()" class="mt-2 flex flex-col gap-y-4">
+      <p class="text-white">To begin, enter the server URL. This should include the host and port. The default URL has
+        been filled in for you.</p>
       <div>
         <label for="protocol" class="text-white font-semibold">Protocol: </label>
         <select id="protocol" name="protocol" [(ngModel)]="protocol"
@@ -27,9 +28,10 @@
         <app-button type="submit" text="Connect" [disabled]="!form.form.valid || false"></app-button>
       </div>
     </form>
+    }
 
     @if (serverFound()) {
-    <p class="text-white mt-4">Server found! Please create your account.</p>
+    <p class="text-white mt-4">Please create your account.</p>
 
     <form #loginForm="ngForm" (ngSubmit)="register()" class="flex flex-wrap gap-x-2">
       <div>
@@ -50,7 +52,14 @@
       </div>
     </form>
     }
+
+    @if (!serverFound() && !showConnectionInputs()) {
+    <p class="animate-pulse text-white mt-4">Connecting to API...</p>
+    }
+
+    @if (serverFound() || showConnectionInputs()) {
     <p class="text-white mt-4 italic">Already have an account? <a class="text-cyan-400 hover:text-cyan-500"
         href="/login">Login</a></p>
+    }
   </div>
 </div>
