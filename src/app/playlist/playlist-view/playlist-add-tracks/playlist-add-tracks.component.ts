@@ -41,15 +41,15 @@ export class PlaylistAddTracksComponent {
   async ngOnInit(): Promise<void> {
     // Listen for scroll events
     this.scrollSubscription = fromEvent(window, 'scroll')
-      .pipe(debounceTime(500))
+      .pipe(debounceTime(300))
       .subscribe(() => {
-        const endOfPage = window.innerHeight + window.pageYOffset >= (document.body.offsetHeight * 0.8);
+        const endOfPage = window.innerHeight + window.pageYOffset >= (document.body.offsetHeight * 0.6);
         if (endOfPage) {
           this.requestTracks(this.searchBar.nativeElement.value);
         }
       })
 
-    // On load, get the first 25 tracks
+    // On load, get the first 75 tracks
     let req = await fetcher('tracks/search');
     this.loading.set(false);
     if (!req.ok) return;
@@ -113,7 +113,7 @@ export class PlaylistAddTracksComponent {
           offset += 1;
         }
       });
-      if (offset < 25) {
+      if (offset < 75) {
         offset = 0;
       }
     }
