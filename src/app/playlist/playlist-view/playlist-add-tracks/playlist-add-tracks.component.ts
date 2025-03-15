@@ -34,7 +34,6 @@ export class PlaylistAddTracksComponent {
   constructor() { }
 
   ngAfterViewInit(): void {
-    this.searchBar.nativeElement.focus();
     this.matrix.setMode(TrackMatrixMode.Select);
   }
 
