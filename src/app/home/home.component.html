@@ -1,22 +1,24 @@
-<div class="flex flex-wrap gap-8 bg-slate-500 bg-opacity-15 rounded-lg p-4">
-  <div class="flex flex-col mr-auto">
-    <div class="flex gap-x-4">
-      <button
-        class="bg-slate-300 rounded-lg backdrop-blur-sm w-60 h-60 p-2 flex items-end flex-wrap bg-cover drop-shadow-glow"
-        style="background-image: url('{{bg()}}');" (click)="showAlbumArt()" aria-label="Show Album Art">
-      </button>
-    </div>
-  </div>
-  <div class="grow flex flex-col text-white">
-    <app-header [text]="title()"></app-header>
-    <p class="italic max-w-80">{{ artist() || 'Unknown Artist' }}</p>
-    <div class="text-center text-white mt-auto">
-      <div>
+<div class="flex flex-col flex-wrap gap-2 bg-slate-500 bg-opacity-15 rounded-lg p-4">
+  <div class="flex flex-wrap gap-x-8 gap-y-4">
+    <button
+      class="bg-slate-300 rounded-lg backdrop-blur-sm w-60 h-60 p-2 flex items-end flex-wrap bg-cover drop-shadow-glow"
+      style="background-image: url('{{bg()}}');" (click)="showAlbumArt()" aria-label="Show Album Art">
+    </button>
+
+    <div class="grow flex flex-col">
+      <app-header [text]="title()"></app-header>
+      <p class="italic max-w-80 text-slate-300">{{ artist() || 'Unknown Artist' }}</p>
+
+      <div class="w-full mt-auto">
         @if (showVisualizer()) {
         <app-visualizer></app-visualizer>
         }
-        <hr class="mb-2">
+        <hr>
       </div>
+    </div>
+  </div>
+  <div class="grow flex flex-col text-white">
+    <div class="text-center text-white mt-auto">
       <div class="flex justify-around text-xl gap-x-4">
         @if (tracksCanBeRestored()) {
         <button (click)="restoreTracks()" class="rounded-full px-2 py-1 hover:bg-emerald-300 hover:bg-opacity-15"
