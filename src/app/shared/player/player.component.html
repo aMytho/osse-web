@@ -22,7 +22,8 @@
       </div>
       <div class="basis-1/4 flex gap-x-4 max-lg:hidden">
         <p>{{ currentTime() || '0:00' }}</p>
-        <div class="w-full flex flex-col items-center justify-around gap-y-1">
+        <div class="w-full flex flex-col items-center justify-around gap-y-1"
+          [ngClass]="{'pointer-events-none': !playerService.isPlaying()}">
           <div #progressContainer id="progressContainer" (mousedown)="onSetPosition($event)"
             class="relative w-full z-10 h-2 flex items-center bg-slate-700 bg-opacity-40 cursor-pointer">
             <div #rendered id="rendered" class="absolute w-full h-2 rounded-l-lg rounded-r-lg"></div>

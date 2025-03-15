@@ -39,7 +39,7 @@ export class PlayerComponent implements AfterViewInit {
   verticalDots = mdiDotsVertical;
 
   constructor(
-    private playerService: PlayerService, private configService: ConfigService,
+    public playerService: PlayerService, private configService: ConfigService,
     private mediaSessionService: MediaSessionService
   ) {
     // Make sure the mouse up is accessible in global contexts

@@ -128,7 +128,7 @@ export class PlayerService {
   }
 
   public clearTrack() {
-    this.audioPlayer.src = "#";
+    this.audioPlayer.removeAttribute('src');
     this.audioPlayer.currentTime = 0;
     this.track = null;
     this.isPlayingSignal.set(false);

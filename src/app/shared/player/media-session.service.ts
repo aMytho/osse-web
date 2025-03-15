@@ -36,6 +36,12 @@ export class MediaSessionService {
     navigator.mediaSession.setActionHandler("nexttrack", () => {
       this.trackService.moveToNextTrack();
     });
+    navigator.mediaSession.setActionHandler('seekforward', (ev) => {
+      this.playerService.jumpDuration(ev.seekOffset || 10, true);
+    });
+    navigator.mediaSession.setActionHandler('seekbackward', (ev) => {
+      this.playerService.jumpDuration(ev.seekOffset || 10, false);
+    });
   }
 
   private listenForTrackUpdate() {
