@@ -36,7 +36,7 @@
     <form #loginForm="ngForm" (ngSubmit)="login()" class="flex flex-wrap gap-x-2">
       <div>
         <label for="username" class="text-white font-semibold">Username</label>
-        <input id="username" [(ngModel)]="username" required minlength="1" name="username"
+        <input id="username" [(ngModel)]="username" required minlength="1" name="username" autofocus
           class="text-emerald-300 m-2 p-2 rounded-md bg-opacity-15 focus:bg-opacity-30 bg-white" placeholder="osse" />
       </div>
 

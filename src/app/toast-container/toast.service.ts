@@ -18,6 +18,7 @@ export class ToastService {
     let toast = new ToastMessage(message, NotifyType.Error, uuid(), 7);
     this.toasts.push(toast);
     setTimeout(() => this.removeToast(toast.id), 7000);
+    console.error(toast);
   }
 
   public removeToast(id: string) {

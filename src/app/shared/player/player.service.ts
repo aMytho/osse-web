@@ -7,6 +7,7 @@ import { BackgroundImageService } from '../ui/background-image.service';
 import { BufferUpdate } from './buffer-update.interface';
 import { TrackPosition } from './track-position.interface';
 import { WebAudioService } from './web-audio.service';
+import { ToastService } from '../../toast-container/toast.service';
 
 @Injectable({
   providedIn: 'root'
@@ -32,7 +33,8 @@ export class PlayerService {
   constructor(
     private configService: ConfigService,
     private backgroundImageService: BackgroundImageService,
-    private webAudioService: WebAudioService
+    private webAudioService: WebAudioService,
+    private notificationService: ToastService
   ) {
     // Set up web audio
     this.audioPlayer.crossOrigin = "use-credentials"
@@ -49,6 +51,7 @@ export class PlayerService {
     this.audioPlayer.addEventListener('play', (_ev) => {
       this.isPlayingSignal.set(true)
       this.stateChanged.emit(PlaybackState.Playing);
+      this.webAudioService.resumeIfSuspended();
     });
     this.audioPlayer.addEventListener('pause', (_ev) => {
       this.isPlayingSignal.set(false);
@@ -68,6 +71,9 @@ export class PlayerService {
       });
 
       this.bufferUpdated.emit({ duration: this.duration(), buffered: this.audioPlayer.buffered })
+    });
+    this.audioPlayer.addEventListener('error', (_ev) => {
+      this.notificationService.error('An error occurred while loading the audio file.');
     });
 
     this.audioPlayer.preload = "metadata";

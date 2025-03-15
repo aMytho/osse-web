@@ -23,6 +23,17 @@ export class WebAudioService {
     return audioElement;
   }
 
+  /**
+  * Call when playback starts.
+  * Web audio is init before user interaction. Some browsers suspend it until interaction.
+  * Once audio starts from a user interaction, we can resume it.
+  */
+  public resumeIfSuspended() {
+    if (this.audioContext.state == 'suspended') {
+      this.audioContext.resume();
+    }
+  }
+
   public setPan(pan: number) {
     this.panner.pan.value = pan;
   }
