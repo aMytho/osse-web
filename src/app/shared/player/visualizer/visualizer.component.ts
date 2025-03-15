@@ -1,29 +1,50 @@
-import { Component, ElementRef, ViewChild, OnInit } from '@angular/core';
+import { Component, ElementRef, ViewChild, OnInit, OnDestroy } from '@angular/core';
 import { WebAudioService } from '../web-audio.service';
 
 @Component({
   selector: 'app-visualizer',
   templateUrl: './visualizer.component.html',
 })
-export class VisualizerComponent implements OnInit {
+export class VisualizerComponent implements OnInit, OnDestroy {
   @ViewChild('canvas', { static: true }) canvas!: ElementRef<HTMLCanvasElement>;
   private ctx!: CanvasRenderingContext2D;
   private animationFrameId!: number;
   private width = 0;
   private height = 0;
+  private resizeObserver!: () => void;
+  private resizeTimeout = 0;
 
   constructor(private webAudioService: WebAudioService) { }
 
   ngOnInit() {
     this.ctx = this.canvas.nativeElement.getContext('2d')!;
 
-    const dpr = window.devicePixelRatio || 1;
-    this.canvas.nativeElement.width = this.canvas.nativeElement.clientWidth * dpr;
-    this.width = this.canvas.nativeElement.width;
-    this.canvas.nativeElement.height = this.canvas.nativeElement.clientHeight * dpr;
-    this.height = this.canvas.nativeElement.height;
+    // Listen for resize events to rescale canvas
+    this.resizeObserver = () => {
+      clearTimeout(this.resizeTimeout);
+      this.resizeTimeout = setTimeout(() => this.resizeCanvas(), 300);
+    }
+    window.addEventListener('resize', this.resizeObserver);
+    window.addEventListener('fullscreenchange', () => this.resizeCanvas());
 
+    this.resizeCanvas();
     this.drawVisualizer();
+  }
+
+  private resizeCanvas() {
+    const canvas = this.canvas.nativeElement;
+    const dpr = window.devicePixelRatio || 1;
+
+    // Set canvas size based on client size and DPR
+    canvas.width = canvas.clientWidth * dpr;
+    canvas.height = canvas.clientHeight * dpr;
+    // Store local copies for easier access in drawing functions
+    this.width = canvas.width * dpr;
+    this.height = canvas.height * dpr;
+
+    // Scale context so drawing operations match the high resolution
+    this.ctx.resetTransform(); // Reset to avoid cumulative scaling
+    this.ctx.scale(dpr, dpr);
   }
 
   private drawVisualizer() {
@@ -57,5 +78,8 @@ export class VisualizerComponent implements OnInit {
 
   ngOnDestroy() {
     cancelAnimationFrame(this.animationFrameId);
+    clearTimeout(this.resizeTimeout);
+    window.removeEventListener('resize', this.resizeObserver);
+    window.removeEventListener('fullscreenchange', () => this.resizeCanvas());
   }
 }

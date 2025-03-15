@@ -47,7 +47,8 @@ export const routes: Routes = [
   {
     path: 'home',
     component: HomeComponent,
-    canActivate: [isLoggedIn]
+    canActivate: [isLoggedIn],
+    title: 'Osse - Player'
   },
   {
     path: 'login',
@@ -57,7 +58,7 @@ export const routes: Routes = [
   {
     path: 'register',
     loadComponent: () => import('./registration/registration.component').then(c => c.RegistrationComponent),
-    title: 'Osse - Login'
+    title: 'Osse - Register'
   },
   {
     path: "**",

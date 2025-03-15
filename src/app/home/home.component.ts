@@ -6,7 +6,7 @@ import { PlayerService } from '../shared/player/player.service';
 import { PlaybackState } from '../shared/player/state-change';
 import { ConfigService } from '../shared/services/config/config.service';
 import { IconComponent } from '../shared/ui/icon/icon.component';
-import { mdiFastForward, mdiInformation, mdiRepeat, mdiRewind, mdiShuffle, mdiSilverwareForkKnife, mdiDeleteSweep, mdiRepeatOff, mdiRepeatOnce, mdiRestore } from '@mdi/js';
+import { mdiFastForward, mdiInformation, mdiRepeat, mdiRewind, mdiShuffle, mdiSilverwareForkKnife, mdiDeleteSweep, mdiRepeatOff, mdiRepeatOnce, mdiRestore, mdiCog } from '@mdi/js';
 import { ModalService } from '../shared/ui/modal/modal.service';
 import { AddToPlaylistComponent } from '../shared/ui/modals/add-to-playlist/add-to-playlist.component';
 import { CommonModule } from '@angular/common';
@@ -17,6 +17,7 @@ import { ToastService } from '../toast-container/toast.service';
 import { TrackInfoComponent } from '../shared/ui/modals/track-info/track-info.component';
 import { Repeat } from '../shared/services/track/repeat.enum';
 import { VisualizerComponent } from '../shared/player/visualizer/visualizer.component';
+import { PlayerSettingsComponent } from '../shared/ui/modals/player-settings/player-settings.component';
 
 @Component({
   selector: 'app-home',
@@ -61,6 +62,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   consume = mdiSilverwareForkKnife;
   clear = mdiDeleteSweep;
   restore = mdiRestore;
+  settings = mdiCog;
 
   constructor(
     public trackService: TrackService,
@@ -164,6 +166,14 @@ export class HomeComponent implements OnInit, OnDestroy {
     } else {
       this.notificationService.info('You must have a track playing to view track info.');
     }
+  }
+
+  public showPlayerSettings() {
+    this.modalService.setDynamicModal(PlayerSettingsComponent, [{
+      'name': 'visualizerSignal',
+      'val': this.showVisualizer
+    }], 'Player Settings');
+    this.modalService.show();
   }
 
   ngOnInit(): void {
