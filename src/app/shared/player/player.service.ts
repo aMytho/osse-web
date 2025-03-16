@@ -78,10 +78,12 @@ export class PlayerService {
 
     this.audioPlayer.preload = "metadata";
 
-    this.playbackRate = Number(localStorage.getItem('speed')) ?? 1;
+    this.playbackRate = Number(localStorage.getItem('speed') ?? 1);
+    this.audioPlayer.volume = Number(localStorage.getItem('volume') ?? 1);
   }
 
-  public async setTrack(track: Track) { // Set next track
+  public async setTrack(track: Track) {
+    // Set next track
     this.track = track;
 
     // Set the real duration. Used for calculating buffer percentages later.

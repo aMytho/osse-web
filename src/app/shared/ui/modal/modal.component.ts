@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ComponentRef, ElementRef, EventEmitter, Output, ViewChild, ViewContainerRef, inject } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ComponentRef, ElementRef, ViewChild, ViewContainerRef, inject } from '@angular/core';
 import { ModalService } from './modal.service';
 
 @Component({
