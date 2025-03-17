@@ -146,6 +146,7 @@ export class Track {
       track_number: this.trackNumber,
       disc_number: this.discNumber,
       bitrate: this.track.bitrate,
+      cover_art_id: this.track.cover_art_id,
       artist_ids: this.track.artists?.map((a) => a.id) ?? null,
       artists: this.track.artists
     });
@@ -159,7 +160,7 @@ export class Track {
     return this.track.disc_number;
   }
 
-  get cover() {
-    return this.configService.get('apiURL') + "api/tracks/" + this.id + '/cover'
+  get coverURL() {
+    return this.configService.get('apiURL') + "api/cover-art/" + this.track.cover_art_id;
   }
 }

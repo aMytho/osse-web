@@ -43,7 +43,7 @@ export class TrackUpdate {
   }
 
   get cover() {
-    return this.track.cover;
+    return this.track.coverURL;
   }
 }
 

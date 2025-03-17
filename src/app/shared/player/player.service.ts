@@ -98,7 +98,7 @@ export class PlayerService {
 
     // We do this last. It may slow down the player if it is first since it makes a network request.
     // Browsers are async, but our server isn't (yet).
-    this.backgroundImageService.setBG(this.configService.get('apiURL') + 'api/tracks/' + track.id + '/cover');
+    this.backgroundImageService.setBG(this.track.coverURL);
   }
 
   public play(time: number = this.audioPlayer.currentTime) {

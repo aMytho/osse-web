@@ -140,7 +140,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   public showAlbumArt() {
     if (this.trackService.activeTrack) {
-      let url = this.configService.get('apiURL') + 'api/tracks/' + this.trackService.activeTrack?.id + '/cover';
+      let url = this.trackService.activeTrack?.coverURL;
 
       this.modalService.setDynamicModal(AlbumArtFullscreenComponent, [{
         name: 'url',
@@ -182,7 +182,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.trackUpdated = this.playerService.trackUpdated.subscribe((val) => {
       this.title.set(val.title);
       this.artist.set(val.artist?.name || '');
-      this.bg.set(this.configService.get('apiURL') + "api/tracks/" + val.id + '/cover');
+      this.bg.set(val.cover);
     });
     this.stateChanged = this.playerService.stateChanged.subscribe((val) => {
       if (val == PlaybackState.Paused) {
@@ -202,7 +202,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     if (this.trackService.activeTrack) {
       this.title.set(this.trackService.activeTrack.title);
       this.artist.set(this.trackService.activeTrack.artistPrimary()?.name ?? '');
-      this.bg.set(this.configService.get('apiURL') + "api/tracks/" + this.trackService.activeTrack.id + '/cover');
+      this.bg.set(this.trackService.activeTrack.coverURL);
     }
 
     this.showVisualizer.set(this.configService.get('showVisualizer'));
