@@ -25,7 +25,7 @@ export class PlayerComponent implements AfterViewInit {
   @ViewChild('rendered') rendered!: ElementRef<HTMLDivElement>;
   @ViewChild('trackTitleElement') trackTitleElement!: ElementRef<HTMLParagraphElement>;
 
-  public bg: WritableSignal<string> = signal("#");
+  public bg: WritableSignal<string> = signal("assets/img/osse.webp");
   public currentTime: WritableSignal<string> = signal('');
   public totalDuration: WritableSignal<string> = signal('');
   public trackTitle: WritableSignal<string> = signal('');
@@ -179,7 +179,7 @@ export class PlayerComponent implements AfterViewInit {
       this.currentTime.set('');
       this.trackTitle.set('');
       this.artistTitle.set('');
-      this.bg.set('#');
+      this.bg.set('assets/img/osse.webp');
       this.setGradient(0, "transparent", 100);
     });
 

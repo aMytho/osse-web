@@ -25,7 +25,7 @@ import { PlayerSettingsComponent } from '../shared/ui/modals/player-settings/pla
   templateUrl: './home.component.html'
 })
 export class HomeComponent implements OnInit, OnDestroy {
-  public bg: WritableSignal<string> = signal("#");
+  public bg: WritableSignal<string> = signal("assets/img/osse.webp");
   public tracks: WritableSignal<Track[]> = signal([]);
   public playing: boolean = false;
   public title: WritableSignal<string> = signal('No Track Found');
@@ -194,7 +194,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.playbackEnded = this.playerService.playbackEnded.subscribe(_ => {
       this.title.set('');
       this.artist.set('');
-      this.bg.set("#");
+      this.bg.set("assets/img/osse.webp");
       this.playing = false;
     });
 
