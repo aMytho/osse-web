@@ -23,3 +23,9 @@ a {
 .loading {
   @apply animate-pulse pointer-events-none;
 }
+
+dialog::backdrop {
+  background-color: black !important;
+  opacity: 0.7 !important;
+  padding: 0;
+}

@@ -36,15 +36,14 @@
       </div>
     </div>
     <div class="w-min flex items-center">
-      <button (click)="togglePopover()" class="rounded-full px-2 py-1 hover:bg-emerald-300 hover:bg-opacity-15"
-        title="Toggle advanced controls">
+      <button (click)="popoverControls.showModal()"
+        class="rounded-full px-2 py-1 hover:bg-emerald-300 hover:bg-opacity-15" title="Toggle advanced controls">
         <app-icon [icon]="verticalDots"></app-icon>
       </button>
     </div>
   </div>
-  @if (showPopoverControls()) {
-  <div class="absolute bottom-20 w-full pr-16">
-    <app-popover-controls (onClose)="showPopoverControls.set(false)"></app-popover-controls>
-  </div>
-  }
+  <dialog id="popover" #popoverControls class="mb-20 sm:ml-32 ml-4 px-4 bg-transparent"
+    (click)="onBackdropClick($event)">
+    <app-popover-controls (onClose)="popoverControls.close()"></app-popover-controls>
+  </dialog>
 </div>

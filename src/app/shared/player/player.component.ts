@@ -1,7 +1,6 @@
 import { AfterViewInit, Component, ElementRef, signal, ViewChild, WritableSignal } from '@angular/core';
 import { PlayerService } from './player.service';
 import { PointState } from './point-state';
-import { ConfigService } from '../services/config/config.service';
 import { RouterLink } from '@angular/router';
 import { IconComponent } from '../ui/icon/icon.component';
 import { mdiDotsVertical } from '@mdi/js';
@@ -24,13 +23,13 @@ export class PlayerComponent implements AfterViewInit {
   @ViewChild('point') point!: ElementRef<HTMLDivElement>;
   @ViewChild('rendered') rendered!: ElementRef<HTMLDivElement>;
   @ViewChild('trackTitleElement') trackTitleElement!: ElementRef<HTMLParagraphElement>;
+  @ViewChild('popoverControls') popoverControls!: ElementRef<HTMLDialogElement>;
 
   public bg: WritableSignal<string> = signal("assets/img/osse.webp");
   public currentTime: WritableSignal<string> = signal('');
   public totalDuration: WritableSignal<string> = signal('');
   public trackTitle: WritableSignal<string> = signal('');
   public artistTitle: WritableSignal<string> = signal('');
-  public showPopoverControls: WritableSignal<boolean> = signal(false);
   private isDragging = false;
   private abortMouseMove = new AbortController();
   private seekDuration = 0;
@@ -39,7 +38,7 @@ export class PlayerComponent implements AfterViewInit {
   verticalDots = mdiDotsVertical;
 
   constructor(
-    public playerService: PlayerService, private configService: ConfigService,
+    public playerService: PlayerService,
     private mediaSessionService: MediaSessionService
   ) {
     // Make sure the mouse up is accessible in global contexts
@@ -55,8 +54,10 @@ export class PlayerComponent implements AfterViewInit {
     })
   }
 
-  public togglePopover() {
-    this.showPopoverControls.update((v) => !v);
+  onBackdropClick(ev: any) {
+    if (ev.target.id == 'popover') {
+      this.popoverControls.nativeElement.close();
+    }
   }
 
   onMouseDown(ev: MouseEvent) {
