@@ -16,7 +16,6 @@ export class ConfigService {
     this.config = {
       apiURL: localStorage.getItem('apiURL') ?? environment.apiURL,
       version: environment.version,
-      broadcastURL: environment.broadcastURL,
       showCoverBackgrounds: Boolean(localStorage.getItem('showCoverBackgrounds') ?? environment.showCoverBackgrounds),
       showVisualizer: Boolean(localStorage.getItem('showVisualizer') ?? environment.showVisualizer),
       visualizerSamples: Number(localStorage.getItem('visualizerSamples') ?? environment.visualizerSamples)

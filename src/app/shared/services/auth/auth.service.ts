@@ -69,11 +69,12 @@ export class AuthService {
     this.isLoggedIn = true;
 
     // Listen for events.
-    this.echoService.connect(userAuth.broadcastHost, Number(userAuth.broadcastPort), userAuth.broadcastKey);
-    this.echoService.listenForScanStarted();
-    this.echoService.listenForScanProgressed();
-    this.echoService.listenForScanCompleted();
-    this.echoService.listenForScanFailed();
+    this.echoService.connect().then((_e) => {
+      this.echoService.listenForScanStarted();
+      this.echoService.listenForScanProgressed();
+      this.echoService.listenForScanCompleted();
+      this.echoService.listenForScanFailed();
+    });
 
     this.authStateChanged.emit(true);
   }
