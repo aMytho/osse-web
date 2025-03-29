@@ -1,8 +1,6 @@
 import { EventEmitter, Injectable } from '@angular/core';
-import Echo from 'laravel-echo';
-import Pusher from 'pusher-js';
 import { fetcher } from '../../util/fetcher';
-import { ScanChannels, ScanCompletedResult, ScanEvents, ScanFailedResult, ScanProgressedResult, ScanStartedResult } from './channels/scan';
+import { ScanChannels, ScanEvents } from './channels/scan';
 import { EchoChannel, EchoResult } from './channels';
 import { Observable } from 'rxjs';
 
@@ -10,46 +8,28 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class EchoService implements ScanEvents {
-  private echo!: Echo<"reverb">;
-  private pusher!: typeof Pusher;
   private echoEvent = new EventEmitter<{ channel: EchoChannel; data: EchoResult<EchoChannel> }>();
+  private eventSource!: EventSource;
 
   constructor() { }
 
-  public connect(host: string, port: number, key: string) {
-    if (!key) {
-      throw "Tried to connect without a reverb key. Please authenticate first!";
-    }
+  public connect() {
+    return new Promise((resolve, reject) => {
+      fetcher('sse', {
+        method: 'POST'
+      }).then(async (r) => {
+        if (r.ok) {
+          let json = await r.json();
 
-    this.pusher = Pusher;
+          // TODO: Use cookies instead of a query string to pass params.
+          this.eventSource = new EventSource(json.url + '?id=' + json.userID + '&token=' + json.token);
+          this.eventSource.addEventListener("error", (e) => console.log(e));
+          resolve(null);
+        }
 
-    this.echo = new Echo({
-      broadcaster: 'reverb',
-      key: key,
-      wsHost: host,
-      wsPort: port,
-      wssPort: port,
-      forceTLS: false,
-      enabledTransports: ['ws', 'wss'],
-      authorizer: (channel: any, _options: any) => ({
-        authorize: (socketId: any, callback: any) => {
-          fetcher(`broadcasting/auth`, {
-            body: JSON.stringify({
-              socket_id: socketId,
-              channel_name: channel.name,
-            }),
-            method: 'POST'
-          })
-            .then(async response => {
-              callback(null, await response.json());
-            })
-            .catch(error => {
-              callback(error);
-            });
-        },
-      }),
+      }).catch(() => resolve(null));
+    })
 
-    });
   }
 
 
@@ -74,30 +54,27 @@ export class EchoService implements ScanEvents {
   }
 
   private emitEvent<T extends EchoChannel>(channel: T, data: EchoResult<T>): void {
+    console.log(channel, data);
     this.echoEvent.emit({ channel, data });
   }
 
   listenForScanStarted(): void {
-    this.echo.private('scan')
-      .listen('ScanStarted', (ev: ScanStartedResult) => this.emitEvent(ScanChannels.ScanStarted, ev));
+    this.eventSource.addEventListener("ScanStarted", (ev) => this.emitEvent(ScanChannels.ScanStarted, JSON.parse(ev.data)))
   }
 
   listenForScanProgressed(): void {
-    this.echo.private('scan')
-      .listen('ScanProgressed', (ev: ScanProgressedResult) => this.emitEvent(ScanChannels.ScanProgressed, ev));
+    this.eventSource.addEventListener("ScanProgressed", (ev) => this.emitEvent(ScanChannels.ScanProgressed, JSON.parse(ev.data)))
   }
 
   listenForScanCompleted(): void {
-    this.echo.private('scan')
-      .listen('ScanCompleted', (ev: ScanCompletedResult) => this.emitEvent(ScanChannels.ScanCompleted, ev));
+    this.eventSource.addEventListener("ScanCompleted", (ev) => this.emitEvent(ScanChannels.ScanCompleted, JSON.parse(ev.data)))
   }
 
   listenForScanFailed(): void {
-    this.echo.private('scan')
-      .listen('ScanFailed', (ev: ScanFailedResult) => this.emitEvent(ScanChannels.ScanFailed, ev));
+    this.eventSource.addEventListener("ScanFailed", (ev) => this.emitEvent(ScanChannels.ScanFailed, JSON.parse(ev.data)))
   }
 
   public disconnect() {
-    this.echo.disconnect();
+    this.eventSource.close();
   }
 }

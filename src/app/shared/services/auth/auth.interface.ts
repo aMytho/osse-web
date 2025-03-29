@@ -7,16 +7,4 @@ export interface AuthResponse {
    */
   id: number,
   username: string,
-  /**
-   * Auth for reverb server.
-   */
-  broadcastKey: string
-  /**
-   * Used to access the reverb server.
-  */
-  broadcastHost: string;
-  /**
-   * Used to access the reverb server.
-  */
-  broadcastPort: string;
 }
