@@ -27,7 +27,7 @@ export class EchoService implements ScanEvents {
           resolve(null);
         }
 
-      }).catch(() => resolve(null));
+      }).catch(() => reject(null));
     })
 
   }
