@@ -76,11 +76,16 @@ export class SettingsComponent implements OnInit, OnDestroy {
     }
   }
 
+  public async cancelScan() {
+    fetcher('scan/cancel', {
+      method: 'POST'
+    });
+  }
+
   private async requestScanProgress() {
     let res = await fetcher('scan');
     if (res.ok) {
       let response: ScanProgress = await res.json();
-      console.log(response);
       // Set the progress. If active, show the progress bar.
       this.scanProgress.set(response);
       if (response.active) {
@@ -133,8 +138,13 @@ export class SettingsComponent implements OnInit, OnDestroy {
       this.scanInProgress.set(false);
       this.scanProgress.set({ active: false })
     });
+    const scanCancelled$ = this.echoService.subscribeToEvent(ScanChannels.ScanCancelled, (data) => {
+      this.notificationService.info(`Scan has been cancelled. ${data.directoriesScannedBeforeCancellation} directories were scanned in.`);
+      this.scanInProgress.set(false);
+      this.scanProgress.set({ active: false });
+    });
 
-    this.subscription = merge(scanStarted$, scanProgressed$, scanCompleted$, scanFailed$).subscribe();
+    this.subscription = merge(scanStarted$, scanProgressed$, scanCompleted$, scanFailed$, scanCancelled$).subscribe();
 
     this.showBackgrounds.set(this.configService.get('showCoverBackgrounds'));
     this.showVisualizer.set(this.configService.get('showVisualizer'));

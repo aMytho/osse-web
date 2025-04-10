@@ -24,6 +24,7 @@ export class EchoService implements ScanEvents {
           // TODO: Use cookies instead of a query string to pass params.
           this.eventSource = new EventSource(json.url + '?id=' + json.userID + '&token=' + json.token);
           this.eventSource.addEventListener("error", (e) => console.log(e));
+          // NOTE: To add a new event, you must suscribe by it to name. You can't use the generic "message" event.
           resolve(null);
         }
 
@@ -72,6 +73,10 @@ export class EchoService implements ScanEvents {
 
   listenForScanFailed(): void {
     this.eventSource.addEventListener("ScanFailed", (ev) => this.emitEvent(ScanChannels.ScanFailed, JSON.parse(ev.data)))
+  }
+
+  listenForScanCancelled(): void {
+    this.eventSource.addEventListener("ScanCancelled", (ev) => this.emitEvent(ScanChannels.ScanCancelled, JSON.parse(ev.data)))
   }
 
   public disconnect() {

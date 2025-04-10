@@ -6,6 +6,7 @@ export interface ScanEvents {
   listenForScanProgressed(): void;
   listenForScanCompleted(): void;
   listenForScanFailed(): void;
+  listenForScanCancelled(): void;
 }
 
 export interface ScanStartedResult {
@@ -28,11 +29,16 @@ export interface ScanFailedResult {
   message: string;
 }
 
+export interface ScanCancelledResult {
+  directoriesScannedBeforeCancellation: number;
+}
+
 export interface ScanEventMap {
   ScanStarted: ScanStartedResult;
   ScanProgressed: ScanProgressedResult;
   ScanCompleted: ScanCompletedResult;
   ScanFailed: ScanFailedResult;
+  ScanCancelled: ScanCancelledResult;
 }
 
 
@@ -44,4 +50,5 @@ export enum ScanChannels {
   ScanProgressed = "ScanProgressed",
   ScanCompleted = "ScanCompleted",
   ScanFailed = "ScanFailed",
+  ScanCancelled = "ScanCancelled",
 }

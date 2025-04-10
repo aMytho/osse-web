@@ -74,6 +74,7 @@ export class AuthService {
       this.echoService.listenForScanProgressed();
       this.echoService.listenForScanCompleted();
       this.echoService.listenForScanFailed();
+      this.echoService.listenForScanCancelled();
     }).catch(() => {
       console.error("Failed to connect to osse-broadcast. Live events will not be received!");
     });

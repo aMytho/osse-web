@@ -30,6 +30,10 @@
         <p>Scanned {{scanProgress().finished_count}} of {{scanProgress().total_directories}} directories.</p>
         <p class="italic">While you can leave this page, we suggest waiting for the scan to finish before viewing your
           library. Some files may be missing metadata if the scan is incomplete.</p>
+
+        <p class="my-2">You can cancel the scan, but any files scanned will remain in the database.</p>
+
+        <app-button text="Cancel Scan" (click)="cancelScan()"></app-button>
       </div>
       }
 
