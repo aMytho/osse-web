@@ -2,10 +2,12 @@ FROM node:22-alpine
 
 WORKDIR /app
 
-COPY package*.json ./
+RUN npm install -g pnpm@latest-10
 
-RUN npm install
+COPY package*.json pnpm-lock.yaml ./
+
+RUN pnpm install
 
 COPY . .
 
-RUN npm run build --configuration=production --configuration=production
+RUN pnpm run build --configuration=production
