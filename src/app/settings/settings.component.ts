@@ -122,7 +122,8 @@ export class SettingsComponent implements OnInit, OnDestroy {
       this.scanProgress.update((v) => ({
         active: v.active,
         finished_count: data.scannedDirectories,
-        total_directories: data.totalDirectories
+        total_directories: data.totalDirectories,
+        nextDir: data.nextDirectoryToScan || null
       }));
       this.notificationService.info(`Scanned dir ${data.directoryName} with ${data.filesScanned} files scanned and ${data.filesSkipped} files skipped.`)
     });

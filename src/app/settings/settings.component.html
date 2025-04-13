@@ -27,7 +27,13 @@
         <label for="scan-progress">Scan Progress: </label>
         <progress id="scan-progress" [value]="scanProgress().finished_count" [max]="scanProgress().total_directories"
           class="rounded-sm overflow-hidden accent-emerald-400"></progress>
+
+        @if (scanProgress().nextDir) {
+        <p>Now scanning {{scanProgress().nextDir}}</p>
+        }
+
         <p>Scanned {{scanProgress().finished_count}} of {{scanProgress().total_directories}} directories.</p>
+
         <p class="italic">While you can leave this page, we suggest waiting for the scan to finish before viewing your
           library. Some files may be missing metadata if the scan is incomplete.</p>
 
