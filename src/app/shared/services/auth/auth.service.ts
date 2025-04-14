@@ -73,6 +73,7 @@ export class AuthService {
       this.echoService.listenForScanStarted();
       this.echoService.listenForScanProgressed();
       this.echoService.listenForScanCompleted();
+      this.echoService.listenForScanError();
       this.echoService.listenForScanFailed();
       this.echoService.listenForScanCancelled();
     }).catch(() => {

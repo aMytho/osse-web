@@ -133,6 +133,11 @@ export class SettingsComponent implements OnInit, OnDestroy {
       this.scanProgress.set({ active: false })
       this.scanComplete.set(true);
     });
+
+    const scanError$ = this.echoService.subscribeToEvent(ScanChannels.ScanError, (data) => {
+      this.notificationService.error('Scan Error: ' + data.message);
+      this.scanFailMessage.set(data.message);
+    });
     const scanFailed$ = this.echoService.subscribeToEvent(ScanChannels.ScanFailed, (data) => {
       this.notificationService.error('Scan Failed!');
       this.scanFailMessage.set(data.message);
@@ -145,7 +150,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
       this.scanProgress.set({ active: false });
     });
 
-    this.subscription = merge(scanStarted$, scanProgressed$, scanCompleted$, scanFailed$, scanCancelled$).subscribe();
+    this.subscription = merge(scanStarted$, scanProgressed$, scanCompleted$, scanError$, scanFailed$, scanCancelled$).subscribe();
 
     this.showBackgrounds.set(this.configService.get('showCoverBackgrounds'));
     this.showVisualizer.set(this.configService.get('showVisualizer'));

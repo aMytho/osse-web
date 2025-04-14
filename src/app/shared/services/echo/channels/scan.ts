@@ -5,6 +5,7 @@ export interface ScanEvents {
   listenForScanStarted(): void;
   listenForScanProgressed(): void;
   listenForScanCompleted(): void;
+  listenForScanError(): void;
   listenForScanFailed(): void;
   listenForScanCancelled(): void;
 }
@@ -26,6 +27,10 @@ export interface ScanCompletedResult {
   directoryCount: number;
 }
 
+export interface ScanErrorResult {
+  message: string;
+}
+
 export interface ScanFailedResult {
   message: string;
 }
@@ -38,6 +43,7 @@ export interface ScanEventMap {
   ScanStarted: ScanStartedResult;
   ScanProgressed: ScanProgressedResult;
   ScanCompleted: ScanCompletedResult;
+  ScanError: ScanErrorResult;
   ScanFailed: ScanFailedResult;
   ScanCancelled: ScanCancelledResult;
 }
@@ -50,6 +56,7 @@ export enum ScanChannels {
   ScanStarted = "ScanStarted",
   ScanProgressed = "ScanProgressed",
   ScanCompleted = "ScanCompleted",
+  ScanError = "ScanError",
   ScanFailed = "ScanFailed",
   ScanCancelled = "ScanCancelled",
 }

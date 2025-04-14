@@ -71,6 +71,10 @@ export class EchoService implements ScanEvents {
     this.eventSource.addEventListener("ScanCompleted", (ev) => this.emitEvent(ScanChannels.ScanCompleted, JSON.parse(ev.data)))
   }
 
+  listenForScanError(): void {
+    this.eventSource.addEventListener("ScanError", (ev) => this.emitEvent(ScanChannels.ScanError, JSON.parse(ev.data)))
+  }
+
   listenForScanFailed(): void {
     this.eventSource.addEventListener("ScanFailed", (ev) => this.emitEvent(ScanChannels.ScanFailed, JSON.parse(ev.data)))
   }
