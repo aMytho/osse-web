@@ -94,6 +94,7 @@ export class PlayerService {
     this.audioPlayer.playbackRate = this.playbackRate;
 
     this.trackUpdated.emit(new TrackUpdate(this.track, this.buildTrackInfo()));
+    document.title = "Osse - " + this.track.title;
     await this.play();
 
     // We do this last. It may slow down the player if it is first since it makes a network request.

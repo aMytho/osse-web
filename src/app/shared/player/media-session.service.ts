@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { PlayerService } from './player.service';
 import { TrackService } from '../services/track/track.service';
+import { PlaybackState } from './state-change';
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +16,7 @@ export class MediaSessionService {
         this.listenForMediaEvents();
       } catch (error) { }
       try {
-        this.listenForTrackUpdate();
+        this.listenForPlayerEvents();
       } catch (error) { }
     }
   }
@@ -44,7 +45,7 @@ export class MediaSessionService {
     });
   }
 
-  private listenForTrackUpdate() {
+  private listenForPlayerEvents() {
     this.playerService.trackUpdated.subscribe((t) => {
       navigator.mediaSession.metadata = new MediaMetadata({
         title: t.title,
@@ -55,6 +56,16 @@ export class MediaSessionService {
           }
         ]
       })
-    })
+    });
+
+    this.playerService.stateChanged.subscribe((s) => {
+      if (s == PlaybackState.Playing) {
+        navigator.mediaSession.playbackState = "playing";
+      } else {
+        navigator.mediaSession.playbackState = "paused";
+      }
+    });
+
+    this.playerService.playbackEnded.subscribe((_) => navigator.mediaSession.playbackState = "none");
   }
 }

@@ -8,7 +8,8 @@
         <div class="grow shrink">
           <div id="track-title-container"
             class="w-full relative whitespace-nowrap overflow-hidden font-semibold text-lg">
-            <p class="whitespace-nowrap w-min overflow-hidden overflow-ellipsis" #trackTitleElement>
+            <p class="whitespace-nowrap w-min overflow-hidden overflow-ellipsis" #trackTitleElement aria-live="polite"
+              role="status" aria-atomic="true">
               {{trackTitle()}}
             </p>
           </div>
