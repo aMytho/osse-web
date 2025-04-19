@@ -6,13 +6,15 @@ import { HeaderComponent } from '../shared/ui/header/header.component';
 import { OsseAlbum } from '../shared/services/album/osse-album';
 import { fetcher } from '../shared/util/fetcher';
 import { IconComponent } from '../shared/ui/icon/icon.component';
-import { mdiSearchWeb } from '@mdi/js';
+import { mdiPlaylistPlay, mdiSearchWeb } from '@mdi/js';
+import { TrackService } from '../shared/services/track/track.service';
+import { ToastService } from '../toast-container/toast.service';
 
 @Component({
   selector: 'app-albums',
   imports: [RouterLink, HeaderComponent, IconComponent],
   templateUrl: './albums.component.html',
-  styles: ``,
+  styleUrl: `./albums.component.css`,
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AlbumsComponent implements OnInit {
@@ -22,9 +24,12 @@ export class AlbumsComponent implements OnInit {
   loading: WritableSignal<boolean> = signal(true);
 
   search = mdiSearchWeb;
+  play = mdiPlaylistPlay;
 
   constructor(
-    private configService: ConfigService
+    private configService: ConfigService,
+    private trackService: TrackService,
+    private notificationService: ToastService
   ) { }
 
   public filterAlbums(event: any) {
@@ -33,6 +38,21 @@ export class AlbumsComponent implements OnInit {
     } else {
       const regex = new RegExp(event.target.value.trim(), 'i');
       this.filteredAlbums.set(this.albums().filter((a) => regex.test(a.name)));
+    }
+  }
+
+  public playAlbum(id: number) {
+    let album = this.filteredAlbums().find((a) => a.id == id);
+    if (album) {
+      for (const track of album.tracks) {
+        this.trackService.addTrack(track);
+      }
+
+      if (album.tracks.length > 1) {
+        this.notificationService.info(`Added ${album.tracks.length} tracks to queue.`);
+      } else {
+        this.notificationService.info(`Added track to queue.`);
+      }
     }
   }
 
