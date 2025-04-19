@@ -1,9 +1,8 @@
 <div class="flex flex-col flex-wrap gap-2 bg-slate-500 bg-opacity-15 rounded-lg p-4">
   <div class="flex flex-wrap gap-x-8 gap-y-4">
-    <button
-      class="bg-slate-300 rounded-lg backdrop-blur-sm w-60 h-60 p-2 flex items-end flex-wrap bg-cover drop-shadow-glow"
-      style="background-image: url('{{bg()}}');" (click)="showAlbumArt()" aria-label="Show Album Art"
-      onerror="this.onerror = null; this.src = 'assets/img/osse.webp'">
+    <button (click)="showAlbumArt()" aria-label="Show Album Art">
+      <img class="bg-slate-300 rounded-lg backdrop-blur-sm w-60 h-60 flex items-end flex-wrap bg-cover drop-shadow-glow"
+        onerror="if (this.src !== 'assets/img/osse.webp') this.src = 'assets/img/osse.webp';" [src]="bg()" alt="">
     </button>
 
     <div class="grow flex flex-col">

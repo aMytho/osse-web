@@ -21,7 +21,7 @@
     <a routerLink="view/{{album.id}}" class="block w-full h-60">
       <img [src]="coverUrlBase().replace('ID', album.tracks[0]?.id?.toString() ?? '-1')" alt="" loading="lazy"
         class="w-full h-full object-cover rounded-t-lg hover:border hover:border-emerald-300 hover:border-solid"
-        onerror="this.onerror = null; this.src = 'assets/img/osse.webp'">
+        onerror="if (this.src !== 'assets/img/osse.webp') this.src = 'assets/img/osse.webp';">
     </a>
 
     <!-- Info & Actions -->
