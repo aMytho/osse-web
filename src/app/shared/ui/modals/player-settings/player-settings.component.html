@@ -3,19 +3,18 @@
     <label class="inline-flex items-center space-x-2">
       <span>Enable Visualizer: </span>
       <input type="checkbox" name="show-visualizer" id="show-visualizer" [checked]="showVisualizer()"
-        (input)="showVisualizer.set(!showVisualizer())"
-        class="h-5 w-5 text-blue-600 border-gray-300 rounded-sm focus:ring-3 focus:ring-blue-200/50">
+        (input)="showVisualizer.set(!showVisualizer())" class="toggle toggle-primary">
     </label>
 
     <label class="inline-flex items-center space-x-2">
       <span>Visualizer Samples: </span>
       <input #samples type="number" name="visualizer-samples" id="visualizer-samples" [value]="visualizerSamples()"
-        min="0" max="10" class="text-emerald-300 m-2 p-2 rounded-md focus:bg-white/30 bg-white/15">
+        min="0" max="10" class="input input-secondary" placeholder="1">
     </label>
   </div>
 
   <div class="flex place-content-end gap-x-2 mt-2">
-    <app-button text="Close" [border]="false" (click)="close()"></app-button>
-    <app-button text="Save" (click)="save()"></app-button>
+    <button class="btn btn-ghost btn-neutral" (click)="close()">Close</button>
+    <button class="btn btn-primary" (click)="save()">Save</button>
   </div>
 </div>

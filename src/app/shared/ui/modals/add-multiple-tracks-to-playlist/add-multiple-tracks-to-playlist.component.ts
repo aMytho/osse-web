@@ -2,13 +2,12 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output
 import { Track } from '../../../services/track/track';
 import { PlaylistService } from '../../../services/playlist/playlist.service';
 import { Playlist } from '../../../services/playlist/Playlist';
-import { ButtonComponent } from '../../button/button.component';
 import { FormsModule } from '@angular/forms';
 import { ToastService } from '../../../../toast-container/toast.service';
 
 @Component({
   selector: 'app-add-multiple-tracks-to-playlist',
-  imports: [ButtonComponent, FormsModule],
+  imports: [FormsModule],
   templateUrl: './add-multiple-tracks-to-playlist.component.html',
   styles: ``,
   changeDetection: ChangeDetectionStrategy.OnPush

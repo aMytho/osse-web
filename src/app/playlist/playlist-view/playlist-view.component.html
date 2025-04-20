@@ -14,14 +14,15 @@
     <div>
       <app-header [type]="2" text="Edit Playlist"></app-header>
     </div>
-    <label for="name" class="text-white font-semibold">Playlist Name: </label>
-    <input [(ngModel)]="model.name" required minlength="1" id="name" name="name"
-      class="mx-2 mb-2 p-2 rounded-md bg-slate-400/25 text-white"> <br>
+    <div class="flex flex-col gap-2">
+      <label for="name" class="text-white font-semibold">Playlist Name: </label>
+      <input [(ngModel)]="model.name" required minlength="1" id="name" name="name" class="input input-primary">
+    </div>
 
     <p class="text-red-500 font-semibold my-2" [hidden]="!(model.name.length == 0)">The playlist name must be at least 1
       character.</p>
 
-    <app-button type="submit" class="mt-4" text="Save" [disabled]="!form.form.valid || false"></app-button>
+    <button class="mt-4 btn btn-primary" [disabled]="!form.form.valid || false">Save</button>
   </form>
   }
   <div class="mt-4"></div>

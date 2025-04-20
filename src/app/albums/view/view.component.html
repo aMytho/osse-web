@@ -13,7 +13,7 @@
         {{album().artist[0]?.name ?? albumTrackArtist() ?? "Unknown Artist"}}
       </p>
       <div class="flex flex-wrap gap-2 justify-between items-center mt-6">
-        <button (click)="addAll()" class="bg-green-500 hover:bg-green-400 p-2 text-white font-semibold rounded-lg">
+        <button (click)="addAll()" class="btn btn-primary">
           Play All
         </button>
         <a class="text-cyan-400 hover:text-cyan-500 cursor-pointer">View in MusicBrainz</a>
@@ -32,7 +32,7 @@
               [icon]="filter"></app-icon>
             <span class="max-md:hidden">Filter: </span>
           </label>
-          <select id="filter" [(ngModel)]="chosenFilter" class="text-black p-2 rounded-md" (change)="sortTracks()">
+          <select id="filter" [(ngModel)]="chosenFilter" class="select select-neutral" (change)="sortTracks()">
             <option [value]="filterType.TrackNumber" selected>Track Number (default)</option>
             <option [value]="filterType.DiscNumber">Disc Number</option>
             <option [value]="filterType.Alphabetical">Alphabetical</option>
@@ -42,8 +42,7 @@
         <div class="flex items-center gap-x-1">
           <label for="search"><app-icon aria-label="Search" class="cursor-pointer hover:text-emerald-300" pull="left"
               [icon]="search"></app-icon></label>
-          <input (input)="filterTracks($event)"
-            class="bg-transparent border border-emerald-300 rounded-md py-1 px-2 shrink" type="text" id="search"
+          <input (input)="filterTracks($event)" class="input input-neutral" type="text" id="search"
             placeholder="Never gonna give you up..." (click)="sortTracks()">
         </div>
       </div>

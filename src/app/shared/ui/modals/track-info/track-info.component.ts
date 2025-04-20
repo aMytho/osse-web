@@ -1,10 +1,9 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Track } from '../../../services/track/track';
-import { ButtonComponent } from '../../button/button.component';
 
 @Component({
   selector: 'app-track-info',
-  imports: [ButtonComponent],
+  imports: [],
   templateUrl: './track-info.component.html',
   styles: ``
 })

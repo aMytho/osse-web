@@ -1,11 +1,10 @@
 import { Component, ElementRef, EventEmitter, Input, OnInit, Output, signal, ViewChild, WritableSignal } from '@angular/core';
-import { ButtonComponent } from '../../button/button.component';
 import { ConfigService } from '../../../services/config/config.service';
 import { ToastService } from '../../../../toast-container/toast.service';
 
 @Component({
   selector: 'app-player-settings',
-  imports: [ButtonComponent],
+  imports: [],
   templateUrl: './player-settings.component.html',
   styles: ``
 })

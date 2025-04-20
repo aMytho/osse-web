@@ -40,7 +40,7 @@ a {
   line-height: 1.5rem;
 }
 
-.loading {
+.loading-matrix {
   @apply animate-pulse pointer-events-none;
 }
 

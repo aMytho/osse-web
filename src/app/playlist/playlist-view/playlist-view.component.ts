@@ -3,7 +3,6 @@ import { Playlist } from '../../shared/services/playlist/Playlist';
 import { HeaderComponent } from '../../shared/ui/header/header.component';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { ButtonComponent } from '../../shared/ui/button/button.component';
 import { EditPlaylist } from './editPlaylistModel';
 import { FormsModule } from '@angular/forms';
 import { IconComponent } from '../../shared/ui/icon/icon.component';
@@ -19,7 +18,7 @@ import { PlaylistAddTracksComponent } from './playlist-add-tracks/playlist-add-t
 
 @Component({
   selector: 'app-playlist-view',
-  imports: [HeaderComponent, ButtonComponent, IconComponent, CommonModule, FormsModule, TrackMatrixComponent, PlaylistAddTracksComponent],
+  imports: [HeaderComponent, IconComponent, CommonModule, FormsModule, TrackMatrixComponent, PlaylistAddTracksComponent],
   templateUrl: './playlist-view.component.html',
   styles: ``
 })

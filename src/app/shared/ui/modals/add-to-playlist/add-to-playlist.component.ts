@@ -2,15 +2,14 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output
 import { Track } from '../../../services/track/track';
 import { PlaylistService } from '../../../services/playlist/playlist.service';
 import { Playlist } from '../../../services/playlist/Playlist';
-import { ButtonComponent } from '../../button/button.component';
 import { FormsModule } from '@angular/forms';
 
 @Component({
-    selector: 'app-add-to-playlist',
-    imports: [ButtonComponent, FormsModule],
-    templateUrl: './add-to-playlist.component.html',
-    styles: ``,
-    changeDetection: ChangeDetectionStrategy.OnPush
+  selector: 'app-add-to-playlist',
+  imports: [FormsModule],
+  templateUrl: './add-to-playlist.component.html',
+  styles: ``,
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AddToPlaylistComponent implements OnInit {
   @Input('track') track!: Track;
@@ -18,7 +17,7 @@ export class AddToPlaylistComponent implements OnInit {
   playlists: WritableSignal<Playlist[]> = signal([]);
   model: WritableSignal<number> = signal(-1);
 
-  constructor(private playlistService: PlaylistService) {}
+  constructor(private playlistService: PlaylistService) { }
 
   public close() {
     this.onClose.emit();

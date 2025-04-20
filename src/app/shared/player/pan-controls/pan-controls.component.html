@@ -6,8 +6,7 @@
   <div class="flex items-center gap-x-2">
     <p aria-label="-1 is left channel">L</p>
     <input #pan (change)="onPanChange($event)" (input)="onPanChange($event)" (wheel)="adjustPanByScroll($event)"
-      type="range" name="volume" min="-1" max="1" step="0.01"
-      class="cursor-pointer accent-emerald-500 hover:accent-emerald-400 active:accent-emerald-300">
+      type="range" name="volume" min="-1" max="1" step="0.01" class="range range-secondary">
     <p aria-label="1 is right channel">R</p>
   </div>
 </div>

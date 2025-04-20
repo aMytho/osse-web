@@ -1,7 +1,6 @@
 import { Component, OnInit, signal, WritableSignal } from '@angular/core';
 import { fetcher } from '../shared/util/fetcher';
 import { HeaderComponent } from '../shared/ui/header/header.component';
-import { ButtonComponent } from '../shared/ui/button/button.component';
 import { FormsModule } from '@angular/forms';
 import { ToastService } from '../toast-container/toast.service';
 import { ConfigService } from '../shared/services/config/config.service';
@@ -10,7 +9,7 @@ import { AuthService } from '../shared/services/auth/auth.service';
 
 @Component({
   selector: 'app-login',
-  imports: [HeaderComponent, ButtonComponent, FormsModule],
+  imports: [HeaderComponent, FormsModule],
   templateUrl: './login.component.html',
   styles: ``
 })

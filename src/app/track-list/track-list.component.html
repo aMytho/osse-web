@@ -29,7 +29,7 @@
             [icon]="play"></app-icon></button>
       </div>
 
-      <div [class.loading]="loading()">
+      <div [class.loading-matrix]="loading()">
         <app-track-matrix [tracks]="tracks()" (onClick)="addTrack($event)" (onModeChanged)="handleModeChange($event)"
           (onEmptySelection)="handleEmptySelection()"></app-track-matrix>
       </div>

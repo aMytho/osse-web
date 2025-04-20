@@ -60,7 +60,7 @@
 
         <p class="my-2">You can cancel the scan, but any files scanned will remain in the database.</p>
 
-        <app-button text="Cancel Scan" (click)="cancelScan()"></app-button>
+        <button class="btn btn-warning" (click)="cancelScan()">Cancel Scan</button>
       </div>
       }
 
@@ -107,7 +107,7 @@
 
       <div class="w-full max-w-xs">
         <label for="test">Visualizer Samples</label>
-        <input type="range" min="1" max="10" value="1" class="range range-accent" step="1" #samples
+        <input type="range" min="1" max="10" value="1" class="range range-secondary" step="1" #samples
           name="visualizer-samples" id="visualizer-samples" [value]="visualizerSamples()" />
         <div class="flex justify-between px-2.5 mt-2 text-xs">
           <span>|</span>
