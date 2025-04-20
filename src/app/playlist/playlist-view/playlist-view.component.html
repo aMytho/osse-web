@@ -1,5 +1,5 @@
 <div [ngClass]="{'animate-pulse pointer-events-none': !ready()}">
-  <div class="bg-slate-400 bg-opacity-15 px-4 rounded-lg w-full flex justify-around gap-x-2">
+  <div class="bg-slate-400/15 px-4 rounded-lg w-full flex justify-around gap-x-2">
     <button (click)="delete()"
       class="font-semibold text-lg text-white hover:text-red-500 p-2 rounded-md bg-transparent group">Delete <app-icon
         class="group-hover:fill-red-500" [icon]="trash"></app-icon></button>
@@ -10,13 +10,13 @@
         [icon]="play"></app-icon></button>
   </div>
   @if (showEditMenu()) {
-  <form #form="ngForm" (ngSubmit)="edit()" class="mt-2 bg-slate-400 bg-opacity-15 p-4 rounded-lg w-full">
+  <form #form="ngForm" (ngSubmit)="edit()" class="mt-2 bg-slate-400/15 p-4 rounded-lg w-full">
     <div>
       <app-header [type]="2" text="Edit Playlist"></app-header>
     </div>
     <label for="name" class="text-white font-semibold">Playlist Name: </label>
     <input [(ngModel)]="model.name" required minlength="1" id="name" name="name"
-      class="mx-2 mb-2 p-2 rounded-md bg-opacity-25"> <br>
+      class="mx-2 mb-2 p-2 rounded-md bg-slate-400/25 text-white"> <br>
 
     <p class="text-red-500 font-semibold my-2" [hidden]="!(model.name.length == 0)">The playlist name must be at least 1
       character.</p>
@@ -28,23 +28,26 @@
   <app-header [text]="playlist?.name ?? 'Loading'"></app-header>
 
   @if (playlist) {
-    <div [ngClass]="{'animate-pulse pointer-events-none': waitingOnRequest()}">
-      <div class="flex justify-around gap-x-2 my-2" [ngClass]="{'pointer-events-none opacity-45 my-1': !showTrackSelectionMenu()}">
-        <button (click)="closePlaylistTrackSelector()"
-          class="font-semibold text-lg text-white hover:text-red-500 p-2 rounded-md bg-transparent group">
-          Close
-          <app-icon [icon]="close"></app-icon></button>
-        <button (click)="removeTracksFromPlaylist()"
-          class="font-semibold text-lg text-white p-2 rounded-md bg-transparent">Remove from Playlist<app-icon
-            [icon]="trash"></app-icon></button>
-      </div>
-      <app-track-matrix [tracks]="playlist.tracks" (onClick)="addTrack($event)" (onModeChanged)="onTrackMatrixModeChange($event)"></app-track-matrix>
-
+  <div [ngClass]="{'animate-pulse pointer-events-none': waitingOnRequest()}">
+    <div class="flex justify-around gap-x-2 my-2"
+      [ngClass]="{'pointer-events-none opacity-45 my-1': !showTrackSelectionMenu()}">
+      <button (click)="closePlaylistTrackSelector()"
+        class="font-semibold text-lg text-white hover:text-red-500 p-2 rounded-md bg-transparent group">
+        Close
+        <app-icon [icon]="close"></app-icon></button>
+      <button (click)="removeTracksFromPlaylist()"
+        class="font-semibold text-lg text-white p-2 rounded-md bg-transparent">Remove from Playlist<app-icon
+          [icon]="trash"></app-icon></button>
     </div>
+    <app-track-matrix [tracks]="playlist.tracks" (onClick)="addTrack($event)"
+      (onModeChanged)="onTrackMatrixModeChange($event)"></app-track-matrix>
 
-    @if (showEditMenu()) {
-      <div aria-hidden="true" class="mt-8"></div>
-      <app-playlist-add-tracks (addTracks)="addTracksToPlaylist($event)" [playlistID]="playlist.id"></app-playlist-add-tracks>
-    }
+  </div>
+
+  @if (showEditMenu()) {
+  <div aria-hidden="true" class="mt-8"></div>
+  <app-playlist-add-tracks (addTracks)="addTracksToPlaylist($event)"
+    [playlistID]="playlist.id"></app-playlist-add-tracks>
+  }
   }
 </div>

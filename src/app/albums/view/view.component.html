@@ -3,7 +3,7 @@
     <div class="basis-2/5 flex place-content-center">
       <button (click)="showAlbumArt()" aria-label="Show album art">
         <img
-          class="bg-slate-300 rounded-lg backdrop-blur-sm w-40 h-40 bg-cover drop-shadow-glow cursor-pointer border border-white border-solid"
+          class="bg-slate-300 rounded-lg backdrop-blur-xs w-40 h-40 bg-cover drop-shadow-glow cursor-pointer border border-white border-solid"
           [src]="bg()" alt="" onerror="if (this.src !== 'assets/img/osse.webp') this.src = 'assets/img/osse.webp';">
       </button>
     </div>

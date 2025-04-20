@@ -1,9 +1,9 @@
-<div class="flex justify-between bg-slate-400 rounded-lg shadow-sm shadow-cyan-950" [ngClass]="{
-    'hover:bg-emerald-400 hover:bg-opacity-10 bg-opacity-10': !activeTrack(),
-    'bg-emerald-400 bg-opacity-15 hover:bg-opacity-20 border-r-emerald-400 border-b-emerald-400 border-r border-emerald-200 border-2': activeTrack()
+<div class="flex justify-between rounded-lg shadow-xs shadow-cyan-950" [ngClass]="{
+    'hover:bg-emerald-400/10  bg-slate-400/10': !activeTrack(),
+    'bg-emerald-400/15 hover:bg-emerald-400/20 border-r-emerald-400 border-b-emerald-400 border-r border-emerald-200 border-2': activeTrack()
   }">
   @if (mode == 'view') {
-  <div class="flex-grow">
+  <div class="grow">
     <button (click)="onPlay.emit()" class="w-full p-4" (contextmenu)="toggleViewWithEvent($event)"
       [attr.aria-label]="'Play' + track.title + ' by ' + (track.artistPrimary()?.name ?? 'unknown artist')">
       <p class="text-left">
@@ -29,19 +29,19 @@
   </div>
   } @else {
   <div class="flex flex-wrap items-center place-items-center gap-x-2 w-full p-4">
-    <button class="bg-green-400 hover:bg-opacity-90 p-4 rounded-xl group" (click)="playTrack()" title="Play Track"
+    <button class="bg-green-400 hover:bg-green-400/90 p-4 rounded-xl group" (click)="playTrack()" title="Play Track"
       aria-label="Play Track" accesskey="p">
       <app-icon class="group-hover:opacity-95" [icon]="play" align="middle"></app-icon>
     </button>
-    <button class="bg-red-400 hover:bg-opacity-90 p-4 rounded-xl group" (click)="removeTrack()" title="Remove Track"
+    <button class="bg-red-400 hover:bg-red-400/90 p-4 rounded-xl group" (click)="removeTrack()" title="Remove Track"
       aria-label="Remove Track" accesskey="d">
       <app-icon class="group-hover:opacity-95" [icon]="trash" align="middle"></app-icon>
     </button>
-    <button class="bg-blue-400 hover:bg-opacity-90 p-4 rounded-xl group" (click)="addToPlaylist()"
+    <button class="bg-blue-400 hover:bg-blue-400/90 p-4 rounded-xl group" (click)="addToPlaylist()"
       title="Add to Playlist" aria-label="Add to Playlist" accesskey="a">
       <app-icon class="group-hover:opacity-95" [icon]="playlist" align="middle"></app-icon>
     </button>
-    <button class="bg-slate-400 hover:bg-opacity-90 p-4 rounded-xl group" (click)="toggleView()" title="Cancel"
+    <button class="bg-slate-400 hover:bg-slate-400/90 p-4 rounded-xl group" (click)="toggleView()" title="Cancel"
       aria-label="Cancel" accesskey="c">
       <app-icon class="group-hover:opacity-95" [icon]="cancel" align="middle"></app-icon>
     </button>

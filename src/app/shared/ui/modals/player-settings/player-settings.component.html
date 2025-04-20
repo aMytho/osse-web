@@ -4,13 +4,13 @@
       <span>Enable Visualizer: </span>
       <input type="checkbox" name="show-visualizer" id="show-visualizer" [checked]="showVisualizer()"
         (input)="showVisualizer.set(!showVisualizer())"
-        class="h-5 w-5 text-blue-600 border-gray-300 rounded focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+        class="h-5 w-5 text-blue-600 border-gray-300 rounded-sm focus:ring-3 focus:ring-blue-200/50">
     </label>
 
     <label class="inline-flex items-center space-x-2">
       <span>Visualizer Samples: </span>
       <input #samples type="number" name="visualizer-samples" id="visualizer-samples" [value]="visualizerSamples()"
-        min="0" max="10" class="text-emerald-300 m-2 p-2 rounded-md bg-opacity-15 focus:bg-opacity-30 bg-white">
+        min="0" max="10" class="text-emerald-300 m-2 p-2 rounded-md focus:bg-white/30 bg-white/15">
     </label>
   </div>
 

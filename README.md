@@ -1,27 +1,54 @@
-# OsseWeb
+# Osse-Web
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 17.3.6.
+Osse is a free and open source music player and server. This repository is the web frontend.
 
-## Development server
+## Features
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+> Osse is in early development. There will be bugs and unexpected behavior. Some features are not yet complete. It is safe to use on your library, but it will need some time before it can be your main music player.
 
-## Code scaffolding
+- Supports most music formats (MP3, Ogg/Opus, Flac, WAV).
+- Support reading tags for library generation.
+- Album & Playlist support.
+- No Tracking/Telemetry/Data collection.
+- Simplicity. Install it and it will just work.
+- Support for Linux/Mac/Windows (Mac/Windows need Docker or other medium). Any OS (including Android/IOS) can use the web frontend.
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+## Installation
 
-## Build
+Both the server and the web frontend (this project) must be installed.
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+> When v1 releases, we will provide a standalone installer/executable to simplify this process. We will also provide docker images. Currently, you must manually install the projects and their dependencies.
 
-## Running unit tests
+You will need the following tools installed:
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+- Git https://git-scm.com/downloads
+- PHP 8.4 `/bin/bash -c "$(curl -fsSL https://php.new/install/linux/8.4)"`
+- NodeJS v22 https://nodejs.org/en
+- PNPM (optional, preferred over NPM) https://pnpm.io/installation
 
-## Running end-to-end tests
+Clone this repository and the server.
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+```
+git clone https://github.com/amytho/osse
+cd
+git clone https://github.com/amytho/osse-web
+```
 
-## Further help
+Start the web frontend and the php backend.
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+```
+cd osse
+composer run dev
+```
+
+In another terminal window:
+```
+cd osse-web
+pnpm start
+```
+
+Open the web frontend and login. http://localhost:4200
+
+The default username is `osse` and the default password is `cassidor`.
+
+You should edit the .env file in the server and add your music directory to it. This is located at the bottom of the file.

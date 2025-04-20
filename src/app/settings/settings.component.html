@@ -1,22 +1,21 @@
 <app-header text="Settings"></app-header>
 
 
-<div class="bg-slate-500 bg-opacity-15 rounded-lg px-4 pb-4 text-white">
+<div class="bg-slate-500/15 rounded-lg px-4 pb-4 text-white">
   <!-- Tab headers -->
-  <div class="flex flex-wrap border-b border-white mb-4 bg-emerald-300 bg-opacity-5 -mx-4" role="tablist">
+  <div class="flex flex-wrap border-b border-white mb-4 bg-emerald-300/5 -mx-4" role="tablist">
     <button class="px-4 py-2 text-white transition-all duration-200 font-semibold"
-      [ngClass]="{'bg-opacity-30 bg-emerald-500': activeTab === 'scan'}" (click)="activeTab = 'scan'" role="tab"
+      [ngClass]="{'bg-emerald-500/30': activeTab === 'scan'}" (click)="activeTab = 'scan'" role="tab"
       [attr.aria-selected]="activeTab == 'scan'" aria-controls="tab-scan" id="label-scan">
       Scan
     </button>
     <button class="px-4 py-2 text-white transition-all duration-200 font-semibold"
-      [ngClass]="{'bg-opacity-30 bg-emerald-500': activeTab === 'preferences'}" (click)="activeTab = 'preferences'"
-      role="tab" [attr.aria-selected]="activeTab == 'preferences'" aria-controls="tab-preferences"
-      id="label-preferences">
+      [ngClass]="{'bg-emerald-500/30': activeTab === 'preferences'}" (click)="activeTab = 'preferences'" role="tab"
+      [attr.aria-selected]="activeTab == 'preferences'" aria-controls="tab-preferences" id="label-preferences">
       Preferences
     </button>
     <button class="px-4 py-2 text-white transition-all duration-200 font-semibold"
-      [ngClass]="{'bg-opacity-30 bg-emerald-500': activeTab === 'logs'}" (click)="activeTab = 'logs'" role="tab"
+      [ngClass]="{'bg-emerald-500/30': activeTab === 'logs'}" (click)="activeTab = 'logs'" role="tab"
       [attr.aria-selected]="activeTab == 'logs'" aria-controls="tab-logs" id="label-logs">
       Logs
     </button>
@@ -35,8 +34,8 @@
       }
     </ul>
     <div class="mt-2">
-      <app-button text="Start Scan" [disabled]="scanInProgress() || waitingForScanConfirmation()"
-        (click)="scan()"></app-button>
+      <button class="btn btn-primary" [disabled]="scanInProgress() || waitingForScanConfirmation()"
+        (click)="scan()">Start Scan</button>
 
       @if (waitingForScanConfirmation()) {
       <p class="animate-pulse font-semibold text-xl">Waiting for scan start confirmation...</p>
@@ -48,7 +47,7 @@
       <div class="ml-2 mt-2">
         <label for="scan-progress">Scan Progress: </label>
         <progress id="scan-progress" [value]="scanProgress().finished_count" [max]="scanProgress().total_directories"
-          class="rounded-sm overflow-hidden accent-emerald-400"></progress>
+          class="rounded-xs overflow-hidden accent-emerald-400"></progress>
 
         @if (scanProgress().nextDir) {
         <p>Now scanning {{scanProgress().nextDir}}</p>
@@ -83,15 +82,15 @@
       When a track or album is playing, Osse will dispay the cover art in the background.
       This may cause contrast issues with certain covers. This can be disabled if you so choose.</p>
 
-    <form #showBackgroundsForm="ngForm" (ngSubmit)="saveBackgroundCoverPreference()" class="ml-2 flex flex-col gap-y-2">
-      <label class="inline-flex items-center space-x-2">
-        <span>Show Background Covers: </span>
-        <input type="checkbox" name="show-background-covers" id="show-background-covers" [checked]="showBackgrounds()"
-          (input)="showBackgrounds.set(!showBackgrounds())"
-          class="h-5 w-5 text-blue-600 border-gray-300 rounded focus:ring focus:ring-blue-200 focus:ring-opacity-50">
-      </label> <br>
+    <form #showBackgroundsForm="ngForm" (ngSubmit)="saveBackgroundCoverPreference()" class="ml-2 flex flex-col gap-y-4">
+      <label class="label">
+        <input type="checkbox" checked="checked" class="toggle toggle-primary" name="show-background-covers"
+          id="show-background-covers" [checked]="showBackgrounds()" (input)="showBackgrounds.set(!showBackgrounds())" />
+        Show background colors
+      </label>
 
-      <app-button type="submit" text="Save" [disabled]="!showBackgroundsForm.form.valid || false"></app-button>
+      <button type="submit" class="btn btn-primary w-min"
+        [disabled]="!showBackgroundsForm.form.valid || false">Save</button>
     </form>
 
     <p class="my-2 ml-2">Visualizer</p>
@@ -99,21 +98,44 @@
       When a track is playing, Osse will dispay a music visualizer. This is generated in real-time.
       This may cause performance issues with certain devices. This can be disabled if you so choose.</p>
 
-    <form #visualizerForm="ngForm" (ngSubmit)="saveVisualizerPreference()" class="ml-2 flex flex-col gap-y-2">
-      <label class="inline-flex items-center space-x-2">
-        <span>Enable Visualizer: </span>
-        <input type="checkbox" name="show-visualizer" id="show-visualizer" [checked]="showVisualizer()"
-          (input)="showVisualizer.set(!showVisualizer())"
-          class="h-5 w-5 text-blue-600 border-gray-300 rounded focus:ring focus:ring-blue-200 focus:ring-opacity-50">
-      </label> <br>
+    <form #visualizerForm="ngForm" (ngSubmit)="saveVisualizerPreference()" class="ml-2 flex flex-col gap-y-4">
+      <label class="label">
+        <input type="checkbox" checked="checked" class="toggle toggle-primary" name="show-visualizer"
+          id="show-visualizer" [checked]="showVisualizer()" (input)="showVisualizer.set(!showVisualizer())" />
+        Enable visualiser
+      </label>
 
-      <label class="inline-flex items-center space-x-2">
-        <span>Visualizer Samples: </span>
-        <input #samples type="number" name="visualizer-samples" id="visualizer-samples" [value]="visualizerSamples()"
-          min="0" max="10" class="text-emerald-300 m-2 p-2 rounded-md bg-opacity-15 focus:bg-opacity-30 bg-white">
-      </label> <br>
+      <div class="w-full max-w-xs">
+        <label for="test">Visualizer Samples</label>
+        <input type="range" min="1" max="10" value="1" class="range range-accent" step="1" #samples
+          name="visualizer-samples" id="visualizer-samples" [value]="visualizerSamples()" />
+        <div class="flex justify-between px-2.5 mt-2 text-xs">
+          <span>|</span>
+          <span>|</span>
+          <span>|</span>
+          <span>|</span>
+          <span>|</span>
+          <span>|</span>
+          <span>|</span>
+          <span>|</span>
+          <span>|</span>
+          <span>|</span>
+        </div>
+        <div class="flex justify-between px-2.5 mt-2 text-xs">
+          <span>1</span>
+          <span>2</span>
+          <span>3</span>
+          <span>4</span>
+          <span>5</span>
+          <span>6</span>
+          <span>7</span>
+          <span>8</span>
+          <span>9</span>
+          <span>10</span>
+        </div>
+      </div>
 
-      <app-button type="submit" text="Save" [disabled]="!visualizerForm.form.valid || false"></app-button>
+      <button type="submit" class="btn btn-primary w-min" [disabled]="!visualizerForm.form.valid || false">Save</button>
     </form>
   </div>
   } @else if (activeTab === 'logs') {
