@@ -1,7 +1,29 @@
 <app-header text="Settings"></app-header>
 
-<div class="bg-slate-500 bg-opacity-15 rounded-lg p-4 text-white">
-  <div>
+
+<div class="bg-slate-500 bg-opacity-15 rounded-lg px-4 pb-4 text-white">
+  <!-- Tab headers -->
+  <div class="flex flex-wrap border-b border-white mb-4 bg-emerald-300 bg-opacity-5 -mx-4" role="tablist">
+    <button class="px-4 py-2 text-white transition-all duration-200 font-semibold"
+      [ngClass]="{'bg-opacity-30 bg-emerald-500': activeTab === 'scan'}" (click)="activeTab = 'scan'" role="tab"
+      [attr.aria-selected]="activeTab == 'scan'" aria-controls="tab-scan" id="label-scan">
+      Scan
+    </button>
+    <button class="px-4 py-2 text-white transition-all duration-200 font-semibold"
+      [ngClass]="{'bg-opacity-30 bg-emerald-500': activeTab === 'preferences'}" (click)="activeTab = 'preferences'"
+      role="tab" [attr.aria-selected]="activeTab == 'preferences'" aria-controls="tab-preferences"
+      id="label-preferences">
+      Preferences
+    </button>
+    <button class="px-4 py-2 text-white transition-all duration-200 font-semibold"
+      [ngClass]="{'bg-opacity-30 bg-emerald-500': activeTab === 'logs'}" (click)="activeTab = 'logs'" role="tab"
+      [attr.aria-selected]="activeTab == 'logs'" aria-controls="tab-logs" id="label-logs">
+      Logs
+    </button>
+  </div>
+
+  @if (activeTab === 'scan') {
+  <div class="space-y-4" role="tabpanel" aria-labelledby="label-scan" id="tab-scan">
     <app-header [type]="2" text="Scan Tracks"></app-header>
     <p class="my-2 ml-2">You can start a track scan from the web GUI. This will scan the below directories as listed in
       your config.json file.</p>
@@ -52,7 +74,8 @@
       }
     </div>
   </div>
-  <div class="mt-4">
+  } @else if (activeTab === 'preferences') {
+  <div class="space-y-4" role="tabpanel" aria-labelledby="label-preferences" id="tab-preferences">
     <app-header [type]="2" text="Preferences"></app-header>
 
     <p class="my-2 ml-2">Background Images</p>
@@ -93,23 +116,9 @@
       <app-button type="submit" text="Save" [disabled]="!visualizerForm.form.valid || false"></app-button>
     </form>
   </div>
-
-  <div class="mt-4">
-    <app-header [type]="2" text="Logs"></app-header>
-
-    <p class="my-2 ml-2">Application Logs</p>
-    <p class="my-2 ml-2">Below are the current application logs. The last 500 lines are shown.</p>
-    <p class="my-2 ml-2 italic">Warning: Logs do not auto-update. Refresh the page to view updated logs.</p>
-
-    @if (!showLogs()) {
-    <div class="bg-slate-800 h-[40rem]">
-      <button class="w-full h-full py-8" (click)="showLogs.set(true)" aria-label="Show Logs">
-        Click to show logs (verbose, may include sensitive info)
-      </button>
-    </div>
-    } @else {
-    <pre class="p-4 bg-slate-800 overflow-auto max-h-[40rem]">{{logs()}}</pre>
-    }
+  } @else if (activeTab === 'logs') {
+  <div class="space-y-4" role="tabpanel" aria-labelledby="label-logs" id="tab-logs">
+    <app-settings-logs></app-settings-logs>
   </div>
-
+  }
 </div>

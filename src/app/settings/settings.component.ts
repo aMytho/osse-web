@@ -10,10 +10,12 @@ import { merge, Subscription } from 'rxjs';
 import { ScanChannels } from '../shared/services/echo/channels/scan';
 import { BackgroundImageService } from '../shared/ui/background-image.service';
 import { ScanProgress } from './scan-progress.interface';
+import { CommonModule } from '@angular/common';
+import { SettingsLogsComponent } from './settings-logs/settings-logs.component';
 
 @Component({
   selector: 'app-settings',
-  imports: [HeaderComponent, ButtonComponent, FormsModule],
+  imports: [HeaderComponent, ButtonComponent, FormsModule, CommonModule, SettingsLogsComponent],
   templateUrl: './settings.component.html',
   styles: ``,
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -25,14 +27,13 @@ export class SettingsComponent implements OnInit, OnDestroy {
   public scanFailMessage: WritableSignal<string> = signal('');
   public scanComplete: WritableSignal<boolean> = signal(false);
   public scanProgress: WritableSignal<ScanProgress> = signal({ active: false });
+  public activeTab: string = 'scan';
 
   public directories: WritableSignal<string[]> = signal([]);
   private subscription!: Subscription;
   public showBackgrounds: WritableSignal<boolean> = signal(false);
   public showVisualizer: WritableSignal<boolean> = signal(false);
   public visualizerSamples: WritableSignal<number> = signal(1);
-  public logs: WritableSignal<string> = signal('');
-  public showLogs: WritableSignal<boolean> = signal(false);
 
   constructor(
     private configService: ConfigService,
@@ -70,7 +71,6 @@ export class SettingsComponent implements OnInit, OnDestroy {
 
     if (res.ok) {
       this.directories.set(await res.json());
-      this.requestLogs();
     } else {
       this.notificationService.error('Failed to reach server. Check that the URL is correct and that the server is running.');
     }
@@ -91,16 +91,6 @@ export class SettingsComponent implements OnInit, OnDestroy {
       if (response.active) {
         this.scanInProgress.set(true);
       }
-    }
-  }
-
-  private async requestLogs() {
-    let res = await fetcher('config/logs');
-
-    if (res.ok) {
-      this.logs.set(await res.text());
-    } else {
-      this.notificationService.error('Failed to access logs.');
     }
   }
 
