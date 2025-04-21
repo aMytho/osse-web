@@ -2,11 +2,10 @@ import { Component, OnInit, signal, WritableSignal } from '@angular/core';
 import { HeaderComponent } from '../../shared/ui/header/header.component';
 import { fetcher } from '../../shared/util/fetcher';
 import { ToastService } from '../../toast-container/toast.service';
-import { ButtonComponent } from "../../shared/ui/button/button.component";
 
 @Component({
   selector: 'app-settings-logs',
-  imports: [HeaderComponent, ButtonComponent],
+  imports: [HeaderComponent],
   templateUrl: './settings-logs.component.html',
   styles: ``
 })

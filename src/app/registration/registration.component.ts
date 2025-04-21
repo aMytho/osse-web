@@ -1,5 +1,4 @@
 import { Component, OnInit, signal, WritableSignal } from '@angular/core';
-import { ButtonComponent } from '../shared/ui/button/button.component';
 import { HeaderComponent } from '../shared/ui/header/header.component';
 import { ToastService } from '../toast-container/toast.service';
 import { ConfigService } from '../shared/services/config/config.service';
@@ -10,7 +9,7 @@ import { fetcher } from '../shared/util/fetcher';
 
 @Component({
   selector: 'app-registration',
-  imports: [ButtonComponent, HeaderComponent, FormsModule],
+  imports: [HeaderComponent, FormsModule],
   templateUrl: './registration.component.html',
   styles: ``
 })

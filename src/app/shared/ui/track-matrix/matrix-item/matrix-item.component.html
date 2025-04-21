@@ -20,7 +20,7 @@
   <button (click)="toggleSelected()"
     class="flex gap-x-2 items-center rounded-md px-4 py-4 w-full h-full border border-dashed border-emerald-300"
     [ngClass]="{
-      'bg-emerald-600 bg-opacity-45 hover:bg-emerald-700 hover:bg-opacity-45': selected(),
+      'bg-emerald-600/45 hover:bg-emerald-700/45': selected(),
       'hover:bg-slate-700': !selected()
     }">
     <p class="text-lg font-semibold">{{track().title}}</p>

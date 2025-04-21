@@ -1,9 +1,8 @@
-import { Component, Input, numberAttribute, signal, ViewChild, WritableSignal } from '@angular/core';
+import { Component, computed, Input, numberAttribute, signal, ViewChild, WritableSignal } from '@angular/core';
 import { Playlist } from '../../shared/services/playlist/Playlist';
 import { HeaderComponent } from '../../shared/ui/header/header.component';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { ButtonComponent } from '../../shared/ui/button/button.component';
 import { EditPlaylist } from './editPlaylistModel';
 import { FormsModule } from '@angular/forms';
 import { IconComponent } from '../../shared/ui/icon/icon.component';
@@ -19,7 +18,7 @@ import { PlaylistAddTracksComponent } from './playlist-add-tracks/playlist-add-t
 
 @Component({
   selector: 'app-playlist-view',
-  imports: [HeaderComponent, ButtonComponent, IconComponent, CommonModule, FormsModule, TrackMatrixComponent, PlaylistAddTracksComponent],
+  imports: [HeaderComponent, IconComponent, CommonModule, FormsModule, TrackMatrixComponent, PlaylistAddTracksComponent],
   templateUrl: './playlist-view.component.html',
   styles: ``
 })
@@ -36,10 +35,13 @@ export class PlaylistViewComponent {
   close = mdiClose;
 
   public playlist!: Playlist;
-  public showEditMenu: WritableSignal<boolean> = signal(false);
   public showTrackSelectionMenu: WritableSignal<boolean> = signal(false);
   public ready: WritableSignal<boolean> = signal(false);
   public waitingOnRequest: WritableSignal<boolean> = signal(false);
+  public activeTab = signal('view');
+  public showViewTab = computed(() => this.activeTab() == 'view');
+  public showAddTracksTab = computed(() => this.activeTab() == 'addTracks');
+  public showModifyTab = computed(() => this.activeTab() == 'modify');
   public model = new EditPlaylist('');
 
   constructor(
@@ -72,7 +74,8 @@ export class PlaylistViewComponent {
 
     if (req.ok) {
       this.getPlaylist(this.playlist.id);
-      this.showEditMenu.set(false);
+      this.notificationService.info('Playlist renamed successfully.');
+      this.activeTab.set('view');
     }
   }
 
@@ -95,11 +98,6 @@ export class PlaylistViewComponent {
     this.ready.set(true);
   }
 
-  public toggleEditMenu() {
-    this.showEditMenu.set(!this.showEditMenu());
-    this.tracks.setMode(this.showEditMenu() ? TrackMatrixMode.Select : TrackMatrixMode.View);
-  }
-
   public onTrackMatrixModeChange(mode: TrackMatrixMode) {
     this.showTrackSelectionMenu.set(mode == TrackMatrixMode.Select);
   }
@@ -107,7 +105,6 @@ export class PlaylistViewComponent {
   public closePlaylistTrackSelector() {
     this.tracks.setMode(TrackMatrixMode.View);
     this.tracks.clearSelectedTracks();
-    this.showEditMenu.set(false);
   }
 
   public async removeTracksFromPlaylist() {
@@ -127,7 +124,6 @@ export class PlaylistViewComponent {
     if (req.ok) {
       this.playlist.tracks = this.playlist.tracks.filter((t) => !tracks.some((t2) => t2.id == t.id));
       this.notificationService.info('Removed ' + tracks.length + ' tracks from ' + this.playlist.name);
-      this.showEditMenu.set(false);
       this.tracks.clearSelectedTracks();
       this.tracks.setMode(TrackMatrixMode.View);
     }
@@ -138,7 +134,7 @@ export class PlaylistViewComponent {
   addTracksToPlaylist(tracks: Track[]) {
     this.playlist.tracks.push(...tracks);
     this.notificationService.info('Added ' + tracks.length + ' tracks to ' + this.playlist.name);
-    this.showEditMenu.set(false);
+    this.activeTab.set('view');
     this.tracks.clearSelectedTracks();
     this.tracks.setMode(TrackMatrixMode.View);
   }

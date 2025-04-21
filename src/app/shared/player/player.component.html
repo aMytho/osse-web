@@ -4,18 +4,18 @@
       <div class="flex gap-x-4 items-center basis-1/4">
         <a routerLink="/">
           <img
-            class="bg-slate-300 rounded-md backdrop-blur-sm w-14 h-14 inline-block bg-cover drop-shadow-glow max-md:hidden"
+            class="bg-slate-300 rounded-md backdrop-blur-xs w-14 h-14 inline-block bg-cover drop-shadow-glow max-md:hidden"
             [src]="bg()" alt="" onerror="if (this.src !== 'assets/img/osse.webp') this.src = 'assets/img/osse.webp';">
         </a>
         <div class="grow shrink">
           <div id="track-title-container"
             class="w-full relative whitespace-nowrap overflow-hidden font-semibold text-lg">
-            <p class="whitespace-nowrap w-min overflow-hidden overflow-ellipsis" #trackTitleElement aria-live="polite"
+            <p class="whitespace-nowrap w-min overflow-hidden text-ellipsis" #trackTitleElement aria-live="polite"
               role="status" aria-atomic="true">
               {{trackTitle()}}
             </p>
           </div>
-          <p class="italic whitespace-nowrap overflow-hidden overflow-ellipsis">{{artistTitle()}}</p>
+          <p class="italic whitespace-nowrap overflow-hidden text-ellipsis">{{artistTitle()}}</p>
         </div>
       </div>
       <div class="lg:basis-1/4 basis-3/4 max-sm:hidden">
@@ -29,7 +29,7 @@
         <div class="w-full flex flex-col items-center justify-around gap-y-1"
           [ngClass]="{'pointer-events-none': !playerService.isPlaying()}">
           <div #progressContainer id="progressContainer" (mousedown)="onSetPosition($event)"
-            class="relative w-full z-10 h-2 flex items-center bg-slate-700 bg-opacity-40 cursor-pointer">
+            class="relative w-full z-10 h-2 flex items-center bg-slate-700/40 cursor-pointer">
             <div #rendered id="rendered" class="absolute w-full h-2 rounded-l-lg rounded-r-lg"></div>
             <!-- <div id="loaded" class="bg-emerald-300 h-2 rounded-l-lg"></div> -->
             <div #point id="point" class="absolute w-4 h-4 rounded-lg bg-cyan-300 hover:bg-cyan-400 -ml-2 z-20"
@@ -40,13 +40,13 @@
       </div>
     </div>
     <div class="w-min flex items-center">
-      <button (click)="popoverControls.showModal()"
-        class="rounded-full px-2 py-1 hover:bg-emerald-300 hover:bg-opacity-15" title="Toggle advanced controls">
+      <button (click)="popoverControls.showModal()" class="rounded-full px-2 py-1 hover:bg-emerald-300/15"
+        title="Toggle advanced controls">
         <app-icon [icon]="verticalDots"></app-icon>
       </button>
     </div>
   </div>
-  <dialog id="popover" #popoverControls class="mb-20 sm:ml-32 ml-4 px-4 bg-transparent"
+  <dialog id="popover" #popoverControls class="mb-20 sm:ml-32 ml-4 px-4 bg-transparent m-auto w-auto"
     (click)="onBackdropClick($event)">
     <app-popover-controls (onClose)="popoverControls.close()"></app-popover-controls>
   </dialog>

@@ -1,35 +1,28 @@
 <div [ngClass]="{'animate-pulse pointer-events-none': !ready()}">
-  <div class="bg-slate-400 bg-opacity-15 px-4 rounded-lg w-full flex justify-around gap-x-2">
-    <button (click)="delete()"
-      class="font-semibold text-lg text-white hover:text-red-500 p-2 rounded-md bg-transparent group">Delete <app-icon
-        class="group-hover:fill-red-500" [icon]="trash"></app-icon></button>
-    <button (click)="toggleEditMenu()" class="font-semibold text-lg text-white p-2 rounded-md bg-transparent">Edit
-      <app-icon [icon]="pencil"></app-icon></button>
-    <button (click)="addTracksToQueue()"
-      class="font-semibold text-lg text-white p-2 rounded-md bg-transparent">Play<app-icon
-        [icon]="play"></app-icon></button>
-  </div>
-  @if (showEditMenu()) {
-  <form #form="ngForm" (ngSubmit)="edit()" class="mt-2 bg-slate-400 bg-opacity-15 p-4 rounded-lg w-full">
-    <div>
-      <app-header [type]="2" text="Edit Playlist"></app-header>
-    </div>
-    <label for="name" class="text-white font-semibold">Playlist Name: </label>
-    <input [(ngModel)]="model.name" required minlength="1" id="name" name="name"
-      class="mx-2 mb-2 p-2 rounded-md bg-opacity-25"> <br>
-
-    <p class="text-red-500 font-semibold my-2" [hidden]="!(model.name.length == 0)">The playlist name must be at least 1
-      character.</p>
-
-    <app-button type="submit" class="mt-4" text="Save" [disabled]="!form.form.valid || false"></app-button>
-  </form>
-  }
-  <div class="mt-4"></div>
   <app-header [text]="playlist?.name ?? 'Loading'"></app-header>
 
+  <div class="tabs tabs-box bg-slate-400/15 place-content-center" role="tablist">
+    <button class="tab" [ngClass]="{'tab-active': showViewTab()}" (click)="activeTab.set('view')" role="tab"
+      [attr.aria-selected]="showViewTab()" aria-controls="tab-view" id="label-view">
+      View
+    </button>
+    <button class="tab" [ngClass]="{'tab-active': showAddTracksTab()}" (click)="activeTab.set('addTracks')" role="tab"
+      [attr.aria-selected]="showAddTracksTab()" aria-controls="tab-addTracks" id="label-addTracks">
+      Add Tracks
+    </button>
+    <button class="tab" [ngClass]="{'tab-active': showModifyTab()}" (click)="activeTab.set('modify')" role="tab"
+      [attr.aria-selected]="showModifyTab()" aria-controls="tab-modify" id="label-modify">
+      Modify
+    </button>
+  </div>
+
+  <div class="mt-4" aria-hidden="true"></div>
+
   @if (playlist) {
-    <div [ngClass]="{'animate-pulse pointer-events-none': waitingOnRequest()}">
-      <div class="flex justify-around gap-x-2 my-2" [ngClass]="{'pointer-events-none opacity-45 my-1': !showTrackSelectionMenu()}">
+  <div [ngClass]="{'animate-pulse pointer-events-none': waitingOnRequest()}">
+    <div [class.hidden]="!showViewTab()" role="tabpanel" aria-labelledby="label-view" id="tab-view">
+      <div class="flex justify-around gap-x-2 my-2"
+        [ngClass]="{'pointer-events-none opacity-45 my-1': !showTrackSelectionMenu()}">
         <button (click)="closePlaylistTrackSelector()"
           class="font-semibold text-lg text-white hover:text-red-500 p-2 rounded-md bg-transparent group">
           Close
@@ -38,13 +31,42 @@
           class="font-semibold text-lg text-white p-2 rounded-md bg-transparent">Remove from Playlist<app-icon
             [icon]="trash"></app-icon></button>
       </div>
-      <app-track-matrix [tracks]="playlist.tracks" (onClick)="addTrack($event)" (onModeChanged)="onTrackMatrixModeChange($event)"></app-track-matrix>
 
+      <p>Click on a track to add it to the queue. Right click (or hold) a track to enable additional options.
+      </p>
+      <app-track-matrix [tracks]="playlist.tracks" (onClick)="addTrack($event)"
+        (onModeChanged)="onTrackMatrixModeChange($event)"></app-track-matrix>
     </div>
 
-    @if (showEditMenu()) {
-      <div aria-hidden="true" class="mt-8"></div>
-      <app-playlist-add-tracks (addTracks)="addTracksToPlaylist($event)" [playlistID]="playlist.id"></app-playlist-add-tracks>
-    }
+    <div [class.hidden]="!showAddTracksTab()" role="tabpanel" aria-labelledby="label-addTracks" id="tab-addTracks">
+      <app-playlist-add-tracks (addTracks)="addTracksToPlaylist($event)"
+        [playlistID]="playlist.id"></app-playlist-add-tracks>
+    </div>
+
+    <div [class.hidden]="!showModifyTab()" role="tabpanel" class="bg-slate-400/15 rounded-lg p-4"
+      aria-labelledby="label-modify" id="tab-modify">
+      <form #form="ngForm" (ngSubmit)="edit()" class="mt-2">
+        <div>
+          <app-header [type]="2" text="Modify Playlist"></app-header>
+        </div>
+        <div class="flex flex-col gap-2">
+          <label for="name" class="text-white font-semibold">Playlist Name: </label>
+          <input [(ngModel)]="model.name" required minlength="1" id="name" name="name" class="input input-primary">
+        </div>
+
+        <p class="text-red-500 font-semibold my-2" [hidden]="!(model.name.length == 0)">The playlist name must be at
+          least
+          1 character.</p>
+
+        <button class="mt-4 btn btn-primary" [disabled]="!form.form.valid || false">Save</button>
+      </form>
+      <div class="divider">
+        Delete
+      </div>
+      <p class="my-2">Deleting a playlist is a permanant action that cannot be undone.</p>
+      <button class="btn btn-error mt-2" (click)="delete()">Delete Playlist</button>
+    </div>
+
+  </div>
   }
 </div>

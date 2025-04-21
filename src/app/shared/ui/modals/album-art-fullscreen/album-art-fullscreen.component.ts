@@ -1,9 +1,8 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output, signal, Signal, WritableSignal } from '@angular/core';
-import { ButtonComponent } from '../../button/button.component';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output, signal, WritableSignal } from '@angular/core';
 
 @Component({
   selector: 'app-album-art-fullscreen',
-  imports: [ButtonComponent],
+  imports: [],
   templateUrl: './album-art-fullscreen.component.html',
   styles: ``,
   changeDetection: ChangeDetectionStrategy.OnPush

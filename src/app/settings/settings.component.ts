@@ -1,6 +1,5 @@
 import { ChangeDetectionStrategy, Component, ElementRef, OnDestroy, OnInit, ViewChild, WritableSignal, signal } from '@angular/core';
 import { HeaderComponent } from '../shared/ui/header/header.component';
-import { ButtonComponent } from '../shared/ui/button/button.component';
 import { ConfigService } from '../shared/services/config/config.service';
 import { FormsModule } from '@angular/forms';
 import { ToastService } from '../toast-container/toast.service';
@@ -15,7 +14,7 @@ import { SettingsLogsComponent } from './settings-logs/settings-logs.component';
 
 @Component({
   selector: 'app-settings',
-  imports: [HeaderComponent, ButtonComponent, FormsModule, CommonModule, SettingsLogsComponent],
+  imports: [HeaderComponent, FormsModule, CommonModule, SettingsLogsComponent],
   templateUrl: './settings.component.html',
   styles: ``,
   changeDetection: ChangeDetectionStrategy.OnPush
