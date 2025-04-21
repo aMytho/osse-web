@@ -74,11 +74,12 @@ export class PlaylistAddTracksComponent {
 
       // If success, add tracks to above UI
       if (req.ok) {
+        console.log(tracks);
         this.addTracks.emit(tracks);
         this.matrix.clearSelectedTracks();
       }
 
-      this.waitingOnRequest.set(true);
+      this.waitingOnRequest.set(false);
     }
   }
 

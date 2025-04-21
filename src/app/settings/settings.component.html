@@ -20,7 +20,6 @@
       Logs
     </button>
   </div>
-
   @if (activeTab === 'scan') {
   <div class="space-y-4" role="tabpanel" aria-labelledby="label-scan" id="tab-scan">
     <app-header [type]="2" text="Scan Tracks"></app-header>
@@ -77,7 +76,7 @@
   <div class="space-y-4" role="tabpanel" aria-labelledby="label-preferences" id="tab-preferences">
     <app-header [type]="2" text="Preferences"></app-header>
 
-    <p class="my-2 ml-2">Background Images</p>
+    <h3 class="divider">Background Image</h3>
     <p class="my-2 ml-2">
       When a track or album is playing, Osse will dispay the cover art in the background.
       This may cause contrast issues with certain covers. This can be disabled if you so choose.</p>
@@ -93,7 +92,10 @@
         [disabled]="!showBackgroundsForm.form.valid || false">Save</button>
     </form>
 
-    <p class="my-2 ml-2">Visualizer</p>
+    <h3 class="divider">
+      Visualizer
+    </h3>
+
     <p class="my-2 ml-2">
       When a track is playing, Osse will dispay a music visualizer. This is generated in real-time.
       This may cause performance issues with certain devices. This can be disabled if you so choose.</p>

@@ -23,6 +23,10 @@ html {
   @apply bg-inherit;
 }
 
+:root {
+  --tw-text-base-size: 1.05rem;
+}
+
 img,
 svg,
 video,
