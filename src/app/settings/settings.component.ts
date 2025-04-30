@@ -11,10 +11,11 @@ import { BackgroundImageService } from '../shared/ui/background-image.service';
 import { ScanProgress } from './scan-progress.interface';
 import { CommonModule } from '@angular/common';
 import { SettingsLogsComponent } from './settings-logs/settings-logs.component';
+import { SettingsScanComponent } from "./settings-scan/settings-scan.component";
 
 @Component({
   selector: 'app-settings',
-  imports: [HeaderComponent, FormsModule, CommonModule, SettingsLogsComponent],
+  imports: [HeaderComponent, FormsModule, CommonModule, SettingsLogsComponent, SettingsScanComponent],
   templateUrl: './settings.component.html',
   styles: ``,
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -98,48 +99,48 @@ export class SettingsComponent implements OnInit, OnDestroy {
     // Request scan progress, but don't wait for it.
     this.requestScanProgress();
 
-    const scanStarted$ = this.echoService.subscribeToEvent(ScanChannels.ScanStarted, (data) => {
-      this.notificationService.info(`Started scanning ${data.directories} directories.`);
-      this.scanInProgress.set(true);
-      this.scanProgress.set({ active: true, finished_count: 0, total_directories: data.directories })
-      this.scanFailMessage.set('');
-      this.scanComplete.set(false);
-    });
-    const scanProgressed$ = this.echoService.subscribeToEvent(ScanChannels.ScanProgressed, (data) => {
-      console.log(data);
-      // Update progress bar.
-      this.scanProgress.update((v) => ({
-        active: v.active,
-        finished_count: data.scannedDirectories,
-        total_directories: data.totalDirectories,
-        nextDir: data.nextDirectoryToScan || null
-      }));
-      this.notificationService.info(`Scanned dir ${data.directoryName} with ${data.filesScanned} files scanned and ${data.filesSkipped} files skipped.`)
-    });
-    const scanCompleted$ = this.echoService.subscribeToEvent(ScanChannels.ScanCompleted, (data) => {
-      this.notificationService.info(`Finished scanning ${data.directoryCount} directories.`)
-      this.scanInProgress.set(false);
-      this.scanProgress.set({ active: false })
-      this.scanComplete.set(true);
-    });
-
-    const scanError$ = this.echoService.subscribeToEvent(ScanChannels.ScanError, (data) => {
-      this.notificationService.error('Scan Error: ' + data.message);
-      this.scanFailMessage.set(data.message);
-    });
-    const scanFailed$ = this.echoService.subscribeToEvent(ScanChannels.ScanFailed, (data) => {
-      this.notificationService.error('Scan Failed!');
-      this.scanFailMessage.set(data.message);
-      this.scanInProgress.set(false);
-      this.scanProgress.set({ active: false })
-    });
-    const scanCancelled$ = this.echoService.subscribeToEvent(ScanChannels.ScanCancelled, (data) => {
-      this.notificationService.info(`Scan has been cancelled. ${data.directoriesScannedBeforeCancellation} directories were scanned in.`);
-      this.scanInProgress.set(false);
-      this.scanProgress.set({ active: false });
-    });
-
-    this.subscription = merge(scanStarted$, scanProgressed$, scanCompleted$, scanError$, scanFailed$, scanCancelled$).subscribe();
+    // const scanStarted$ = this.echoService.subscribeToEvent(ScanChannels.ScanStarted, (data) => {
+    //   this.notificationService.info(`Started scanning ${data.directories} directories.`);
+    //   this.scanInProgress.set(true);
+    //   this.scanProgress.set({ active: true, finished_count: 0, total_directories: data.directories })
+    //   this.scanFailMessage.set('');
+    //   this.scanComplete.set(false);
+    // });
+    // const scanProgressed$ = this.echoService.subscribeToEvent(ScanChannels.ScanProgressed, (data) => {
+    //   console.log(data);
+    //   // Update progress bar.
+    //   this.scanProgress.update((v) => ({
+    //     active: v.active,
+    //     finished_count: data.scannedDirectories,
+    //     total_directories: data.totalDirectories,
+    //     nextDir: data.nextDirectoryToScan || null
+    //   }));
+    //   this.notificationService.info(`Scanned dir ${data.directoryName} with ${data.filesScanned} files scanned and ${data.filesSkipped} files skipped.`)
+    // });
+    // const scanCompleted$ = this.echoService.subscribeToEvent(ScanChannels.ScanCompleted, (data) => {
+    //   this.notificationService.info(`Finished scanning ${data.directoryCount} directories.`)
+    //   this.scanInProgress.set(false);
+    //   this.scanProgress.set({ active: false })
+    //   this.scanComplete.set(true);
+    // });
+    //
+    // const scanError$ = this.echoService.subscribeToEvent(ScanChannels.ScanError, (data) => {
+    //   this.notificationService.error('Scan Error: ' + data.message);
+    //   this.scanFailMessage.set(data.message);
+    // });
+    // const scanFailed$ = this.echoService.subscribeToEvent(ScanChannels.ScanFailed, (data) => {
+    //   this.notificationService.error('Scan Failed!');
+    //   this.scanFailMessage.set(data.message);
+    //   this.scanInProgress.set(false);
+    //   this.scanProgress.set({ active: false })
+    // });
+    // const scanCancelled$ = this.echoService.subscribeToEvent(ScanChannels.ScanCancelled, (data) => {
+    //   this.notificationService.info(`Scan has been cancelled. ${data.directoriesScannedBeforeCancellation} directories were scanned in.`);
+    //   this.scanInProgress.set(false);
+    //   this.scanProgress.set({ active: false });
+    // });
+    //
+    // this.subscription = merge(scanStarted$, scanProgressed$, scanCompleted$, scanError$, scanFailed$, scanCancelled$).subscribe();
 
     this.showBackgrounds.set(this.configService.get('showCoverBackgrounds'));
     this.showVisualizer.set(this.configService.get('showVisualizer'));

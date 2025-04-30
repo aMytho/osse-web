@@ -22,20 +22,8 @@
   </div>
   @if (activeTab === 'scan') {
   <div class="space-y-4" role="tabpanel" aria-labelledby="label-scan" id="tab-scan">
-    <app-header [type]="2" text="Scan Tracks"></app-header>
-    <p class="my-2 ml-2">You can start a track scan from the web GUI. This will scan the below directories as listed in
-      your config.json file.</p>
-    <ul class="mb-2 ml-4 list-disc list-inside">
-      @for (dir of directories(); track $index) {
-      <li class="my-1">{{dir}}</li>
-      } @empty {
-      <li class="my-1">No directories found...</li>
-      }
-    </ul>
+    <app-settings-scan></app-settings-scan>
     <div class="mt-2">
-      <button class="btn btn-primary" [disabled]="scanInProgress() || waitingForScanConfirmation()"
-        (click)="scan()">Start Scan</button>
-
       @if (waitingForScanConfirmation()) {
       <p class="animate-pulse font-semibold text-xl">Waiting for scan start confirmation...</p>
       }
@@ -111,7 +99,7 @@
         <label for="test">Visualizer Samples</label>
         <input type="range" min="1" max="10" value="1" class="range range-secondary" step="1" #samples
           name="visualizer-samples" id="visualizer-samples" [value]="visualizerSamples()" />
-        <div class="flex justify-between px-2.5 mt-2 text-xs">
+        <div class="flex justify-between px-2.5 mt-2 text-xs" aria-hidden="true">
           <span>|</span>
           <span>|</span>
           <span>|</span>
@@ -123,7 +111,7 @@
           <span>|</span>
           <span>|</span>
         </div>
-        <div class="flex justify-between px-2.5 mt-2 text-xs">
+        <div class="flex justify-between px-2.5 mt-2 text-xs" aria-hidden="true">
           <span>1</span>
           <span>2</span>
           <span>3</span>
