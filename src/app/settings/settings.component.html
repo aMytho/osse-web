@@ -23,42 +23,6 @@
   @if (activeTab === 'scan') {
   <div class="space-y-4" role="tabpanel" aria-labelledby="label-scan" id="tab-scan">
     <app-settings-scan></app-settings-scan>
-    <div class="mt-2">
-      @if (waitingForScanConfirmation()) {
-      <p class="animate-pulse font-semibold text-xl">Waiting for scan start confirmation...</p>
-      }
-
-      @if (scanInProgress()) {
-      <p class="animate-pulse font-semibold text-xl mt-2">Scan in progress. This may take some time...</p>
-
-      <div class="ml-2 mt-2">
-        <label for="scan-progress">Scan Progress: </label>
-        <progress id="scan-progress" [value]="scanProgress().finished_count" [max]="scanProgress().total_directories"
-          class="rounded-xs overflow-hidden accent-emerald-400"></progress>
-
-        @if (scanProgress().nextDir) {
-        <p>Now scanning {{scanProgress().nextDir}}</p>
-        }
-
-        <p>Scanned {{scanProgress().finished_count}} of {{scanProgress().total_directories}} directories.</p>
-
-        <p class="italic">While you can leave this page, we suggest waiting for the scan to finish before viewing your
-          library. Some files may be missing metadata if the scan is incomplete.</p>
-
-        <p class="my-2">You can cancel the scan, but any files scanned will remain in the database.</p>
-
-        <button class="btn btn-warning" (click)="cancelScan()">Cancel Scan</button>
-      </div>
-      }
-
-      @if (scanFailMessage()) {
-      <p class="my-4 font-semibold text-xl text-red-500">{{scanFailMessage()}}</p>
-      }
-
-      @if (scanComplete()) {
-      <p class="my-4 font-semibold text-xl text-green-500">Scan Complete! You can safely leave this page.</p>
-      }
-    </div>
   </div>
   } @else if (activeTab === 'preferences') {
   <div class="space-y-4" role="tabpanel" aria-labelledby="label-preferences" id="tab-preferences">

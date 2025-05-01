@@ -1,12 +1,19 @@
 <app-header [type]="2" text="Scan Tracks"></app-header>
 
-<h3 class="divider">
-  Scan
-</h3>
 @if (fetchingScanStatus()) {
 <p class="animate-pulse">Fetching scan status. Please wait...</p>
 }
 @if (!fetchingScanStatus() && !scanInProgress()) {
+<h3 class="divider">
+  Scan Settings
+</h3>
+
+@if (scanCompleted()) {
+  <div class="alert alert-success rounded-md" role="alert">
+    <p>Scan completed, enjoy!</p>
+  </div>
+}
+
 <p class="my-2 ml-2">You can start a track scan from the web GUI. This will scan the below directories as listed in
   your .env file. Each directory will be scanned recursively. This means each directory should not be the parent of a directory listed here.</p>
 <p class="my-2 ml-2">For example, if I have 20 folders in the "Music" directory, I would simply use the "Music" directory, not 20 separate entries.</p>
@@ -57,7 +64,11 @@
       </progress>
     </div>
     <p class="my-2">Scanned {{amountOfDirectoriesComplete()}} of {{totalAmountOfDirectoriesToScan()}} directories.</p>
-    <button class="btn btn-error">Cancel Scan</button>
+
+    <button class="btn btn-error" [disabled]="waitingForCancelConfirmation()" (click)="cancelScan()">Cancel Scan</button>
+    @if (waitingForCancelConfirmation()) {
+      <p>Scan cancel request has been sent. It will be cancelled before the next directory is scanned.</p>
+    }
   </div>
 
   <p class="my-2">The directories will be scanned in the below order. Depending the the speed of the storage drive and
@@ -92,6 +103,17 @@
   </ul>
 }
 
-<h3 class="divider">
-  History
-</h3>
+@if (scanErrorMessages()) {
+  <h3 class="divider">
+    Scan Errors
+  </h3>
+
+  <p>
+    Below is a list of all errors that have occured during the current scan.
+    In most cases, these simply affect a single file and the rest of the directory will process normally.
+  </p>
+
+  <pre class="p-4 mb-8 mt-2 mx-2 bg-slate-800 overflow-auto">
+  {{scanErrorMessages()}}
+  </pre>
+}

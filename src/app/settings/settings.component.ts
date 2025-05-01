@@ -1,14 +1,10 @@
-import { ChangeDetectionStrategy, Component, ElementRef, OnDestroy, OnInit, ViewChild, WritableSignal, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ElementRef, OnInit, ViewChild, WritableSignal, signal } from '@angular/core';
 import { HeaderComponent } from '../shared/ui/header/header.component';
 import { ConfigService } from '../shared/services/config/config.service';
 import { FormsModule } from '@angular/forms';
 import { ToastService } from '../toast-container/toast.service';
 import { fetcher } from '../shared/util/fetcher';
-import { EchoService } from '../shared/services/echo/echo.service';
-import { merge, Subscription } from 'rxjs';
-import { ScanChannels } from '../shared/services/echo/channels/scan';
 import { BackgroundImageService } from '../shared/ui/background-image.service';
-import { ScanProgress } from './scan-progress.interface';
 import { CommonModule } from '@angular/common';
 import { SettingsLogsComponent } from './settings-logs/settings-logs.component';
 import { SettingsScanComponent } from "./settings-scan/settings-scan.component";
@@ -20,17 +16,11 @@ import { SettingsScanComponent } from "./settings-scan/settings-scan.component";
   styles: ``,
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class SettingsComponent implements OnInit, OnDestroy {
+export class SettingsComponent implements OnInit {
   @ViewChild('samples') sampleElement!: ElementRef<HTMLInputElement>;
-  public scanInProgress: WritableSignal<boolean> = signal(false);
-  public waitingForScanConfirmation: WritableSignal<boolean> = signal(false);
-  public scanFailMessage: WritableSignal<string> = signal('');
-  public scanComplete: WritableSignal<boolean> = signal(false);
-  public scanProgress: WritableSignal<ScanProgress> = signal({ active: false });
   public activeTab: string = 'scan';
 
   public directories: WritableSignal<string[]> = signal([]);
-  private subscription!: Subscription;
   public showBackgrounds: WritableSignal<boolean> = signal(false);
   public showVisualizer: WritableSignal<boolean> = signal(false);
   public visualizerSamples: WritableSignal<number> = signal(1);
@@ -38,17 +28,9 @@ export class SettingsComponent implements OnInit, OnDestroy {
   constructor(
     private configService: ConfigService,
     private notificationService: ToastService,
-    private echoService: EchoService,
     private backgroundImageService: BackgroundImageService
   ) { }
 
-  public scan() {
-    this.waitingForScanConfirmation.set(true);
-
-    fetcher('scan', {
-      method: 'POST'
-    }).finally(() => this.waitingForScanConfirmation.set(false));
-  }
 
   public saveBackgroundCoverPreference() {
     this.configService.save('showCoverBackgrounds', this.showBackgrounds());
@@ -76,78 +58,11 @@ export class SettingsComponent implements OnInit, OnDestroy {
     }
   }
 
-  public async cancelScan() {
-    fetcher('scan/cancel', {
-      method: 'POST'
-    });
-  }
-
-  private async requestScanProgress() {
-    let res = await fetcher('scan');
-    if (res.ok) {
-      let response: ScanProgress = await res.json();
-      // Set the progress. If active, show the progress bar.
-      this.scanProgress.set(response);
-      if (response.active) {
-        this.scanInProgress.set(true);
-      }
-    }
-  }
-
   async ngOnInit(): Promise<void> {
     await this.requestSettings();
-    // Request scan progress, but don't wait for it.
-    this.requestScanProgress();
-
-    // const scanStarted$ = this.echoService.subscribeToEvent(ScanChannels.ScanStarted, (data) => {
-    //   this.notificationService.info(`Started scanning ${data.directories} directories.`);
-    //   this.scanInProgress.set(true);
-    //   this.scanProgress.set({ active: true, finished_count: 0, total_directories: data.directories })
-    //   this.scanFailMessage.set('');
-    //   this.scanComplete.set(false);
-    // });
-    // const scanProgressed$ = this.echoService.subscribeToEvent(ScanChannels.ScanProgressed, (data) => {
-    //   console.log(data);
-    //   // Update progress bar.
-    //   this.scanProgress.update((v) => ({
-    //     active: v.active,
-    //     finished_count: data.scannedDirectories,
-    //     total_directories: data.totalDirectories,
-    //     nextDir: data.nextDirectoryToScan || null
-    //   }));
-    //   this.notificationService.info(`Scanned dir ${data.directoryName} with ${data.filesScanned} files scanned and ${data.filesSkipped} files skipped.`)
-    // });
-    // const scanCompleted$ = this.echoService.subscribeToEvent(ScanChannels.ScanCompleted, (data) => {
-    //   this.notificationService.info(`Finished scanning ${data.directoryCount} directories.`)
-    //   this.scanInProgress.set(false);
-    //   this.scanProgress.set({ active: false })
-    //   this.scanComplete.set(true);
-    // });
-    //
-    // const scanError$ = this.echoService.subscribeToEvent(ScanChannels.ScanError, (data) => {
-    //   this.notificationService.error('Scan Error: ' + data.message);
-    //   this.scanFailMessage.set(data.message);
-    // });
-    // const scanFailed$ = this.echoService.subscribeToEvent(ScanChannels.ScanFailed, (data) => {
-    //   this.notificationService.error('Scan Failed!');
-    //   this.scanFailMessage.set(data.message);
-    //   this.scanInProgress.set(false);
-    //   this.scanProgress.set({ active: false })
-    // });
-    // const scanCancelled$ = this.echoService.subscribeToEvent(ScanChannels.ScanCancelled, (data) => {
-    //   this.notificationService.info(`Scan has been cancelled. ${data.directoriesScannedBeforeCancellation} directories were scanned in.`);
-    //   this.scanInProgress.set(false);
-    //   this.scanProgress.set({ active: false });
-    // });
-    //
-    // this.subscription = merge(scanStarted$, scanProgressed$, scanCompleted$, scanError$, scanFailed$, scanCancelled$).subscribe();
 
     this.showBackgrounds.set(this.configService.get('showCoverBackgrounds'));
     this.showVisualizer.set(this.configService.get('showVisualizer'));
     this.visualizerSamples.set(this.configService.get('visualizerSamples'));
-  }
-
-  ngOnDestroy(): void {
-    this.subscription.unsubscribe();
   }
 }

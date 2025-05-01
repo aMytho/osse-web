@@ -1,6 +1,6 @@
 import { Component, computed, OnDestroy, OnInit, signal } from '@angular/core';
 import { HeaderComponent } from '../../shared/ui/header/header.component';
-import { ScanChannels, ScanDirectory, ScanDirectoryStatus, ScanProgressedResult } from '../../shared/services/echo/channels/scan';
+import { ScanChannels, ScanDirectory, ScanDirectoryStatus } from '../../shared/services/echo/channels/scan';
 import { merge, Subscription } from 'rxjs';
 import { EchoService } from '../../shared/services/echo/echo.service';
 import { ToastService } from '../../toast-container/toast.service';
@@ -22,6 +22,11 @@ export class SettingsScanComponent implements OnInit, OnDestroy {
 
   public scanInProgress = signal(false);
   public scanProgress = signal<ScanDirectory[]>([]);
+
+  public waitingForCancelConfirmation = signal(false);
+
+  public scanErrorMessages = signal("");
+  public scanCompleted = signal(false);
 
   public freshScan = false;
   /**
@@ -69,6 +74,14 @@ export class SettingsScanComponent implements OnInit, OnDestroy {
     }
   }
 
+  public async cancelScan() {
+    this.waitingForCancelConfirmation.set(true);
+
+    fetcher('scan/cancel', {
+      method: 'POST'
+    });
+  }
+
   public dirIsScanning(status: ScanDirectoryStatus) {
     return status == ScanDirectoryStatus.Scanning;
   }
@@ -101,7 +114,6 @@ export class SettingsScanComponent implements OnInit, OnDestroy {
       // Set the directories.
       let resp = await req.json();
       this.rootDirectories.set(resp.directories);
-      console.log(resp);
 
       if (resp.active) {
         this.scanInProgress.set(true);
@@ -121,14 +133,13 @@ export class SettingsScanComponent implements OnInit, OnDestroy {
     this.requestScanProgress();
 
     const scanStarted$ = this.echoService.subscribeToEvent(ScanChannels.ScanStarted, (data) => {
-      console.log(data);
       this.notificationService.info(`Started scanning ${data.directories.length} directories.`);
       this.waitingForScanConfirmation.set(false);
       this.scanProgress.set(data.directories);
       this.scanInProgress.set(true);
+      this.scanCompleted.set(false);
     });
     const scanProgressed$ = this.echoService.subscribeToEvent(ScanChannels.ScanProgressed, (data) => {
-      console.log(data);
       this.scanProgress.update((scanProgress) => {
         // On progress update, set the new progress. There should always be a match
         let indexOfProgressDir = -1;
@@ -154,25 +165,25 @@ export class SettingsScanComponent implements OnInit, OnDestroy {
     });
     const scanCompleted$ = this.echoService.subscribeToEvent(ScanChannels.ScanCompleted, (data) => {
       this.notificationService.info(`Finished scanning ${data.directoryCount} directories.`)
-      // this.scanInProgress.set(false);
-      // this.scanProgress.set({ active: false })
-      // this.scanComplete.set(true);
+      this.scanInProgress.set(false);
+      this.scanProgress.set([]);
+      this.scanCompleted.set(true);
     });
 
     const scanError$ = this.echoService.subscribeToEvent(ScanChannels.ScanError, (data) => {
-      this.notificationService.error('Scan Error: ' + data.message);
-      // this.scanFailMessage.set(data.message);
+      this.notificationService.error('A scan error has occured. Continuing...');
+      this.scanErrorMessages.update((e) => e + data.message + '\n');
     });
     const scanFailed$ = this.echoService.subscribeToEvent(ScanChannels.ScanFailed, (data) => {
-      this.notificationService.error('Scan Failed!');
-      // this.scanFailMessage.set(data.message);
+      this.notificationService.error('Scan Failed! The scan will be cancelled at the current directory.');
+      this.scanErrorMessages.update((e) => e + data.message + '\n');
       this.scanInProgress.set(false);
-      // this.scanProgress.set({ active: false })
     });
     const scanCancelled$ = this.echoService.subscribeToEvent(ScanChannels.ScanCancelled, (data) => {
       this.notificationService.info(`Scan has been cancelled. ${data.directoriesScannedBeforeCancellation} directories were scanned in.`);
       this.scanInProgress.set(false);
-      // this.scanProgress.set({ active: false });
+      this.waitingForCancelConfirmation.set(false);
+      this.scanProgress.set([]);
     });
 
     this.subscription = merge(scanStarted$, scanProgressed$, scanCompleted$, scanError$, scanFailed$, scanCancelled$).subscribe();

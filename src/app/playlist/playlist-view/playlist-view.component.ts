@@ -138,5 +138,11 @@ export class PlaylistViewComponent {
     this.tracks.clearSelectedTracks();
     this.tracks.setMode(TrackMatrixMode.View);
   }
+
+  playAll() {
+    let tracks = this.tracks.tracks();
+    tracks.forEach((t) => this.trackService.addTrack(t));
+    this.notificationService.info('Added ' + tracks.length + ' tracks.');
+  }
 }
 
