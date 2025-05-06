@@ -103,6 +103,18 @@
   </ul>
 }
 
+@if (scanLogs()) {
+  <h3 class="divider">
+    Scan Log
+  </h3>
+
+  <p>
+    Below is a log of all directory events in the current scan.
+  </p>
+
+  <pre role="status" class="p-4 mb-8 mt-2 mx-2 bg-slate-800 overflow-auto">{{scanLogs()}}</pre>
+}
+
 @if (scanErrorMessages()) {
   <h3 class="divider">
     Scan Errors
@@ -113,7 +125,5 @@
     In most cases, these simply affect a single file and the rest of the directory will process normally.
   </p>
 
-  <pre class="p-4 mb-8 mt-2 mx-2 bg-slate-800 overflow-auto">
-  {{scanErrorMessages()}}
-  </pre>
+  <pre role="status" class="p-4 mb-8 mt-2 mx-2 bg-slate-800 overflow-auto">{{scanErrorMessages()}}</pre>
 }

@@ -27,6 +27,7 @@ export class SettingsScanComponent implements OnInit, OnDestroy {
 
   public scanErrorMessages = signal("");
   public scanCompleted = signal(false);
+  public scanLogs = signal('');
 
   public freshScan = false;
   /**
@@ -113,11 +114,23 @@ export class SettingsScanComponent implements OnInit, OnDestroy {
     if (req.ok) {
       // Set the directories.
       let resp = await req.json();
-      this.rootDirectories.set(resp.directories);
+      this.rootDirectories.set(resp.rootDirectories);
 
       if (resp.active) {
         this.scanInProgress.set(true);
         this.scanProgress.set(resp.directories);
+
+        let messages = [];
+        // Generate the scan log.
+        for (const dir of resp.directories) {
+          if (dir.status != 'scanned') {
+            messages.push(`${dir.path} has a status of ${dir.status}`);
+          } else {
+            messages.push(`Scanned ${dir.files_scanned} files and skipped ${dir.files_skipped} in ${dir.path} - Status ${dir.status}`);
+          }
+        }
+
+        this.scanLogs.set(messages.join('\n'));
       }
 
       // If a scan is active, set that status.
@@ -138,6 +151,7 @@ export class SettingsScanComponent implements OnInit, OnDestroy {
       this.scanProgress.set(data.directories);
       this.scanInProgress.set(true);
       this.scanCompleted.set(false);
+      this.scanLogs.set('Scan Started...');
     });
     const scanProgressed$ = this.echoService.subscribeToEvent(ScanChannels.ScanProgressed, (data) => {
       this.scanProgress.update((scanProgress) => {
@@ -161,13 +175,15 @@ export class SettingsScanComponent implements OnInit, OnDestroy {
           return dir;
         });
       })
-      this.notificationService.info(`Scanned dir ${data.directoryName} with ${data.filesScanned} files scanned and ${data.filesSkipped} files skipped.`)
+
+      this.scanLogs.update((l) => l + `\nScanned dir ${data.directoryName} with ${data.filesScanned} files scanned and ${data.filesSkipped} files skipped.`);
     });
     const scanCompleted$ = this.echoService.subscribeToEvent(ScanChannels.ScanCompleted, (data) => {
       this.notificationService.info(`Finished scanning ${data.directoryCount} directories.`)
       this.scanInProgress.set(false);
       this.scanProgress.set([]);
       this.scanCompleted.set(true);
+      this.scanLogs.update((l) => l + '\nScan Complete...');
     });
 
     const scanError$ = this.echoService.subscribeToEvent(ScanChannels.ScanError, (data) => {
@@ -178,12 +194,14 @@ export class SettingsScanComponent implements OnInit, OnDestroy {
       this.notificationService.error('Scan Failed! The scan will be cancelled at the current directory.');
       this.scanErrorMessages.update((e) => e + data.message + '\n');
       this.scanInProgress.set(false);
+      this.scanLogs.update((l) => l + '\nScan Failed...');
     });
     const scanCancelled$ = this.echoService.subscribeToEvent(ScanChannels.ScanCancelled, (data) => {
       this.notificationService.info(`Scan has been cancelled. ${data.directoriesScannedBeforeCancellation} directories were scanned in.`);
       this.scanInProgress.set(false);
       this.waitingForCancelConfirmation.set(false);
       this.scanProgress.set([]);
+      this.scanLogs.update((l) => l + '\nScan Cancelled...');
     });
 
     this.subscription = merge(scanStarted$, scanProgressed$, scanCompleted$, scanError$, scanFailed$, scanCancelled$).subscribe();
