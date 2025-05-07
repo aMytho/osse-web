@@ -13,4 +13,13 @@ export interface ScanDirectory {
   files_skipped: number;
   status: string;
   path: string;
+  errors: ScanError[];
+  show: boolean; // This doesn't exist, but we add it client side.
+}
+
+export interface ScanError {
+  id: number;
+  scan_directory_id: number;
+  error: string;
+  created_at: string;
 }

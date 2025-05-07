@@ -11,7 +11,17 @@
     <p>Scan {{job.id}}: {{job.started_at}} - {{job.finished_at}} with {{job.directories.length}} directories scanned.</p>
     @for (dir of job.directories; track $index) {
     <p>{{dir.path}} - {{dir.files_scanned}} files scanned | {{dir.files_skipped}} files skipped. Status: {{dir.status}}</p>
+      @if (dir.errors.length > 0) {
+        <button class="btn btn-secondary" (click)="dir.show = true">Show Errors</button>
+        @if (dir.show) {
+        @for (err of dir.errors; track $index) {
+          <pre class="p-4 mb-8 mt-2 mx-2 bg-slate-800 overflow-auto">{{err.error}}</pre>
+        }
+        }
+      }
     }
   </div>
+  } @empty {
+  <p>No scans were found...</p>
   }
 </div>
