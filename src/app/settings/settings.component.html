@@ -10,6 +10,11 @@
       Scan
     </button>
     <button class="px-4 py-2 text-white transition-all duration-200 font-semibold"
+      [ngClass]="{'bg-emerald-500/30': activeTab === 'scan-history'}" (click)="activeTab = 'scan-history'" role="tab"
+      [attr.aria-selected]="activeTab == 'scan-history'" aria-controls="tab-scan-history" id="label-scan-history">
+      Scan History
+    </button>
+    <button class="px-4 py-2 text-white transition-all duration-200 font-semibold"
       [ngClass]="{'bg-emerald-500/30': activeTab === 'preferences'}" (click)="activeTab = 'preferences'" role="tab"
       [attr.aria-selected]="activeTab == 'preferences'" aria-controls="tab-preferences" id="label-preferences">
       Preferences
@@ -24,6 +29,8 @@
   <div class="space-y-4" role="tabpanel" aria-labelledby="label-scan" id="tab-scan">
     <app-settings-scan></app-settings-scan>
   </div>
+  } @else if (activeTab === 'scan-history') {
+    <app-settings-scan-history></app-settings-scan-history>
   } @else if (activeTab === 'preferences') {
   <div class="space-y-4" role="tabpanel" aria-labelledby="label-preferences" id="tab-preferences">
     <app-header [type]="2" text="Preferences"></app-header>

@@ -1,0 +1,17 @@
+<app-header [type]="2" text="Scan History"></app-header>
+
+@if (isLoading()) {
+<p class="animate-pulse">Fetching history. Please wait...</p>
+}
+
+<div class="flex flex-col gap-4">
+  <p>Scans are listed with the most recent first. Scans are cleared on a weekly basis.</p>
+  @for (job of jobs(); track $index) {
+  <div class="p-2 bg-slate-600">
+    <p>Scan {{job.id}}: {{job.started_at}} - {{job.finished_at}} with {{job.directories.length}} directories scanned.</p>
+    @for (dir of job.directories; track $index) {
+    <p>{{dir.path}} - {{dir.files_scanned}} files scanned | {{dir.files_skipped}} files skipped. Status: {{dir.status}}</p>
+    }
+  </div>
+  }
+</div>

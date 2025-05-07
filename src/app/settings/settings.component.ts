@@ -8,10 +8,11 @@ import { BackgroundImageService } from '../shared/ui/background-image.service';
 import { CommonModule } from '@angular/common';
 import { SettingsLogsComponent } from './settings-logs/settings-logs.component';
 import { SettingsScanComponent } from "./settings-scan/settings-scan.component";
+import { SettingsScanHistoryComponent } from './settings-scan-history/settings-scan-history.component';
 
 @Component({
   selector: 'app-settings',
-  imports: [HeaderComponent, FormsModule, CommonModule, SettingsLogsComponent, SettingsScanComponent],
+  imports: [HeaderComponent, FormsModule, CommonModule, SettingsLogsComponent, SettingsScanComponent, SettingsScanHistoryComponent],
   templateUrl: './settings.component.html',
   styles: ``,
   changeDetection: ChangeDetectionStrategy.OnPush
