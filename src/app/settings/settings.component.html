@@ -10,6 +10,11 @@
       Scan
     </button>
     <button class="px-4 py-2 text-white transition-all duration-200 font-semibold"
+      [ngClass]="{'bg-emerald-500/30': activeTab === 'scan-history'}" (click)="activeTab = 'scan-history'" role="tab"
+      [attr.aria-selected]="activeTab == 'scan-history'" aria-controls="tab-scan-history" id="label-scan-history">
+      Scan History
+    </button>
+    <button class="px-4 py-2 text-white transition-all duration-200 font-semibold"
       [ngClass]="{'bg-emerald-500/30': activeTab === 'preferences'}" (click)="activeTab = 'preferences'" role="tab"
       [attr.aria-selected]="activeTab == 'preferences'" aria-controls="tab-preferences" id="label-preferences">
       Preferences
@@ -22,56 +27,10 @@
   </div>
   @if (activeTab === 'scan') {
   <div class="space-y-4" role="tabpanel" aria-labelledby="label-scan" id="tab-scan">
-    <app-header [type]="2" text="Scan Tracks"></app-header>
-    <p class="my-2 ml-2">You can start a track scan from the web GUI. This will scan the below directories as listed in
-      your config.json file.</p>
-    <ul class="mb-2 ml-4 list-disc list-inside">
-      @for (dir of directories(); track $index) {
-      <li class="my-1">{{dir}}</li>
-      } @empty {
-      <li class="my-1">No directories found...</li>
-      }
-    </ul>
-    <div class="mt-2">
-      <button class="btn btn-primary" [disabled]="scanInProgress() || waitingForScanConfirmation()"
-        (click)="scan()">Start Scan</button>
-
-      @if (waitingForScanConfirmation()) {
-      <p class="animate-pulse font-semibold text-xl">Waiting for scan start confirmation...</p>
-      }
-
-      @if (scanInProgress()) {
-      <p class="animate-pulse font-semibold text-xl mt-2">Scan in progress. This may take some time...</p>
-
-      <div class="ml-2 mt-2">
-        <label for="scan-progress">Scan Progress: </label>
-        <progress id="scan-progress" [value]="scanProgress().finished_count" [max]="scanProgress().total_directories"
-          class="rounded-xs overflow-hidden accent-emerald-400"></progress>
-
-        @if (scanProgress().nextDir) {
-        <p>Now scanning {{scanProgress().nextDir}}</p>
-        }
-
-        <p>Scanned {{scanProgress().finished_count}} of {{scanProgress().total_directories}} directories.</p>
-
-        <p class="italic">While you can leave this page, we suggest waiting for the scan to finish before viewing your
-          library. Some files may be missing metadata if the scan is incomplete.</p>
-
-        <p class="my-2">You can cancel the scan, but any files scanned will remain in the database.</p>
-
-        <button class="btn btn-warning" (click)="cancelScan()">Cancel Scan</button>
-      </div>
-      }
-
-      @if (scanFailMessage()) {
-      <p class="my-4 font-semibold text-xl text-red-500">{{scanFailMessage()}}</p>
-      }
-
-      @if (scanComplete()) {
-      <p class="my-4 font-semibold text-xl text-green-500">Scan Complete! You can safely leave this page.</p>
-      }
-    </div>
+    <app-settings-scan></app-settings-scan>
   </div>
+  } @else if (activeTab === 'scan-history') {
+    <app-settings-scan-history></app-settings-scan-history>
   } @else if (activeTab === 'preferences') {
   <div class="space-y-4" role="tabpanel" aria-labelledby="label-preferences" id="tab-preferences">
     <app-header [type]="2" text="Preferences"></app-header>
@@ -111,7 +70,7 @@
         <label for="test">Visualizer Samples</label>
         <input type="range" min="1" max="10" value="1" class="range range-secondary" step="1" #samples
           name="visualizer-samples" id="visualizer-samples" [value]="visualizerSamples()" />
-        <div class="flex justify-between px-2.5 mt-2 text-xs">
+        <div class="flex justify-between px-2.5 mt-2 text-xs" aria-hidden="true">
           <span>|</span>
           <span>|</span>
           <span>|</span>
@@ -123,7 +82,7 @@
           <span>|</span>
           <span>|</span>
         </div>
-        <div class="flex justify-between px-2.5 mt-2 text-xs">
+        <div class="flex justify-between px-2.5 mt-2 text-xs" aria-hidden="true">
           <span>1</span>
           <span>2</span>
           <span>3</span>

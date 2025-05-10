@@ -21,15 +21,19 @@
   @if (playlist) {
   <div [ngClass]="{'animate-pulse pointer-events-none': waitingOnRequest()}">
     <div [class.hidden]="!showViewTab()" role="tabpanel" aria-labelledby="label-view" id="tab-view">
-      <div class="flex justify-around gap-x-2 my-2"
-        [ngClass]="{'pointer-events-none opacity-45 my-1': !showTrackSelectionMenu()}">
+      <div class="flex justify-around gap-x-2 my-2">
         <button (click)="closePlaylistTrackSelector()"
+          [ngClass]="{'pointer-events-none opacity-45 my-1': !showTrackSelectionMenu()}"
           class="font-semibold text-lg text-white hover:text-red-500 p-2 rounded-md bg-transparent group">
           Close
           <app-icon [icon]="close"></app-icon></button>
         <button (click)="removeTracksFromPlaylist()"
-          class="font-semibold text-lg text-white p-2 rounded-md bg-transparent">Remove from Playlist<app-icon
-            [icon]="trash"></app-icon></button>
+          [ngClass]="{'pointer-events-none opacity-45 my-1': !showTrackSelectionMenu()}"
+          class="font-semibold text-lg text-white p-2 rounded-md bg-transparent">Remove from Playlist
+          <app-icon [icon]="trash"></app-icon></button>
+        <button (click)="playAll()"
+          class="font-semibold text-lg text-white p-2 rounded-md bg-transparent">Play All
+          <app-icon [icon]="play"></app-icon></button>
       </div>
 
       <p>Click on a track to add it to the queue. Right click (or hold) a track to enable additional options.
@@ -55,8 +59,7 @@
         </div>
 
         <p class="text-red-500 font-semibold my-2" [hidden]="!(model.name.length == 0)">The playlist name must be at
-          least
-          1 character.</p>
+          least 1 character.</p>
 
         <button class="mt-4 btn btn-primary" [disabled]="!form.form.valid || false">Save</button>
       </form>

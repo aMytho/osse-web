@@ -11,16 +11,31 @@ export interface ScanEvents {
 }
 
 export interface ScanStartedResult {
-  directories: number
+  directories: ScanDirectory[];
+}
+
+export interface ScanDirectory {
+  id: number;
+  scanJobID: number;
+  path: string;
+  status: ScanDirectoryStatus;
+  filesScanned: number;
+  filesSkipped: number;
+}
+
+export enum ScanDirectoryStatus {
+  Pending = 'pending',
+  Scanning = 'scanning',
+  Scanned = 'scanned',
+  Errored = 'errored',
 }
 
 export interface ScanProgressedResult {
-  filesScanned: number;
+  directoryID: number;
   directoryName: string;
+  filesScanned: number;
   filesSkipped: number;
-  totalDirectories: number;
-  scannedDirectories: number;
-  nextDirectoryToScan: string; // Will be empty string if last dir.
+  status: ScanDirectoryStatus;
 }
 
 export interface ScanCompletedResult {
