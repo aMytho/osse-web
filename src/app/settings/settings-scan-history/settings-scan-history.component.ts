@@ -21,7 +21,19 @@ export class SettingsScanHistoryComponent implements OnInit {
     if (req.ok) {
       // Set the directories.
       let resp: ScanJob[] = await req.json();
-      this.jobs.set(resp);
+      this.jobs.set(resp.map((j) => {
+        let start = new Date(j.started_at);
+        j.started_at = start.toLocaleString('en-US', { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', hour12: true });
+
+        if (!j.finished_at) {
+          j.finished_at = 'now...'
+        } else {
+          let end = new Date(j.finished_at);
+          j.finished_at = end.toLocaleString('en-US', { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', hour12: true });
+        }
+
+        return j;
+      }));
 
       // If a scan is active, set that status.
     } else {

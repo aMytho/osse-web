@@ -38,12 +38,6 @@ object {
   vertical-align: text-bottom !important;
 }
 
-p,
-a {
-  font-size: 1rem;
-  line-height: 1.5rem;
-}
-
 .loading-matrix {
   @apply animate-pulse pointer-events-none;
 }
