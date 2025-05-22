@@ -95,11 +95,24 @@ export class PlayerService {
 
     this.trackUpdated.emit(new TrackUpdate(this.track, this.buildTrackInfo()));
     document.title = "Osse - " + this.track.title;
+  }
+
+  public async setTrackAndPlay(track: Track) {
+    this.setTrack(track);
     await this.play();
 
     // We do this last. It may slow down the player if it is first since it makes a network request.
     // Browsers are async, but our server isn't (yet).
-    this.backgroundImageService.setBG(this.track.coverURL);
+    this.setBackgroundImage();
+  }
+
+  public setTrackAndBackgroundImage(track: Track) {
+    this.setTrack(track);
+    this.setBackgroundImage();
+  }
+
+  private setBackgroundImage() {
+    this.backgroundImageService.setBG(this.track!.coverURL);
   }
 
   public play(time: number = this.audioPlayer.currentTime) {

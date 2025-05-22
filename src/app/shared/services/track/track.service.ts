@@ -2,6 +2,7 @@ import { Injectable, signal, WritableSignal } from '@angular/core';
 import { Track } from './track';
 import { PlayerService } from '../../player/player.service';
 import { Repeat } from './repeat.enum';
+import { QueueSyncService } from './queue-sync.service';
 
 /**
  * This service stores all queued tracks
@@ -28,7 +29,7 @@ export class TrackService {
   public consume: WritableSignal<boolean> = signal(false);
   public repeat: WritableSignal<Repeat> = signal(Repeat.None);
 
-  constructor(private playerService: PlayerService) {
+  constructor(private playerService: PlayerService, private queueSyncService: QueueSyncService) {
     // When playback ends, wait 250 ms.
     // We need the player to clear the UI first. It subscribes to the same event.
     // Then, progress to the next track (if any)
@@ -67,6 +68,7 @@ export class TrackService {
     }
 
     this.tracks.push(track);
+    this.queueSyncService.syncQueue(this.tracks.map((t) => t.id));
     // If this is the first track added, start playback
     if (this.tracks.length - 1 == 0) {
       this.moveToTrack(0);
@@ -81,6 +83,8 @@ export class TrackService {
     while (this.tracks.length != 0) {
       this.tracks.pop();
     }
+
+    this.queueSyncService.syncQueue([]);
 
     this.index = 0;
     this.playerService.pause();
@@ -103,6 +107,8 @@ export class TrackService {
     // If we ever allow this method to be called outside of the homepage, we may need to clear any existing tracks first.
     this.clearedTracks.forEach((t) => this.addTrack(t));
     this.clearedTracks = [];
+
+    this.queueSyncService.syncQueue(this.tracks.map((t) => t.id));
   }
 
   public moveToNextTrack() {
@@ -112,7 +118,7 @@ export class TrackService {
     }
 
     if (this.tracks[this.index]) {
-      this.playerService.setTrack(this.activeTrack);
+      this.playerService.setTrackAndPlay(this.activeTrack);
       // If user goes to next track, clear repeat tracker.
       this.hasRepeatedCurrentTrack = false;
     }
@@ -125,7 +131,7 @@ export class TrackService {
     }
 
     if (this.tracks[this.index]) {
-      this.playerService.setTrack(this.activeTrack);
+      this.playerService.setTrackAndPlay(this.activeTrack);
       // If user goes to last track, clear repeat tracker.
       this.hasRepeatedCurrentTrack = false;
     }
@@ -134,7 +140,7 @@ export class TrackService {
   public moveToTrack(index: number) {
     this.index = index;
 
-    this.playerService.setTrack(this.activeTrack);
+    this.playerService.setTrackAndPlay(this.activeTrack);
   }
 
   public removeTrack(index: number) {
@@ -165,6 +171,8 @@ export class TrackService {
       this.tracks.splice(index, 1);
       this.index -= 1;
     }
+
+    this.queueSyncService.syncQueue(this.tracks.map((t) => t.id));
   }
 
   /**
@@ -177,9 +185,41 @@ export class TrackService {
       .map(value => ({ value, sort: Math.random() }))
       .sort((a, b) => a.sort - b.sort)
       .map(({ value }) => value);
+
     if (currentTrack) {
       this.index = this.tracks.findIndex((t) => t.id == currentTrack.id);
     }
+
+    this.queueSyncService.syncQueue(this.tracks.map((t) => t.id));
+  }
+
+  /**
+  * Sets the queue to whatever the user has server side.
+  */
+  public fetchQueueFromServer(play = false) {
+    this.queueSyncService.getQueueFromServer()
+      .then((result) => {
+        result.queue.forEach(t => this.tracks.push(t));
+
+        // Set the active track
+        if (this.tracks.length > 0) {
+          // If the session has a track, use it.
+          if (result.trackId != null) {
+            if (play) {
+              this.playerService.setTrackAndPlay(result.queue.find((t) => t.id == result.trackId)!);
+            } else {
+              this.playerService.setTrackAndBackgroundImage(result.queue.find((t) => t.id == result.trackId)!);
+            }
+          } else {
+            // Else, use first track.
+            if (play) {
+              this.playerService.setTrackAndPlay(result.queue[0]);
+            } else {
+              this.playerService.setTrackAndBackgroundImage(result.queue[0]);
+            }
+          }
+        }
+      });
   }
 
   private playTrackBasedOnRepeatValue(): boolean {
@@ -191,12 +231,12 @@ export class TrackService {
           // Move to the next track.
           this.moveToNextTrack();
         } else {
-          this.playerService.setTrack(this.activeTrack);
+          this.playerService.setTrackAndPlay(this.activeTrack);
           this.hasRepeatedCurrentTrack = true;
         }
         return true;
       case Repeat.Loop:
-        this.playerService.setTrack(this.activeTrack);
+        this.playerService.setTrackAndPlay(this.activeTrack);
         return true;
     }
   }

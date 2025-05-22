@@ -25,6 +25,7 @@ export class SettingsComponent implements OnInit {
   public showBackgrounds: WritableSignal<boolean> = signal(false);
   public showVisualizer: WritableSignal<boolean> = signal(false);
   public visualizerSamples: WritableSignal<number> = signal(1);
+  public enableQueue: WritableSignal<boolean> = signal(true);
 
   constructor(
     private configService: ConfigService,
@@ -49,11 +50,17 @@ export class SettingsComponent implements OnInit {
     this.notificationService.info('Saved Preferences!');
   }
 
+  public saveQueuePreferences() {
+
+  }
+
   public async requestSettings() {
-    let res = await fetcher('config/directories');
+    let res = await fetcher('config');
 
     if (res.ok) {
-      this.directories.set(await res.json());
+      let response = await res.json();
+      this.directories.set(response.directories);
+      this.enableQueue.set(response.queueEnabled);
     } else {
       this.notificationService.error('Failed to reach server. Check that the URL is correct and that the server is running.');
     }

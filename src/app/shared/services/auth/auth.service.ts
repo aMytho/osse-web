@@ -80,6 +80,9 @@ export class AuthService {
       console.error("Failed to connect to osse-broadcast. Live events will not be received!");
     });
 
+    // Request queue from server to resume.
+    this.trackService.fetchQueueFromServer();
+
     this.authStateChanged.emit(true);
   }
 
