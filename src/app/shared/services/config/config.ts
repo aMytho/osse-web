@@ -19,4 +19,8 @@ export interface OsseConfig {
    * Amount of samples taken for the visualizer.
   */
   visualizerSamples: number;
+  /**
+   * Enable/disable account queue
+  */
+  queue: boolean;
 }

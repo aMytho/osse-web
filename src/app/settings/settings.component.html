@@ -98,6 +98,24 @@
 
       <button type="submit" class="btn btn-primary w-min" [disabled]="!visualizerForm.form.valid || false">Save</button>
     </form>
+
+    <h3 class="divider">
+      Save Queue
+    </h3>
+
+    <p class="my-2 ml-2">Osse can save your queue to the server. This allows you to pick up where you left off when Osse is closed and reopened.
+    This can be disabled if you so choose. This is an <b>account level</b> setting.</p>
+
+    <form #queueForm="ngForm" (ngSubmit)="saveQueuePreferences()" class="ml-2 flex flex-col gap-y-4">
+      <label class="label">
+        <input type="checkbox" checked="checked" class="toggle toggle-primary" name="enable-visualizer"
+          id="enable-queue" [checked]="enableQueue()" (input)="enableQueue.set(!enableQueue())" />
+        Enable Queue
+      </label>
+
+      <button type="submit" class="btn btn-primary w-min" [disabled]="!queueForm.form.valid || false">Save</button>
+    </form>
+
   </div>
   } @else if (activeTab === 'logs') {
   <div class="space-y-4" role="tabpanel" aria-labelledby="label-logs" id="tab-logs">

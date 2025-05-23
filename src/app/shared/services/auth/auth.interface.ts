@@ -7,4 +7,10 @@ export interface AuthResponse {
    */
   id: number,
   username: string,
+  settings: UserSettings;
+}
+
+export interface UserSettings {
+  id: number;
+  queue: boolean;
 }
