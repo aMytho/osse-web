@@ -97,7 +97,7 @@ export class PlayerService {
     document.title = "Osse - " + this.track.title;
   }
 
-  public async setTrackAndPlay(track: Track) {
+  public async setTrackAndPlay(track: Track, duration: number = 0) {
     this.setTrack(track);
     await this.play();
 
@@ -109,6 +109,10 @@ export class PlayerService {
   public setTrackAndBackgroundImage(track: Track) {
     this.setTrack(track);
     this.setBackgroundImage();
+  }
+
+  public setDuration(duration: number) {
+    this.audioPlayer.currentTime = duration;
   }
 
   private setBackgroundImage() {

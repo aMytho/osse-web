@@ -4,4 +4,5 @@ export const environment = {
   showCoverBackgrounds: true,
   showVisualizer: true,
   visualizerSamples: 1,
+  queue: true,
 }

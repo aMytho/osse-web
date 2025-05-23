@@ -50,8 +50,19 @@ export class SettingsComponent implements OnInit {
     this.notificationService.info('Saved Preferences!');
   }
 
-  public saveQueuePreferences() {
+  public async saveQueuePreferences() {
+    let res = await fetcher('config/queue', {
+      method: 'POST',
+      body: JSON.stringify({
+        'queue': this.enableQueue()
+      })
+    });
 
+    if (res.ok) {
+      this.notificationService.info('Settings Saved!');
+    } else {
+      this.notificationService.error('Failed to save queue preferences. Try again?');
+    }
   }
 
   public async requestSettings() {

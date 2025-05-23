@@ -55,6 +55,11 @@ export class TrackService {
         }
       }, 250);
     })
+
+    // Keep the server in synce with playback. There is a throttle of 20 seconds.
+    this.playerService.trackPositionUpdate.subscribe((pos) => {
+      this.queueSyncService.syncActiveTrack(this.index, pos.currentTimeSeconds);
+    });
   }
 
   get activeTrack() {
@@ -68,11 +73,12 @@ export class TrackService {
     }
 
     this.tracks.push(track);
-    this.queueSyncService.syncQueue(this.tracks.map((t) => t.id));
     // If this is the first track added, start playback
     if (this.tracks.length - 1 == 0) {
       this.moveToTrack(0);
     }
+
+    this.queueSyncService.syncQueue(this.tracks.map((t) => t.id), this.index);
   }
 
   // Removes all tracks and stops playback
@@ -84,11 +90,11 @@ export class TrackService {
       this.tracks.pop();
     }
 
-    this.queueSyncService.syncQueue([]);
-
     this.index = 0;
     this.playerService.pause();
     this.playerService.clearTrack();
+
+    this.queueSyncService.syncQueue([], null);
   }
 
   /**
@@ -108,7 +114,7 @@ export class TrackService {
     this.clearedTracks.forEach((t) => this.addTrack(t));
     this.clearedTracks = [];
 
-    this.queueSyncService.syncQueue(this.tracks.map((t) => t.id));
+    this.queueSyncService.syncQueue(this.tracks.map((t) => t.id), null);
   }
 
   public moveToNextTrack() {
@@ -143,6 +149,13 @@ export class TrackService {
     this.playerService.setTrackAndPlay(this.activeTrack);
   }
 
+  /**
+   * Same as moveToTrack, but it won't start playback.
+   */
+  public setTrackIndex(index: number) {
+    this.index = index;
+  }
+
   public removeTrack(index: number) {
     // If 1 track is present, remove them and end playback
     if (this.tracks.length == 1) {
@@ -172,7 +185,7 @@ export class TrackService {
       this.index -= 1;
     }
 
-    this.queueSyncService.syncQueue(this.tracks.map((t) => t.id));
+    this.queueSyncService.syncQueue(this.tracks.map((t) => t.id), this.index);
   }
 
   /**
@@ -190,36 +203,52 @@ export class TrackService {
       this.index = this.tracks.findIndex((t) => t.id == currentTrack.id);
     }
 
-    this.queueSyncService.syncQueue(this.tracks.map((t) => t.id));
+    this.queueSyncService.syncQueue(this.tracks.map((t) => t.id), this.index);
   }
 
   /**
   * Sets the queue to whatever the user has server side.
   */
-  public fetchQueueFromServer(play = false) {
+  public fetchQueueFromServer(play: boolean = false) {
+    // Move duration to 2nd method.
     this.queueSyncService.getQueueFromServer()
       .then((result) => {
         result.queue.forEach(t => this.tracks.push(t));
 
-        // Set the active track
-        if (this.tracks.length > 0) {
-          // If the session has a track, use it.
-          if (result.trackId != null) {
-            if (play) {
-              this.playerService.setTrackAndPlay(result.queue.find((t) => t.id == result.trackId)!);
-            } else {
-              this.playerService.setTrackAndBackgroundImage(result.queue.find((t) => t.id == result.trackId)!);
-            }
-          } else {
-            // Else, use first track.
+        if (this.tracks.length == 0) return;
+
+        // If the session has a track, use it.
+        if (result.trackIndex != null) {
+          // There may have been a index desync, so make sure the index is valid.
+          if (!this.canMoveToTrack(result.trackIndex)) {
             if (play) {
               this.playerService.setTrackAndPlay(result.queue[0]);
             } else {
               this.playerService.setTrackAndBackgroundImage(result.queue[0]);
             }
+
+            return;
+          }
+
+          if (play) {
+            this.playerService.setTrackAndPlay(result.queue[result.trackIndex], result.trackPosition ?? 0);
+          } else {
+            this.playerService.setTrackAndBackgroundImage(result.queue[result.trackIndex]);
+            this.playerService.setDuration(result.trackPosition ?? 0);
+          }
+        } else {
+          // Else, use first track.
+          if (play) {
+            this.playerService.setTrackAndPlay(result.queue[0]);
+          } else {
+            this.playerService.setTrackAndBackgroundImage(result.queue[0]);
           }
         }
       });
+  }
+
+  private canMoveToTrack(index: number) {
+    return index < this.tracks.length;
   }
 
   private playTrackBasedOnRepeatValue(): boolean {

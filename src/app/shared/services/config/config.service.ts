@@ -18,7 +18,11 @@ export class ConfigService {
       version: environment.version,
       showCoverBackgrounds: Boolean(localStorage.getItem('showCoverBackgrounds') ?? environment.showCoverBackgrounds),
       showVisualizer: Boolean(localStorage.getItem('showVisualizer') ?? environment.showVisualizer),
-      visualizerSamples: Number(localStorage.getItem('visualizerSamples') ?? environment.visualizerSamples)
+      visualizerSamples: Number(localStorage.getItem('visualizerSamples') ?? environment.visualizerSamples),
+
+      // Below keys are sources from the server so we give them default values.
+      // They shouldn't be read until we get the user settings in the login process.
+      queue: true,
     };
   }
 
@@ -29,6 +33,16 @@ export class ConfigService {
   public save<T extends keyof OsseConfig>(key: T, val: OsseConfig[T]) {
     localStorage.setItem(key, String(val));
     this.config[key] = val;
+  }
+
+  /**
+  * Sets all keys/values from an object to the current config.
+  * Keys that are in the current conf but not in the new one are unmodified.
+  *
+  * Used to populate account config.
+  */
+  public overrideConfig(conf: Partial<OsseConfig>) {
+    this.config = { ...this.config, ...conf };
   }
 
   private initConfig() {

@@ -4,6 +4,7 @@ import { EchoService } from '../echo/echo.service';
 import { AuthResponse } from './auth.interface';
 import { TrackService } from '../track/track.service';
 import { BackgroundImageService } from '../../ui/background-image.service';
+import { ConfigService } from '../config/config.service';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +14,9 @@ export class AuthService {
   private statusChecked = false;
   public authStateChanged = new EventEmitter<boolean>();
 
-  constructor(private echoService: EchoService, private trackService: TrackService, private backgroundImageService: BackgroundImageService) {
+  constructor(
+    private echoService: EchoService, private trackService: TrackService, private backgroundImageService: BackgroundImageService,
+    private configService: ConfigService) {
     // Check if we are logged in by requesting the current user. If this fails, we know we are not logged in.
     this.checkLoginStatus();
   }
@@ -68,6 +71,11 @@ export class AuthService {
   private login(userAuth: AuthResponse): void {
     this.isLoggedIn = true;
 
+    // Set the config to use any account level config (not in local storage.)
+    this.configService.overrideConfig({
+      queue: userAuth.settings.queue
+    });
+
     // Listen for events.
     this.echoService.connect().then((_e) => {
       this.echoService.listenForScanStarted();
@@ -81,7 +89,9 @@ export class AuthService {
     });
 
     // Request queue from server to resume.
-    this.trackService.fetchQueueFromServer();
+    if (this.configService.get('queue')) {
+      this.trackService.fetchQueueFromServer();
+    }
 
     this.authStateChanged.emit(true);
   }
