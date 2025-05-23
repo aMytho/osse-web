@@ -227,6 +227,9 @@ export class TrackService {
               this.playerService.setTrackAndBackgroundImage(result.queue[0]);
             }
 
+            // Set the track index so active track is correct. (it would play the right track, but the active track is wrong which causes UI issues.)
+            this.setTrackIndex(0);
+
             return;
           }
 
@@ -236,6 +239,8 @@ export class TrackService {
             this.playerService.setTrackAndBackgroundImage(result.queue[result.trackIndex]);
             this.playerService.setDuration(result.trackPosition ?? 0);
           }
+
+          this.setTrackIndex(result.trackIndex);
         } else {
           // Else, use first track.
           if (play) {
@@ -243,6 +248,8 @@ export class TrackService {
           } else {
             this.playerService.setTrackAndBackgroundImage(result.queue[0]);
           }
+
+          this.setTrackIndex(0);
         }
       });
   }

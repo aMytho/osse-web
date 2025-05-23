@@ -52,6 +52,7 @@ export class QueueSyncService {
             // The active track is the input of the user if the track length is > 1, otherwise its null.
             // Null symbolizes unknown curent track, or no tracks to choose from.
             'active_track': trackIds.length > 0 ? (trackIndex ?? 0) : null,
+            'track_position': this.currentPosition,
           })
         })
       }, 5000);
@@ -60,6 +61,7 @@ export class QueueSyncService {
 
   /**
   * Sets the active track and position server side.
+  * Syncs on an interval of 20 seconds.
   */
   syncActiveTrack(trackIndex: number | null, trackPosition: number = 0) {
     this.currentIndex = trackIndex;
