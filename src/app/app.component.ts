@@ -11,6 +11,8 @@ import { LocatorService } from './locator.service';
 import { AuthService } from './shared/services/auth/auth.service';
 import { CommonModule } from '@angular/common';
 import { LoadingComponent } from './shared/ui/loading/loading.component';
+import { NetworkService } from './shared/services/network/network.service';
+import { PreloadService } from './shared/player/preload/preload.service';
 
 @Component({
   selector: 'app-root',
@@ -28,7 +30,9 @@ export class AppComponent {
     private backgroundImageService: BackgroundImageService,
     private playerService: PlayerService,
     private injector: Injector,
-    private authService: AuthService
+    private networkService: NetworkService,
+    private authService: AuthService,
+    private preloadService: PreloadService
   ) {
     // Allow shared injector for accessing services
     LocatorService.injector = this.injector;

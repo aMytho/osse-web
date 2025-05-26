@@ -23,4 +23,8 @@ export interface OsseConfig {
    * Enable/disable account queue
   */
   queue: boolean;
+  /**
+   * ID of the user.
+  */
+  userID: number;
 }

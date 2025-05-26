@@ -23,6 +23,7 @@ export class ConfigService {
       // Below keys are sources from the server so we give them default values.
       // They shouldn't be read until we get the user settings in the login process.
       queue: true,
+      userID: -1,
     };
   }
 

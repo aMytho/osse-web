@@ -73,7 +73,8 @@ export class AuthService {
 
     // Set the config to use any account level config (not in local storage.)
     this.configService.overrideConfig({
-      queue: userAuth.settings.queue
+      queue: userAuth.settings.queue,
+      userID: userAuth.id,
     });
 
     // Listen for events.

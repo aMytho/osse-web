@@ -8,6 +8,7 @@ import { BufferUpdate } from './buffer-update.interface';
 import { TrackPosition } from './track-position.interface';
 import { WebAudioService } from './web-audio.service';
 import { ToastService } from '../../toast-container/toast.service';
+import { fetcher } from '../util/fetcher';
 
 @Injectable({
   providedIn: 'root'
@@ -30,6 +31,8 @@ export class PlayerService {
   private currenTimeSignal: WritableSignal<number> = signal(0);
   private isPlayingSignal: WritableSignal<boolean> = signal(false);
 
+  private trackAuthorizationInterval = 0;
+
   constructor(
     private configService: ConfigService,
     private backgroundImageService: BackgroundImageService,
@@ -37,7 +40,8 @@ export class PlayerService {
     private notificationService: ToastService
   ) {
     // Set up web audio
-    this.audioPlayer.crossOrigin = "use-credentials"
+    // Cross origin is anonymous becuase it is a different origin, but we don't use credentials (cookies).
+    this.audioPlayer.crossOrigin = "anonymous";
     this.webAudioService.setUp(this.audioPlayer);
 
     this.audioPlayer.addEventListener('timeupdate', (_ev) => {
@@ -89,16 +93,29 @@ export class PlayerService {
     // Set the real duration. Used for calculating buffer percentages later.
     // Not all formats list the end duration at the start of the track
     this.durationSignal.set(track.duration);
-    this.audioPlayer.src = this.configService.get("apiURL") + "api/tracks/" + track.id + '/stream';
-    // The playback rate is reset when a new track is loaded, set it again.
-    this.audioPlayer.playbackRate = this.playbackRate;
 
-    this.trackUpdated.emit(new TrackUpdate(this.track, this.buildTrackInfo()));
-    document.title = "Osse - " + this.track.title;
+    // Get a token to access the file from the file server.
+    let req = await fetcher('tracks/' + track.id + '/stream?v=' + track.scannedAt);
+    if (req.ok) {
+      this.trackUpdated.emit(new TrackUpdate(this.track, this.buildTrackInfo()));
+      document.title = "Osse - " + this.track.title;
+
+      let res = await req.json();
+      let token = res.token;
+      let url = res.url;
+
+      this.audioPlayer.src = url + '?token=' + token + '&id=' + this.configService.get('userID') + '&trackID=' + track.id;
+      // The playback rate is reset when a new track is loaded, set it again.
+      this.audioPlayer.playbackRate = this.playbackRate;
+
+      this.reAuthorizeCurrentTrack(token);
+    } else {
+      this.notificationService.error('Failed to play track.');
+    }
   }
 
   public async setTrackAndPlay(track: Track, duration: number = 0) {
-    this.setTrack(track);
+    await this.setTrack(track);
     await this.play();
 
     // We do this last. It may slow down the player if it is first since it makes a network request.
@@ -182,6 +199,21 @@ export class PlayerService {
     } else {
       this.audioPlayer.fastSeek(this.audioPlayer.currentTime - duration);
     }
+  }
+
+  private reAuthorizeCurrentTrack(token: string) {
+    clearInterval(this.trackAuthorizationInterval);
+
+    // Every 5 minutes, reauth track.
+    this.trackAuthorizationInterval = setInterval(async () => {
+      // If no track is playing, don't extend authorization and don't request it again.
+      if (!this.track) {
+        clearInterval(this.trackAuthorizationInterval);
+        return;
+      }
+
+      fetcher('tracks/' + this.track.id + '/re-authorize?token=' + token, { method: 'POST' });
+    }, 300000);
   }
 
   get duration() {

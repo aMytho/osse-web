@@ -147,6 +147,7 @@ export class Track {
       disc_number: this.discNumber,
       bitrate: this.track.bitrate,
       cover_art_id: this.track.cover_art_id,
+      scanned_at: this.track.scanned_at,
       artist_ids: this.track.artists?.map((a) => a.id) ?? null,
       artists: this.track.artists
     });
@@ -158,6 +159,10 @@ export class Track {
 
   public get discNumber() {
     return this.track.disc_number;
+  }
+
+  public get scannedAt() {
+    return this.track.scanned_at;
   }
 
   get coverURL() {

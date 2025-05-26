@@ -276,4 +276,14 @@ export class TrackService {
         return true;
     }
   }
+
+  public getUpcomingTrack(): Track | undefined {
+    let track = this.tracks.at(this.index + 1);
+    if (track != undefined) {
+      return track;
+    }
+
+    // If there isn't a next track, try the first track (expecting loop around)
+    return this.tracks.at(0);
+  }
 }
