@@ -25,14 +25,15 @@
 
     <!-- Info & Actions -->
     <div class="w-full p-3 max-sm:p-2 flex flex-col items-center">
-      <p class="text-center text-base max-sm:text-sm font-semibold truncate w-full" title="{{album.name}}">
-        {{album.name}}
-      </p>
-      <p class="text-sm max-sm:text-xs text-slate-300 truncate w-full text-center"
-        title="{{album.tracks[0]?.artistNames() ?? ''}}">
-        {{album.tracks[0]?.artistNames() ?? ''}}
-      </p>
-
+      <a routerLink="view/{{album.id}}" class="w-full">
+        <p class="text-center text-base max-sm:text-sm font-semibold truncate w-full" title="{{album.name}}">
+          {{album.name}}
+        </p>
+        <p class="text-sm max-sm:text-xs text-slate-300 truncate w-full text-center h-[1.4286rem]"
+          title="{{album.tracks[0]?.artistNames() ?? ''}}">
+          {{album.tracks[0]?.artistNames() ?? ''}}
+        </p>
+      </a>
       <!-- Hover Actions -->
       <div class="flex gap-2 mt-3 opacity-0 group-hover:opacity-100 transition-opacity touch-show">
         <button class="btn btn-primary" title="Play" (click)="playAlbum(album.id)">
