@@ -9,7 +9,7 @@ import { IconComponent } from '../shared/ui/icon/icon.component';
 import { mdiFastForward, mdiInformation, mdiRepeat, mdiRewind, mdiShuffle, mdiSilverwareForkKnife, mdiDeleteSweep, mdiRepeatOff, mdiRepeatOnce, mdiRestore, mdiCog } from '@mdi/js';
 import { ModalService } from '../shared/ui/modal/modal.service';
 import { AddToPlaylistComponent } from '../shared/ui/modals/add-to-playlist/add-to-playlist.component';
-import { CommonModule } from '@angular/common';
+
 import { Subscription } from 'rxjs';
 import { HeaderComponent } from '../shared/ui/header/header.component';
 import { AlbumArtFullscreenComponent } from '../shared/ui/modals/album-art-fullscreen/album-art-fullscreen.component';
@@ -21,7 +21,7 @@ import { PlayerSettingsComponent } from '../shared/ui/modals/player-settings/pla
 
 @Component({
   selector: 'app-home',
-  imports: [IconComponent, TrackComponent, CommonModule, HeaderComponent, VisualizerComponent],
+  imports: [IconComponent, TrackComponent, HeaderComponent, VisualizerComponent],
   templateUrl: './home.component.html'
 })
 export class HomeComponent implements OnInit, OnDestroy {

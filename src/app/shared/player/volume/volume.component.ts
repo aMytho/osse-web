@@ -2,11 +2,11 @@ import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, ViewChil
 import { PlayerService } from '../player.service';
 import { mdiVolumeOff, mdiVolumeLow, mdiVolumeHigh } from '@mdi/js';
 import { IconComponent } from '../../ui/icon/icon.component';
-import { CommonModule } from '@angular/common';
+
 
 @Component({
   selector: 'app-volume',
-  imports: [IconComponent, CommonModule],
+  imports: [IconComponent],
   templateUrl: './volume.component.html',
   styles: ``,
   changeDetection: ChangeDetectionStrategy.OnPush

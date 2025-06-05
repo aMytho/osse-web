@@ -3,32 +3,32 @@
     <button (click)="showAlbumArt()" aria-label="Show Album Art">
       <img class="bg-slate-300 rounded-lg backdrop-blur-xs w-60 h-60 flex items-end flex-wrap bg-cover drop-shadow-glow"
         onerror="if (this.src !== 'assets/img/osse.webp') this.src = 'assets/img/osse.webp';" [src]="bg()" alt="">
-    </button>
+      </button>
 
-    <div class="grow flex flex-col">
-      <app-header [text]="title()"></app-header>
-      <p class="italic max-w-80 text-slate-300">{{ artist() || 'Unknown Artist' }}</p>
+      <div class="grow flex flex-col">
+        <app-header [text]="title()"></app-header>
+        <p class="italic max-w-80 text-slate-300">{{ artist() || 'Unknown Artist' }}</p>
 
-      <div class="w-full mt-auto">
-        @if (showVisualizer()) {
-        <app-visualizer></app-visualizer>
-        }
-        <hr class="text-white">
+        <div class="w-full mt-auto">
+          @if (showVisualizer()) {
+            <app-visualizer></app-visualizer>
+          }
+          <hr class="text-white">
+        </div>
       </div>
     </div>
-  </div>
-  <div class="grow flex flex-col text-white">
-    <div class="text-center text-white mt-auto">
-      <div class="flex justify-around text-xl gap-x-4">
-        @if (tracksCanBeRestored()) {
-        <button (click)="restoreTracks()" class="rounded-full px-2 py-1 hover:bg-emerald-300/15" title="Restore Tracks">
-          <app-icon rotate="90" [icon]="restore"></app-icon>
-        </button>
-        } @else {
-        <button (click)="clearTracks()" class="rounded-full px-2 py-1 hover:bg-red-300/15 disabled:cursor-not-allowed"
-          title="Clear Tracks" [disabled]="tracks().length == 0">
-          <app-icon rotate="90" [icon]="clear"></app-icon>
-        </button>
+    <div class="grow flex flex-col text-white">
+      <div class="text-center text-white mt-auto">
+        <div class="flex justify-around text-xl gap-x-4">
+          @if (tracksCanBeRestored()) {
+            <button (click)="restoreTracks()" class="rounded-full px-2 py-1 hover:bg-emerald-300/15" title="Restore Tracks">
+              <app-icon rotate="90" [icon]="restore"></app-icon>
+            </button>
+          } @else {
+            <button (click)="clearTracks()" class="rounded-full px-2 py-1 hover:bg-red-300/15 disabled:cursor-not-allowed"
+              title="Clear Tracks" [disabled]="tracks().length == 0">
+            <app-icon rotate="90" [icon]="clear"></app-icon>
+          </button>
         }
         <button (click)="toggleRepeat()" class="rounded-full px-2 py-1 hover:bg-emerald-300/15"
           [title]="repeatTooltip()">
@@ -52,9 +52,11 @@
   </div>
 </div>
 
-<div class="bg-slate-700/50 rounded-md mt-8 p-4 flex flex-col gap-y-4" *ngIf="tracks().length > 0">
-  @for (track of tracks(); track track.uuid; let idx = $index) {
-  <app-track (onPlay)="playTrack(idx)" (onRemove)="removeTrack(idx)" (onPlaylistAdd)="addToPlaylist($event)"
-    [track]="track" [activeTrack]="trackService.activeTrack?.uuid == track.uuid"></app-track>
-  }
-</div>
+@if (tracks().length > 0) {
+  <div class="bg-slate-700/50 rounded-md mt-8 p-4 flex flex-col gap-y-4">
+    @for (track of tracks(); track track.uuid; let idx = $index) {
+      <app-track (onPlay)="playTrack(idx)" (onRemove)="removeTrack(idx)" (onPlaylistAdd)="addToPlaylist($event)"
+      [track]="track" [activeTrack]="trackService.activeTrack?.uuid == track.uuid"></app-track>
+    }
+  </div>
+}
