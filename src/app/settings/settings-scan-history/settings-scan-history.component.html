@@ -15,10 +15,10 @@
     <p class="text-slate-50">{{dir.path}} - {{dir.files_scanned}} files scanned | {{dir.files_skipped}} files skipped. Status: {{dir.status}}</p>
       @if (dir.errors.length > 0) {
         @if (!dir.show) {
-        <button class="btn btn-secondary my-2" (click)="dir.show = true">Show Errors</button>
+        <button class="btn btn-secondary btn-soft my-2" (click)="dir.show = true">Show Errors</button>
         }
         @if (dir.show) {
-        <button class="btn btn-secondary my-2" (click)="dir.show = false">Hide Errors</button>
+        <button class="btn btn-secondary btn-soft my-2" (click)="dir.show = false">Hide Errors</button>
         @for (err of dir.errors; track $index) {
           <pre class="p-4 mx-2 my-1 bg-slate-800 text-red-400 overflow-auto border-l border-r-red-300">{{err.error}}</pre>
         }

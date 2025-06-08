@@ -9,19 +9,20 @@
     </div>
     <div>
       <app-header class="font-bold text-6xl" [text]="album().name"></app-header>
-      <p class="text-slate-300 italic font-light mt-1">
-        {{album().artist[0]?.name ?? albumTrackArtist() ?? "Unknown Artist"}}
-      </p>
-      <div class="flex flex-wrap gap-2 justify-between items-center mt-6">
-        <button (click)="addAll()" class="btn btn-primary">
-          Play All
-        </button>
-        <a class="text-cyan-400 hover:text-cyan-500 cursor-pointer">View in MusicBrainz</a>
+      <div class="flex flex-wrap justify-between items-center gap-8">
+        <div class="flex flex-wrap gap-4">
+        <p class="italic font-light">
+          {{album().artist[0]?.name ?? albumTrackArtist() ?? "Unknown Artist"}}
+        </p>
+        <p class="font-light">{{totalDuration}} Minutes</p>
         @if (album().album.year) {
-        <p>{{album().album.year}}</p>
+        <p class="font-light">{{album().album.year}}</p>
         }
-        <p>{{totalDuration}} Minutes</p>
+        </div>
       </div>
+      <button (click)="addAll()" class="btn btn-primary mt-6">
+        Play All
+      </button>
     </div>
   </div>
   <div class="mt-4">
