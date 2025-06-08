@@ -20,6 +20,7 @@ export class RegistrationComponent implements OnInit {
   public url: WritableSignal<string> = signal(window.location.hostname + ':8000');
   public protocol: WritableSignal<string> = signal('http://');
   public showConnectionInputs: WritableSignal<boolean> = signal(false);
+  public waitingForResponse = signal(false);
 
   constructor(
     private notificationService: ToastService,
@@ -35,6 +36,7 @@ export class RegistrationComponent implements OnInit {
 
     // Check if the server URL is right.
     try {
+      this.waitingForResponse.set(true);
       await fetch(this.protocol().concat(this.url()) + 'api/ping');
       // Save the URL
       this.configService.save("apiURL", this.protocol().concat(this.url()));
@@ -42,6 +44,8 @@ export class RegistrationComponent implements OnInit {
       this.serverFound.set(true);
     } catch (e) {
       this.notificationService.error('Failed to reach server. Confirm that the URL is correct and that the server is running.');
+    } finally {
+      this.waitingForResponse.set(false);
     }
   }
 
@@ -51,6 +55,8 @@ export class RegistrationComponent implements OnInit {
       return;
     }
 
+    this.waitingForResponse.set(true);
+
     let res = await fetcher('register', {
       method: 'POST',
       body: JSON.stringify({
@@ -59,6 +65,8 @@ export class RegistrationComponent implements OnInit {
       }),
       rootURL: this.configService.get('apiURL')
     });
+
+    this.waitingForResponse.set(false);
 
     if (res.status == 403) {
       this.notificationService.error('Account creation error. Check that registration is enabled in your server settings. ');

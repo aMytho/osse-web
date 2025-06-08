@@ -23,7 +23,12 @@
       </div>
 
       <div class="basis-full">
-        <button class="btn btn-primary" [disabled]="!form.form.valid || false">Connect</button>
+        <button class="btn btn-primary" [disabled]="!form.form.valid || false || waitingForResponse()">
+        Connect
+        @if (waitingForResponse()) {
+        <span class="ml-4 loading loading-dots loading-md"></span>
+        }
+        </button>
       </div>
     </form>
     }
@@ -45,7 +50,12 @@
       </div>
 
       <div class="basis-full mt-2">
-        <button class="btn btn-primary" [disabled]="!loginForm.form.valid">Login</button>
+        <button class="btn btn-primary" [disabled]="!loginForm.form.valid || waitingForResponse()">
+        Login
+        </button>
+        @if (waitingForResponse()) {
+        <span class="ml-4 loading loading-dots loading-md"></span>
+        }
       </div>
     </form>
     }

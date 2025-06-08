@@ -20,6 +20,7 @@ export class LoginComponent implements OnInit {
   public url: WritableSignal<string> = signal(window.location.hostname + ':8000');
   public protocol: WritableSignal<string> = signal('http://');
   public showConnectionInputs: WritableSignal<boolean> = signal(false);
+  public waitingForResponse = signal(false);
 
   constructor(
     private notificationService: ToastService,
@@ -35,6 +36,7 @@ export class LoginComponent implements OnInit {
 
     // Check if the server URL is right.
     try {
+      this.waitingForResponse.set(true);
       await fetch(this.protocol().concat(this.url()) + 'api/ping');
       // Save the URL
       this.configService.save("apiURL", this.protocol().concat(this.url()));
@@ -42,6 +44,8 @@ export class LoginComponent implements OnInit {
       this.serverFound.set(true);
     } catch (e) {
       this.notificationService.error('Failed to reach server. Confirm that the URL is correct.');
+    } finally {
+      this.waitingForResponse.set(false);
     }
   }
 
@@ -50,6 +54,8 @@ export class LoginComponent implements OnInit {
       this.notificationService.error('You must enter a username and password.');
       return;
     }
+
+    this.waitingForResponse.set(true);
 
     let res = await fetcher('login', {
       method: 'POST',
@@ -66,6 +72,8 @@ export class LoginComponent implements OnInit {
     } else {
       this.notificationService.error('Login error. Check that the username and password are correct.');
     }
+
+    this.waitingForResponse.set(false);
   }
 
   async ngOnInit() {
