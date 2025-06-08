@@ -33,6 +33,10 @@ export class Album {
     return this.artistInfo;
   }
 
+  public get year() {
+    return this.album.year;
+  }
+
   private getArtistIfExists() {
     // If we loaded the artists, init the Artist classes.
     if (this.album.artists != null) {

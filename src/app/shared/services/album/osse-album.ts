@@ -6,6 +6,7 @@ export interface OsseAlbum {
   name: string;
   artist_ids: number[] | null;
   tracks: OsseTrack[];
+  year: number | null;
 
   /**
    * Artist data.

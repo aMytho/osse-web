@@ -17,7 +17,9 @@
           Play All
         </button>
         <a class="text-cyan-400 hover:text-cyan-500 cursor-pointer">View in MusicBrainz</a>
-        <p>2024</p>
+        @if (album().album.year) {
+        <p>{{album().album.year}}</p>
+        }
         <p>{{totalDuration}} Minutes</p>
       </div>
     </div>
