@@ -1,16 +1,16 @@
 <div [ngClass]="{'animate-pulse pointer-events-none': !ready()}">
   <app-header [text]="playlist?.name ?? 'Loading'"></app-header>
 
-  <div class="tabs tabs-box bg-slate-400/15 place-content-center" role="tablist">
-    <button class="tab" [ngClass]="{'tab-active': showViewTab()}" (click)="activeTab.set('view')" role="tab"
+  <div class="flex flex-wrap" role="tablist">
+    <button class="btn btn-secondary grow rounded-none text-lg" [ngClass]="{'btn-soft': !showViewTab()}" (click)="activeTab.set('view')" role="tab"
       [attr.aria-selected]="showViewTab()" aria-controls="tab-view" id="label-view">
       View
     </button>
-    <button class="tab" [ngClass]="{'tab-active': showAddTracksTab()}" (click)="activeTab.set('addTracks')" role="tab"
+    <button class="btn btn-secondary grow rounded-none text-lg" [ngClass]="{'btn-soft': !showAddTracksTab()}" (click)="activeTab.set('addTracks')" role="tab"
       [attr.aria-selected]="showAddTracksTab()" aria-controls="tab-addTracks" id="label-addTracks">
       Add Tracks
     </button>
-    <button class="tab" [ngClass]="{'tab-active': showModifyTab()}" (click)="activeTab.set('modify')" role="tab"
+    <button class="btn btn-secondary grow rounded-none text-lg" [ngClass]="{'btn-soft': !showModifyTab()}" (click)="activeTab.set('modify')" role="tab"
       [attr.aria-selected]="showModifyTab()" aria-controls="tab-modify" id="label-modify">
       Modify
     </button>
@@ -55,7 +55,7 @@
         </div>
         <div class="flex flex-col gap-2">
           <label for="name" class="text-white font-semibold">Playlist Name: </label>
-          <input [(ngModel)]="model.name" required minlength="1" id="name" name="name" class="input input-primary">
+          <input [(ngModel)]="model.name" required minlength="1" id="name" name="name" class="input">
         </div>
 
         <p class="text-red-500 font-semibold my-2" [hidden]="!(model.name.length == 0)">The playlist name must be at

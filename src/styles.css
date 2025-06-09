@@ -52,3 +52,8 @@ dialog::backdrop {
 button {
   cursor: pointer;
 }
+
+input.input:focus {
+  outline: 1px solid oklch(90.5% 0.093 164.15) !important;
+  border-color: transparent;
+}
