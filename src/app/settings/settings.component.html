@@ -26,99 +26,107 @@
     </button>
   </div>
   @if (activeTab === 'scan') {
-  <div class="space-y-4" role="tabpanel" aria-labelledby="label-scan" id="tab-scan">
+  <div class="space-y-12" role="tabpanel" aria-labelledby="label-scan" id="tab-scan">
     <app-settings-scan></app-settings-scan>
   </div>
   } @else if (activeTab === 'scan-history') {
     <app-settings-scan-history></app-settings-scan-history>
   } @else if (activeTab === 'preferences') {
-  <div class="space-y-4" role="tabpanel" aria-labelledby="label-preferences" id="tab-preferences">
+  <div class="space-y-12" role="tabpanel" aria-labelledby="label-preferences" id="tab-preferences">
     <app-header [type]="2" text="Preferences"></app-header>
 
-    <h3 class="divider">Background Image</h3>
-    <p class="my-2 ml-2">
-      When a track or album is playing, Osse will dispay the cover art in the background.
-      This may cause contrast issues with certain covers. This can be disabled if you so choose.</p>
+    <h3 class="divider text-lg">Background Image</h3>
+    <div class="grid grid-cols-2 max-md:grid-cols-1 gap-x-12 gap-y-4">
+      <p>
+        When a track or album is playing, Osse will dispay the cover art in the background.
+        This may cause contrast issues with certain covers. This can be disabled if you so choose.
+        </p>
 
-    <form #showBackgroundsForm="ngForm" (ngSubmit)="saveBackgroundCoverPreference()" class="ml-2 flex flex-col gap-y-4">
-      <label class="label">
-        <input type="checkbox" checked="checked" class="toggle toggle-primary" name="show-background-covers"
-          id="show-background-covers" [checked]="showBackgrounds()" (input)="showBackgrounds.set(!showBackgrounds())" />
-        Show background colors
-      </label>
+      <form #showBackgroundsForm="ngForm" (ngSubmit)="saveBackgroundCoverPreference()" class="flex flex-col gap-y-4">
+        <label class="label">
+          <input type="checkbox" checked="checked" class="toggle" name="show-background-covers"
+            id="show-background-covers" [checked]="showBackgrounds()" (input)="showBackgrounds.set(!showBackgrounds())" />
+          Show background images
+        </label>
 
-      <button type="submit" class="btn btn-primary w-min"
-        [disabled]="!showBackgroundsForm.form.valid || false">Save</button>
-    </form>
+        <button type="submit" class="btn btn-primary w-min"
+          [disabled]="!showBackgroundsForm.form.valid || false">Save</button>
+      </form>
 
-    <h3 class="divider">
+    </div>
+    <h3 class="divider text-lg">
       Visualizer
     </h3>
 
-    <p class="my-2 ml-2">
-      When a track is playing, Osse will dispay a music visualizer. This is generated in real-time.
-      This may cause performance issues with certain devices. This can be disabled if you so choose.</p>
+    <div class="grid grid-cols-2 max-md:grid-cols-1 gap-x-12 gap-y-4">
+      <p class="my-2 ml-2">
+        When a track is playing, Osse will dispay a music visualizer. This is generated in real-time.
+        This may cause performance issues with certain devices. This can be disabled if you so choose.</p>
 
-    <form #visualizerForm="ngForm" (ngSubmit)="saveVisualizerPreference()" class="ml-2 flex flex-col gap-y-4">
-      <label class="label">
-        <input type="checkbox" checked="checked" class="toggle toggle-primary" name="show-visualizer"
-          id="show-visualizer" [checked]="showVisualizer()" (input)="showVisualizer.set(!showVisualizer())" />
-        Enable visualiser
-      </label>
+      <form #visualizerForm="ngForm" (ngSubmit)="saveVisualizerPreference()" class="ml-2 flex flex-col gap-y-4">
+        <label class="label">
+          <input type="checkbox" checked="checked" class="toggle" name="show-visualizer"
+            id="show-visualizer" [checked]="showVisualizer()" (input)="showVisualizer.set(!showVisualizer())" />
+          Enable visualiser
+        </label>
 
-      <div class="w-full max-w-xs">
-        <label for="test">Visualizer Samples</label>
-        <input type="range" min="1" max="10" value="1" class="range range-secondary" step="1" #samples
-          name="visualizer-samples" id="visualizer-samples" [value]="visualizerSamples()" />
-        <div class="flex justify-between px-2.5 mt-2 text-xs" aria-hidden="true">
-          <span>|</span>
-          <span>|</span>
-          <span>|</span>
-          <span>|</span>
-          <span>|</span>
-          <span>|</span>
-          <span>|</span>
-          <span>|</span>
-          <span>|</span>
-          <span>|</span>
+        <div class="w-full max-w-xs">
+          <label for="test">Visualizer Samples</label>
+          <input type="range" min="1" max="10" value="1" class="range range-secondary" step="1" #samples
+            name="visualizer-samples" id="visualizer-samples" [value]="visualizerSamples()" />
+          <div class="flex justify-between px-2.5 mt-2 text-xs" aria-hidden="true">
+            <span>|</span>
+            <span>|</span>
+            <span>|</span>
+            <span>|</span>
+            <span>|</span>
+            <span>|</span>
+            <span>|</span>
+            <span>|</span>
+            <span>|</span>
+            <span>|</span>
+          </div>
+          <div class="flex justify-between px-2.5 mt-2 text-xs" aria-hidden="true">
+            <span>1</span>
+            <span>2</span>
+            <span>3</span>
+            <span>4</span>
+            <span>5</span>
+            <span>6</span>
+            <span>7</span>
+            <span>8</span>
+            <span>9</span>
+            <span>10</span>
+          </div>
         </div>
-        <div class="flex justify-between px-2.5 mt-2 text-xs" aria-hidden="true">
-          <span>1</span>
-          <span>2</span>
-          <span>3</span>
-          <span>4</span>
-          <span>5</span>
-          <span>6</span>
-          <span>7</span>
-          <span>8</span>
-          <span>9</span>
-          <span>10</span>
-        </div>
-      </div>
 
-      <button type="submit" class="btn btn-primary w-min" [disabled]="!visualizerForm.form.valid || false">Save</button>
-    </form>
+        <button type="submit" class="btn btn-primary w-min" [disabled]="!visualizerForm.form.valid || false">Save</button>
+      </form>
+    </div>
 
-    <h3 class="divider">
+
+    <h3 class="divider text-lg">
       Save Queue
     </h3>
 
-    <p class="my-2 ml-2">Osse can save your queue to the server. This allows you to pick up where you left off when Osse is closed and reopened.
-    This can be disabled if you so choose. This is an <b>account level</b> setting.</p>
+    <div class="grid grid-cols-2 max-md:grid-cols-1 gap-x-12 gap-y-4">
+      <p class="my-2 ml-2">Osse can save your queue to the server. This allows you to pick up where you left off when Osse is closed and reopened.
+      This can be disabled if you so choose. This is an <b>account level</b> setting.</p>
 
-    <form #queueForm="ngForm" (ngSubmit)="saveQueuePreferences()" class="ml-2 flex flex-col gap-y-4">
-      <label class="label">
-        <input type="checkbox" checked="checked" class="toggle toggle-primary" name="enable-visualizer"
-          id="enable-queue" [checked]="enableQueue()" (input)="enableQueue.set(!enableQueue())" />
-        Enable Queue
-      </label>
+      <form #queueForm="ngForm" (ngSubmit)="saveQueuePreferences()" class="ml-2 flex flex-col gap-y-4">
+        <label class="label">
+          <input type="checkbox" checked="checked" class="toggle" name="enable-visualizer"
+            id="enable-queue" [checked]="enableQueue()" (input)="enableQueue.set(!enableQueue())" />
+          Enable Queue
+        </label>
 
-      <button type="submit" class="btn btn-primary w-min" [disabled]="!queueForm.form.valid || false">Save</button>
-    </form>
+        <button type="submit" class="btn btn-primary w-min" [disabled]="!queueForm.form.valid || false">Save</button>
+      </form>
+    </div>
 
   </div>
   } @else if (activeTab === 'logs') {
-  <div class="space-y-4" role="tabpanel" aria-labelledby="label-logs" id="tab-logs">
+  <div class="space-y-12" role="tabpanel" aria-labelledby="label-logs" id="tab-logs">
     <app-settings-logs></app-settings-logs>
   </div>
   }
