@@ -11,6 +11,6 @@
 
   <div class="flex place-content-end gap-x-2 mt-8">
     <button class="btn btn-ghost btn-neutral" (click)="close()">Cancel</button>
-    <button class="btn btn-primary" (click)="close()" [disabled]="model() == -1" (click)="onSave()">Save</button>
+    <button class="btn btn-primary" [disabled]="model() == -1" (click)="onSave()">Save</button>
   </div>
 </div>

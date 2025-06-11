@@ -3,13 +3,13 @@
     <label class="inline-flex items-center space-x-2">
       <span>Enable Visualizer: </span>
       <input type="checkbox" name="show-visualizer" id="show-visualizer" [checked]="showVisualizer()"
-        (input)="showVisualizer.set(!showVisualizer())" class="toggle toggle-primary">
+        (input)="showVisualizer.set(!showVisualizer())" class="toggle">
     </label>
 
     <label class="inline-flex items-center space-x-2">
       <span>Visualizer Samples: </span>
       <input #samples type="number" name="visualizer-samples" id="visualizer-samples" [value]="visualizerSamples()"
-        min="0" max="10" class="input input-secondary" placeholder="1">
+        min="0" max="10" class="input" placeholder="1">
     </label>
   </div>
 

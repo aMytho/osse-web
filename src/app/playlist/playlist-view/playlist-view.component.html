@@ -2,15 +2,15 @@
   <app-header [text]="playlist?.name ?? 'Loading'"></app-header>
 
   <div class="flex flex-wrap" role="tablist">
-    <button class="btn btn-secondary grow rounded-none text-lg" [ngClass]="{'btn-soft': !showViewTab()}" (click)="activeTab.set('view')" role="tab"
+    <button class="py-2 bg-slate-500/45 grow rounded-none rounded-l-md text-lg active:bg-slate-500/40" [ngClass]="{'btn-soft bg-slate-400/15! ': !showViewTab()}" (click)="activeTab.set('view')" role="tab"
       [attr.aria-selected]="showViewTab()" aria-controls="tab-view" id="label-view">
       View
     </button>
-    <button class="btn btn-secondary grow rounded-none text-lg" [ngClass]="{'btn-soft': !showAddTracksTab()}" (click)="activeTab.set('addTracks')" role="tab"
+    <button class="bg-slate-400/45 grow rounded-none text-lg active:bg-slate-500/40" [ngClass]="{'btn-soft bg-slate-400/15! ': !showAddTracksTab()}" (click)="activeTab.set('addTracks')" role="tab"
       [attr.aria-selected]="showAddTracksTab()" aria-controls="tab-addTracks" id="label-addTracks">
       Add Tracks
     </button>
-    <button class="btn btn-secondary grow rounded-none text-lg" [ngClass]="{'btn-soft': !showModifyTab()}" (click)="activeTab.set('modify')" role="tab"
+    <button class="bg-slate-400/45 grow rounded-none rounded-r-md text-lg active:bg-slate-500/40" [ngClass]="{'btn-soft bg-slate-400/15! ': !showModifyTab()}" (click)="activeTab.set('modify')" role="tab"
       [attr.aria-selected]="showModifyTab()" aria-controls="tab-modify" id="label-modify">
       Modify
     </button>
