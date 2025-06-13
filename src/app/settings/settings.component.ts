@@ -9,10 +9,12 @@ import { CommonModule } from '@angular/common';
 import { SettingsLogsComponent } from './settings-logs/settings-logs.component';
 import { SettingsScanComponent } from "./settings-scan/settings-scan.component";
 import { SettingsScanHistoryComponent } from './settings-scan-history/settings-scan-history.component';
+import { IconComponent } from "../shared/ui/icon/icon.component";
+import { mdiGraph, mdiImage, mdiMusic, mdiQueueFirstInLastOut, mdiRestore, mdiSettingsHelper } from '@mdi/js';
 
 @Component({
   selector: 'app-settings',
-  imports: [HeaderComponent, FormsModule, CommonModule, SettingsLogsComponent, SettingsScanComponent, SettingsScanHistoryComponent],
+  imports: [HeaderComponent, FormsModule, CommonModule, SettingsLogsComponent, SettingsScanComponent, SettingsScanHistoryComponent, IconComponent],
   templateUrl: './settings.component.html',
   styles: ``,
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -26,6 +28,10 @@ export class SettingsComponent implements OnInit {
   public showVisualizer: WritableSignal<boolean> = signal(false);
   public visualizerSamples: WritableSignal<number> = signal(1);
   public enableQueue: WritableSignal<boolean> = signal(true);
+
+  public visualizerIcon = mdiGraph;
+  public imageIcon = mdiImage;
+  public queueIcon = mdiRestore;
 
   constructor(
     private configService: ConfigService,
@@ -63,6 +69,10 @@ export class SettingsComponent implements OnInit {
     } else {
       this.notificationService.error('Failed to save queue preferences. Try again?');
     }
+  }
+
+  public saveAll() {
+
   }
 
   public async requestSettings() {

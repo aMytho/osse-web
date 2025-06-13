@@ -32,38 +32,35 @@
   } @else if (activeTab === 'scan-history') {
     <app-settings-scan-history></app-settings-scan-history>
   } @else if (activeTab === 'preferences') {
-  <div class="space-y-12" role="tabpanel" aria-labelledby="label-preferences" id="tab-preferences">
+  <div class="space-y-12 pb-12" role="tabpanel" aria-labelledby="label-preferences" id="tab-preferences">
     <app-header [type]="2" text="Preferences"></app-header>
 
-    <h3 class="divider text-lg">Background Image</h3>
-    <div class="grid grid-cols-2 max-md:grid-cols-1 gap-x-12 gap-y-4">
-      <p>
-        When a track or album is playing, Osse will dispay the cover art in the background.
-        This may cause contrast issues with certain covers. This can be disabled if you so choose.
-        </p>
+    <div class="grid grid-cols-2 max-md:grid-cols-1 gap-x-20 gap-y-4">
+      <div>
+        <h3 class="text-lg">Background Image <app-icon [icon]="imageIcon"></app-icon></h3>
+          <p class="my-2">
+            When a track or album is playing, Osse will dispay the cover art in the background.
+            This may cause contrast issues with certain covers.
+          </p>
+      </div>
 
-      <form #showBackgroundsForm="ngForm" (ngSubmit)="saveBackgroundCoverPreference()" class="flex flex-col gap-y-4">
-        <label class="label">
-          <input type="checkbox" checked="checked" class="toggle" name="show-background-covers"
-            id="show-background-covers" [checked]="showBackgrounds()" (input)="showBackgrounds.set(!showBackgrounds())" />
-          Show background images
-        </label>
-
-        <button type="submit" class="btn btn-primary w-min"
-          [disabled]="!showBackgroundsForm.form.valid || false">Save</button>
-      </form>
+      <label class="label pt-3">
+        <input type="checkbox" checked="checked" class="toggle" name="show-background-covers"
+          id="show-background-covers" [checked]="showBackgrounds()" (input)="showBackgrounds.set(!showBackgrounds())" />
+        Show background images
+      </label>
 
     </div>
-    <h3 class="divider text-lg">
-      Visualizer
-    </h3>
+    <div class="divider"></div>
+    <div class="grid grid-cols-2 max-md:grid-cols-1 gap-x-20 gap-y-4">
+      <div>
+        <h3 class="text-lg">Visualizer <app-icon [icon]="visualizerIcon"></app-icon></h3>
+        <p class="my-2">
+          When a track is playing, Osse will dispay a music visualizer. This is generated in real-time.
+          This may cause performance issues with certain devices.</p>
+      </div>
 
-    <div class="grid grid-cols-2 max-md:grid-cols-1 gap-x-12 gap-y-4">
-      <p class="my-2 ml-2">
-        When a track is playing, Osse will dispay a music visualizer. This is generated in real-time.
-        This may cause performance issues with certain devices. This can be disabled if you so choose.</p>
-
-      <form #visualizerForm="ngForm" (ngSubmit)="saveVisualizerPreference()" class="ml-2 flex flex-col gap-y-4">
+      <div class="pt-8 flex flex-col gap-y-4">
         <label class="label">
           <input type="checkbox" checked="checked" class="toggle" name="show-visualizer"
             id="show-visualizer" [checked]="showVisualizer()" (input)="showVisualizer.set(!showVisualizer())" />
@@ -72,7 +69,7 @@
 
         <div class="w-full max-w-xs">
           <label for="test">Visualizer Samples</label>
-          <input type="range" min="1" max="10" value="1" class="range range-secondary" step="1" #samples
+          <input type="range" min="1" max="10" value="1" class="range" step="1" #samples
             name="visualizer-samples" id="visualizer-samples" [value]="visualizerSamples()" />
           <div class="flex justify-between px-2.5 mt-2 text-xs" aria-hidden="true">
             <span>|</span>
@@ -99,31 +96,28 @@
             <span>10</span>
           </div>
         </div>
-
-        <button type="submit" class="btn btn-primary w-min" [disabled]="!visualizerForm.form.valid || false">Save</button>
-      </form>
+      </div>
     </div>
 
+    <div class="divider"></div>
+    <div class="grid grid-cols-2 max-md:grid-cols-1 gap-x-20 gap-y-4">
+      <div>
+        <h3 class="text-lg">
+          Save Queue <app-icon [icon]="queueIcon"></app-icon>
+        </h3>
+        <p class="my-2">Osse can save your queue to the server. This allows you to pick up where you left off when Osse is closed and reopened.
+        This is an <b>account level</b> setting.</p>
+      </div>
 
-    <h3 class="divider text-lg">
-      Save Queue
-    </h3>
-
-    <div class="grid grid-cols-2 max-md:grid-cols-1 gap-x-12 gap-y-4">
-      <p class="my-2 ml-2">Osse can save your queue to the server. This allows you to pick up where you left off when Osse is closed and reopened.
-      This can be disabled if you so choose. This is an <b>account level</b> setting.</p>
-
-      <form #queueForm="ngForm" (ngSubmit)="saveQueuePreferences()" class="ml-2 flex flex-col gap-y-4">
-        <label class="label">
-          <input type="checkbox" checked="checked" class="toggle" name="enable-visualizer"
-            id="enable-queue" [checked]="enableQueue()" (input)="enableQueue.set(!enableQueue())" />
-          Enable Queue
-        </label>
-
-        <button type="submit" class="btn btn-primary w-min" [disabled]="!queueForm.form.valid || false">Save</button>
-      </form>
+      <label class="label pt-4">
+        <input type="checkbox" checked="checked" class="toggle" name="enable-visualizer"
+          id="enable-queue" [checked]="enableQueue()" (input)="enableQueue.set(!enableQueue())" />
+        Enable Queue
+      </label>
     </div>
 
+    <div class="divider"></div>
+    <button class="btn btn-primary float-right">Save Changes</button>
   </div>
   } @else if (activeTab === 'logs') {
   <div class="space-y-12" role="tabpanel" aria-labelledby="label-logs" id="tab-logs">
