@@ -37,6 +37,18 @@ export class ConfigService {
   }
 
   /**
+   * Saves many entries into the config.
+   */
+  public saveMany(conf: Partial<OsseConfig>) {
+    this.config = { ...this.config, ...conf };
+    for (const key in conf) {
+      if (conf.hasOwnProperty(key)) {
+        localStorage.setItem(key, String(conf[key as keyof OsseConfig]));
+      }
+    }
+  }
+
+  /**
   * Sets all keys/values from an object to the current config.
   * Keys that are in the current conf but not in the new one are unmodified.
   *
