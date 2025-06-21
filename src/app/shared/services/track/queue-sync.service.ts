@@ -80,7 +80,6 @@ export class QueueSyncService {
     let req = await fetcher('queue');
     if (req.ok) {
       let result: QueueResponse = await req.json();
-      console.log(result);
       if (result.trackIndex != null) {
         return {
           queue: result.tracks.map((t) => new Track(t)),
