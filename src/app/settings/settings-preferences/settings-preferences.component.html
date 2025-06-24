@@ -3,7 +3,7 @@
 <form [formGroup]="preferencesForm" (ngSubmit)="onSubmit()">
 <div class="grid grid-cols-2 max-md:grid-cols-1 gap-x-20 gap-y-4">
   <div>
-    <h3 class="text-lg">Background Image <app-icon [icon]="imageIcon"></app-icon></h3>
+    <h3 class="text-lg"><app-icon [icon]="imageIcon"></app-icon> Background Image</h3>
     <p class="my-2">
     When a track or album is playing, Osse will dispay the cover art in the background.
     This may cause contrast issues with certain covers.
@@ -11,7 +11,7 @@
   </div>
 
   <div class="flex items-center gap-2">
-  <input type="checkbox" class="toggle" formControlName="showBackgroundArt" id="showBackgroundArt" />
+  <input type="checkbox" class="toggle toggle-primary" formControlName="showBackgroundArt" id="showBackgroundArt" />
   <label class="label" for="showBackgroundArt">
     Show background images
   </label>
@@ -21,7 +21,7 @@
 <div class="divider"></div>
 <div class="grid grid-cols-2 max-md:grid-cols-1 gap-x-20 gap-y-4">
   <div>
-    <h3 class="text-lg">Visualizer <app-icon [icon]="visualizerIcon"></app-icon></h3>
+    <h3 class="text-lg"><app-icon [icon]="visualizerIcon"></app-icon> Visualizer </h3>
     <p class="my-2">
     When a track is playing, Osse will dispay a music visualizer. This is generated in real-time.
     This may cause performance issues with certain devices.</p>
@@ -29,7 +29,7 @@
 
   <div class="pt-8 flex flex-col gap-y-4">
     <div class="flex items-center gap-2">
-      <input type="checkbox" class="toggle" formControlName="showVisualizer" id="showVisualizer" />
+      <input type="checkbox" class="toggle toggle-primary" formControlName="showVisualizer" id="showVisualizer" />
       <label class="label" for="showVisualizer">
         Enable visualiser
       </label>
@@ -70,14 +70,14 @@
 <div class="grid grid-cols-2 max-md:grid-cols-1 gap-x-20 gap-y-4">
   <div>
     <h3 class="text-lg">
-      Save Queue <app-icon [icon]="queueIcon"></app-icon>
+      <app-icon [icon]="queueIcon"></app-icon> Save Queue
     </h3>
     <p class="my-2">Osse can save your queue to the server. This allows you to pick up where you left off when Osse is closed and reopened.
     This is an <b>account level</b> setting.</p>
   </div>
 
   <div class="flex items-center gap-2">
-    <input type="checkbox" checked="checked" class="toggle" formControlName="enableQueue" id="enableQueue" />
+    <input type="checkbox" checked="checked" class="toggle toggle-primary" formControlName="enableQueue" id="enableQueue" />
     <label class="label" for="enableQueue">
       Enable Queue
     </label>

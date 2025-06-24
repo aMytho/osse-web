@@ -25,6 +25,7 @@ html {
 
 :root {
   --tw-text-base-size: 1.05rem;
+  --color-primary: HSL(165, 50%, 55%);
 }
 
 img,
