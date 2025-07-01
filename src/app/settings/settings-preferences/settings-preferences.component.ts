@@ -3,7 +3,7 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ConfigService } from '../../shared/services/config/config.service';
 import { HeaderComponent } from "../../shared/ui/header/header.component";
 import { IconComponent } from "../../shared/ui/icon/icon.component";
-import { mdiContentSave, mdiGraph, mdiImage, mdiRestore } from '@mdi/js';
+import { mdiChartBar, mdiContentSave, mdiImage, mdiRestore } from '@mdi/js';
 import { fetcher } from '../../shared/util/fetcher';
 import { ToastService } from '../../toast-container/toast.service';
 import { OsseConfigResponse } from './osse-config';
@@ -25,7 +25,7 @@ export class SettingsPreferencesComponent implements OnInit {
 
   public waitingForResponse = signal(false);
 
-  public visualizerIcon = mdiGraph;
+  public visualizerIcon = mdiChartBar;
   public imageIcon = mdiImage;
   public queueIcon = mdiRestore;
   public saveIcon = mdiContentSave;
