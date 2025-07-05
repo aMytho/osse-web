@@ -195,9 +195,18 @@ export class PlayerService {
   */
   public jumpDuration(duration: number, jumpForward = true) {
     if (jumpForward) {
-      this.audioPlayer.fastSeek(this.audioPlayer.currentTime + duration);
+      this.seek(this.audioPlayer.currentTime + duration);
     } else {
-      this.audioPlayer.fastSeek(this.audioPlayer.currentTime - duration);
+      this.seek(this.audioPlayer.currentTime - duration);
+    }
+  }
+
+  private seek(duration: number) {
+    // @ts-ignore This is valid because browser support for this function isn't good
+    if (this.audioPlayer.fastSeek) {
+      this.audioPlayer.fastSeek(duration);
+    } else {
+      this.audioPlayer.currentTime = duration;
     }
   }
 
