@@ -27,7 +27,7 @@ export class AddMultipleTracksToPlaylistComponent implements OnInit {
 
   public async onSave() {
     await this.playlistService.addTracksToPlaylist(Number(this.model()), this.tracks.map((t) => t.id));
-    this.notificationService.info(this.tracks.length + ' added to playlist.');
+    this.notificationService.info(this.tracks.length + ' tracks added to playlist.');
     this.close();
   }
 

@@ -9,8 +9,8 @@ import { TrackMatrixComponent } from '../shared/ui/track-matrix/track-matrix.com
 import { TrackMatrixMode } from '../shared/ui/track-matrix/track-matrix-mode.enum'; import { IconComponent } from "../shared/ui/icon/icon.component";
 import { mdiClose, mdiPencil, mdiPlaylistPlay } from '@mdi/js';
 import { CommonModule } from '@angular/common';
-import { AddMultipleTracksToPlaylistComponent } from '../shared/ui/modals/add-multiple-tracks-to-playlist/add-multiple-tracks-to-playlist.component';
 import { ModalService } from '../shared/ui/modal/modal.service';
+import { AddToPlaylistFactoryComponent } from '../shared/ui/modals/add-to-playlist-factory/add-to-playlist-factory.component';
 
 @Component({
   selector: 'app-track-list',
@@ -89,7 +89,7 @@ export class TrackListComponent implements AfterViewInit, OnInit, OnDestroy {
   }
 
   public addSelectedTracksToPlaylist() {
-    this.modalService.setDynamicModal(AddMultipleTracksToPlaylistComponent, [{
+    this.modalService.setDynamicModal(AddToPlaylistFactoryComponent, [{
       name: 'tracks',
       val: this.matrix.getSelectedTracks()
     }], 'Add to Playlist');

@@ -8,7 +8,6 @@ import { ConfigService } from '../shared/services/config/config.service';
 import { IconComponent } from '../shared/ui/icon/icon.component';
 import { mdiFastForward, mdiInformation, mdiRepeat, mdiRewind, mdiShuffle, mdiSilverwareForkKnife, mdiDeleteSweep, mdiRepeatOff, mdiRepeatOnce, mdiRestore, mdiCog } from '@mdi/js';
 import { ModalService } from '../shared/ui/modal/modal.service';
-import { AddToPlaylistComponent } from '../shared/ui/modals/add-to-playlist/add-to-playlist.component';
 
 import { Subscription } from 'rxjs';
 import { HeaderComponent } from '../shared/ui/header/header.component';
@@ -19,6 +18,7 @@ import { Repeat } from '../shared/services/track/repeat.enum';
 import { VisualizerComponent } from '../shared/player/visualizer/visualizer.component';
 import { PlayerSettingsComponent } from '../shared/ui/modals/player-settings/player-settings.component';
 import { CommonModule } from '@angular/common';
+import { AddToPlaylistFactoryComponent } from '../shared/ui/modals/add-to-playlist-factory/add-to-playlist-factory.component';
 
 @Component({
   selector: 'app-home',
@@ -103,9 +103,9 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   public addToPlaylist(track: Track) {
-    this.modalService.setDynamicModal(AddToPlaylistComponent, [{
-      name: 'track',
-      val: track
+    this.modalService.setDynamicModal(AddToPlaylistFactoryComponent, [{
+      name: 'tracks',
+      val: [track]
     }], 'Add to Playlist');
     this.modalService.show();
   }

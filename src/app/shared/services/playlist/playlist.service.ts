@@ -45,4 +45,13 @@ export class PlaylistService {
       })
     });
   }
+
+  public createPlaylist(name: string) {
+    return fetcher('playlists', {
+      method: 'POST',
+      body: JSON.stringify({
+        'name': name
+      })
+    });
+  }
 }
