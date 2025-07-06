@@ -18,10 +18,11 @@ import { TrackInfoComponent } from '../shared/ui/modals/track-info/track-info.co
 import { Repeat } from '../shared/services/track/repeat.enum';
 import { VisualizerComponent } from '../shared/player/visualizer/visualizer.component';
 import { PlayerSettingsComponent } from '../shared/ui/modals/player-settings/player-settings.component';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-home',
-  imports: [IconComponent, TrackComponent, HeaderComponent, VisualizerComponent],
+  imports: [CommonModule, IconComponent, TrackComponent, HeaderComponent, VisualizerComponent],
   templateUrl: './home.component.html'
 })
 export class HomeComponent implements OnInit, OnDestroy {

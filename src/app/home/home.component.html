@@ -13,7 +13,7 @@
           @if (showVisualizer()) {
             <app-visualizer></app-visualizer>
           }
-          <hr class="text-white">
+          <hr class="text-white" [ngClass]="{'mt-2': !showVisualizer()}">
         </div>
       </div>
     </div>
