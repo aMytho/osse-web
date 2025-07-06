@@ -46,12 +46,16 @@ export class PlayerComponent implements AfterViewInit {
     this.onMouseMove = this.onMouseMove.bind(this);
 
     // Listen for the resize event
-    window.addEventListener('resize', (e) => {
-      clearTimeout(this.resizeTimer);
-      this.resizeTimer = setTimeout(() => {
-        this.setTitleAnimationByScreenSize();
-      }, 150);
+    window.addEventListener('resize', () => {
+      this.queueResizeCheck();
     })
+  }
+
+  private queueResizeCheck() {
+    clearTimeout(this.resizeTimer);
+    this.resizeTimer = setTimeout(() => {
+      this.setTitleAnimationByScreenSize();
+    }, 150);
   }
 
   onBackdropClick(ev: any) {
@@ -161,6 +165,7 @@ export class PlayerComponent implements AfterViewInit {
       this.bg.set(val.cover);
       this.setTitleAnimationByScreenSize();
       this.setGradient(0, "transparent", 100);
+      this.queueResizeCheck();
     });
 
     this.playerService.trackPositionUpdate.subscribe((val) => {
