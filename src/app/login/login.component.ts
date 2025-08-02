@@ -37,7 +37,9 @@ export class LoginComponent implements OnInit {
     // Check if the server URL is right.
     try {
       this.waitingForResponse.set(true);
-      await fetch(this.protocol().concat(this.url()) + 'api/ping');
+      await fetch(this.protocol().concat(this.url()) + 'api/ping', {
+        credentials: 'include'
+      });
       // Save the URL
       this.configService.save("apiURL", this.protocol().concat(this.url()));
       this.notificationService.info("URL saved as " + this.configService.get("apiURL"));
@@ -79,7 +81,9 @@ export class LoginComponent implements OnInit {
   async ngOnInit() {
     // Try to login with the default URL.
     try {
-      await fetch(this.configService.get('apiURL') + 'api/ping');
+      await fetch(this.configService.get('apiURL') + 'api/ping', {
+        credentials: 'include'
+      });
       this.serverFound.set(true);
     } catch (e) {
       // This should only happen in dev. If it fails, show the server URL inputs.
