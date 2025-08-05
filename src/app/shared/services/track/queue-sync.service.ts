@@ -35,7 +35,7 @@ export class QueueSyncService {
         }
 
       }
-    }, 20000);
+    }, 30000);
   }
 
   /**

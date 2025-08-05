@@ -31,8 +31,6 @@ export class PlayerService {
   private currenTimeSignal: WritableSignal<number> = signal(0);
   private isPlayingSignal: WritableSignal<boolean> = signal(false);
 
-  private trackAuthorizationInterval = 0;
-
   constructor(
     private configService: ConfigService,
     private backgroundImageService: BackgroundImageService,
@@ -107,8 +105,6 @@ export class PlayerService {
       this.audioPlayer.src = url + '?token=' + token + '&id=' + this.configService.get('userID') + '&trackID=' + track.id;
       // The playback rate is reset when a new track is loaded, set it again.
       this.audioPlayer.playbackRate = this.playbackRate;
-
-      this.reAuthorizeCurrentTrack(token);
     } else {
       this.notificationService.error('Failed to play track.');
     }
@@ -208,21 +204,6 @@ export class PlayerService {
     } else {
       this.audioPlayer.currentTime = duration;
     }
-  }
-
-  private reAuthorizeCurrentTrack(token: string) {
-    clearInterval(this.trackAuthorizationInterval);
-
-    // Every 5 minutes, reauth track.
-    this.trackAuthorizationInterval = setInterval(async () => {
-      // If no track is playing, don't extend authorization and don't request it again.
-      if (!this.track) {
-        clearInterval(this.trackAuthorizationInterval);
-        return;
-      }
-
-      fetcher('tracks/' + this.track.id + '/re-authorize?token=' + token, { method: 'POST' });
-    }, 300000);
   }
 
   get duration() {
