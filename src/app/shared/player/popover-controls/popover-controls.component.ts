@@ -7,10 +7,11 @@ import { mdiClose } from '@mdi/js';
 import { JumpControlsComponent } from '../jump-controls/jump-controls.component';
 import { PanControlsComponent } from '../pan-controls/pan-controls.component';
 import { SpeedControlsComponent } from '../speed-controls/speed-controls.component';
+import { ClearQueueControlsComponent } from "../clear-queue-controls/clear-queue-controls.component";
 
 @Component({
   selector: 'app-popover-controls',
-  imports: [VolumeComponent, TrackControlsComponent, DurationComponent, JumpControlsComponent, PanControlsComponent, SpeedControlsComponent, IconComponent],
+  imports: [VolumeComponent, TrackControlsComponent, DurationComponent, JumpControlsComponent, PanControlsComponent, SpeedControlsComponent, IconComponent, ClearQueueControlsComponent],
   templateUrl: './popover-controls.component.html',
   styles: ``
 })
