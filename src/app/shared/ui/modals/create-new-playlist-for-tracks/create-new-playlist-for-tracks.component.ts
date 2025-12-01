@@ -2,14 +2,14 @@ import { Component, EventEmitter, Input, Output, signal, WritableSignal } from '
 import { Track } from '../../../services/track/track';
 import { Playlist } from '../../../services/playlist/Playlist';
 import { PlaylistService } from '../../../services/playlist/playlist.service';
-import { CommonModule } from '@angular/common';
+
 import { FormsModule } from '@angular/forms';
 import { OssePlaylist } from '../../../services/playlist/osse-playlist';
 import { ToastService } from '../../../../toast-container/toast.service';
 
 @Component({
   selector: 'app-create-new-playlist-for-tracks',
-  imports: [CommonModule, FormsModule],
+  imports: [FormsModule],
   templateUrl: './create-new-playlist-for-tracks.component.html',
   styles: ``
 })
