@@ -1,7 +1,7 @@
 import { EventEmitter, Injectable } from '@angular/core';
 import { fetcher } from '../../util/fetcher';
 import { EchoService } from '../echo/echo.service';
-import { AuthResponse } from './auth.interface';
+import { AuthResponse, UserPermission } from './auth.interface';
 import { TrackService } from '../track/track.service';
 import { BackgroundImageService } from '../../ui/background-image.service';
 import { ConfigService } from '../config/config.service';
@@ -12,6 +12,7 @@ import { ConfigService } from '../config/config.service';
 export class AuthService {
   private isLoggedIn = false;
   private statusChecked = false;
+  private permissions: UserPermission[] = [];
   public authStateChanged = new EventEmitter<boolean>();
 
   constructor(
@@ -69,6 +70,7 @@ export class AuthService {
   * The work is already done, this just lets the client routes work and subscribes to events.
   */
   private login(userAuth: AuthResponse): void {
+    console.log(userAuth);
     this.isLoggedIn = true;
 
     // Set the config to use any account level config (not in local storage.)
@@ -94,6 +96,8 @@ export class AuthService {
       this.trackService.fetchQueueFromServer();
     }
 
+    this.permissions = userAuth.permissions;
+
     this.authStateChanged.emit(true);
   }
 
@@ -106,7 +110,13 @@ export class AuthService {
     document.cookie = "XSRF-TOKEN=;expires=" + new Date(0).toUTCString();
 
     this.isLoggedIn = false;
+    this.permissions = [];
     this.authStateChanged.emit(false);
+  }
+
+  public hasPermission(id: number) {
+    console.log(this.permissions);
+    return this.permissions.some((v) => v.id == id);
   }
 }
 

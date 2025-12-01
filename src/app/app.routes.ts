@@ -3,6 +3,7 @@ import { HomeComponent } from './home/home.component';
 import { albumViewResolver } from './albums/view/album-view.resolver';
 import { LoginComponent } from './login/login.component';
 import { isLoggedIn } from './shared/services/auth/auth.guard';
+import { isAdmin } from './shared/services/auth/admin.guard';
 
 export const routes: Routes = [
   {
@@ -59,6 +60,12 @@ export const routes: Routes = [
     path: 'register',
     loadComponent: () => import('./registration/registration.component').then(c => c.RegistrationComponent),
     title: 'Osse - Register'
+  },
+  {
+    path: 'admin',
+    loadComponent: () => import('./admin/admin.component').then(c => c.AdminComponent),
+    canActivate: [isLoggedIn, isAdmin],
+    title: 'Osse - Admin'
   },
   {
     path: "**",
