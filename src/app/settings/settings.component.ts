@@ -17,7 +17,7 @@ import { SettingsPreferencesComponent } from "./settings-preferences/settings-pr
 })
 export class SettingsComponent implements OnInit {
   @ViewChild('samples') sampleElement!: ElementRef<HTMLInputElement>;
-  public activeTab: string = 'scan';
+  public activeTab = signal('scan');
 
   public directories: WritableSignal<string[]> = signal([]);
 

@@ -1,5 +1,5 @@
 <section class="flex flex-col gap-y-2 max-w-[50vh]">
-  @for (toast of toasts; track toast.id) {
+  @for (toast of toastService.toasts(); track toast.id) {
   <output role="status">
     <button class="relative bg-slate-700 p-4 max-lg:p-3 rounded-md border-l-2 transition-opacity duration-300 w-full"
       [ngClass]="{

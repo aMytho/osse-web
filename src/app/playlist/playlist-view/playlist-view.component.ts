@@ -34,7 +34,7 @@ export class PlaylistViewComponent {
   play = mdiPlaylistPlay;
   close = mdiClose;
 
-  public playlist!: Playlist;
+  public playlist = signal<Playlist|null>(null);
   public showTrackSelectionMenu: WritableSignal<boolean> = signal(false);
   public ready: WritableSignal<boolean> = signal(false);
   public waitingOnRequest: WritableSignal<boolean> = signal(false);
@@ -52,8 +52,8 @@ export class PlaylistViewComponent {
   ) { }
 
   public delete() {
-    if (confirm(`Are you sure you want to delete ${this.playlist.name}?`)) {
-      fetcher('playlists/' + this.playlist.id, {
+    if (confirm(`Are you sure you want to delete ${this.playlist()!.name}?`)) {
+      fetcher('playlists/' + this.playlist()?.id, {
         method: 'DELETE',
       }).then((_r) => {
         this.router.navigate(['/playlists']);
@@ -62,7 +62,7 @@ export class PlaylistViewComponent {
   }
 
   public async edit() {
-    let req = await fetcher('playlists/' + this.playlist.id, {
+    let req = await fetcher('playlists/' + this.playlist()?.id, {
       method: 'PATCH',
       body: JSON.stringify({
         name: this.model.name
@@ -73,7 +73,7 @@ export class PlaylistViewComponent {
     });
 
     if (req.ok) {
-      this.getPlaylist(this.playlist.id);
+      this.getPlaylist(this.playlist()?.id as number);
       this.notificationService.info('Playlist renamed successfully.');
       this.activeTab.set('view');
     }
@@ -85,16 +85,17 @@ export class PlaylistViewComponent {
   }
 
   public addTracksToQueue() {
-    for (let track of this.playlist.tracks) {
+    let tracks = this.playlist()!.tracks;
+    for (let track of tracks) {
       this.trackService.addTrack(track);
     }
 
-    this.notificationService.info('Added ' + this.playlist.tracks.length + ' tracks');
+    this.notificationService.info('Added ' + tracks.length + ' tracks');
   }
 
   private async getPlaylist(id: number) {
-    this.playlist = await this.playlistService.getPlaylist(id);
-    this.model.name = this.playlist.name;
+    this.playlist.set(await this.playlistService.getPlaylist(id));
+    this.model.name = this.playlist()?.name ?? '';
     this.ready.set(true);
   }
 
@@ -114,7 +115,7 @@ export class PlaylistViewComponent {
     }
 
     this.waitingOnRequest.set(true);
-    let req = await fetcher(`playlists/${this.playlist.id}/track-set`, {
+    let req = await fetcher(`playlists/${this.playlist()?.id}/track-set`, {
       method: 'DELETE',
       body: JSON.stringify({
         'track-ids': tracks.map((t) => t.id)
@@ -122,8 +123,12 @@ export class PlaylistViewComponent {
     });
 
     if (req.ok) {
-      this.playlist.tracks = this.playlist.tracks.filter((t) => !tracks.some((t2) => t2.id == t.id));
-      this.notificationService.info('Removed ' + tracks.length + ' tracks from ' + this.playlist.name);
+      this.playlist.update((p) => {
+        p!.tracks = p!.tracks.filter((t) => !tracks.some((t2) => t2.id == t.id))
+        return p;
+      });
+
+      this.notificationService.info('Removed ' + tracks.length + ' tracks from ' + this.playlist()!.name);
       this.tracks.clearSelectedTracks();
       this.tracks.setMode(TrackMatrixMode.View);
     }
@@ -132,8 +137,11 @@ export class PlaylistViewComponent {
   }
 
   addTracksToPlaylist(tracks: Track[]) {
-    this.playlist.tracks.push(...tracks);
-    this.notificationService.info('Added ' + tracks.length + ' tracks to ' + this.playlist.name);
+    this.playlist.update((p) => {
+      p!.tracks.push(...tracks);
+      return p;
+    })
+    this.notificationService.info('Added ' + tracks.length + ' tracks to ' + this.playlist()!.name);
     this.activeTab.set('view');
     this.tracks.clearSelectedTracks();
     this.tracks.setMode(TrackMatrixMode.View);

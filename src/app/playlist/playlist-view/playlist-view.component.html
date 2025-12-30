@@ -1,5 +1,5 @@
 <div [ngClass]="{'animate-pulse pointer-events-none': !ready()}">
-  <app-header [text]="playlist?.name ?? 'Loading'"></app-header>
+  <app-header [text]="playlist()?.name ?? 'Loading'"></app-header>
 
   <div class="flex flex-wrap" role="tablist">
     <button class="py-2 bg-slate-500/45 grow rounded-none rounded-l-md text-lg active:bg-slate-500/40" [ngClass]="{'btn-soft bg-slate-400/15! ': !showViewTab()}" (click)="activeTab.set('view')" role="tab"
@@ -18,7 +18,7 @@
 
   <div class="mt-4" aria-hidden="true"></div>
 
-  @if (playlist) {
+  @if (playlist()) {
   <div [ngClass]="{'animate-pulse pointer-events-none': waitingOnRequest()}">
     <div [class.hidden]="!showViewTab()" role="tabpanel" aria-labelledby="label-view" id="tab-view">
       <div class="flex justify-around gap-x-2 my-2">
@@ -38,13 +38,13 @@
 
       <p>Click on a track to add it to the queue. Right click (or hold) a track to enable additional options.
       </p>
-      <app-track-matrix [tracks]="playlist.tracks" (onClick)="addTrack($event)"
+      <app-track-matrix [tracks]="playlist()!.tracks" (onClick)="addTrack($event)"
         (onModeChanged)="onTrackMatrixModeChange($event)"></app-track-matrix>
     </div>
 
     <div [class.hidden]="!showAddTracksTab()" role="tabpanel" aria-labelledby="label-addTracks" id="tab-addTracks">
       <app-playlist-add-tracks (addTracks)="addTracksToPlaylist($event)"
-        [playlistID]="playlist.id"></app-playlist-add-tracks>
+        [playlistID]="playlist()!.id"></app-playlist-add-tracks>
     </div>
 
     <div [class.hidden]="!showModifyTab()" role="tabpanel" class="bg-slate-400/15 rounded-lg p-4"
