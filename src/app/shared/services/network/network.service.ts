@@ -9,7 +9,6 @@ import { ModalService } from '../../ui/modal/modal.service';
   providedIn: 'root'
 })
 export class NetworkService {
-
   constructor(private notificationService: ToastService, private modelService: ModalService) {
     window.addEventListener('online', () => {
       this.notificationService.info('Internet connection restored.');
@@ -18,10 +17,4 @@ export class NetworkService {
       this.notificationService.info('Internet connection lost.');
     });
   }
-
-  private onlineHandler() {
-
-  }
-
-  private offlineHandler() { }
 }

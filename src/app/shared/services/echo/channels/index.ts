@@ -9,7 +9,7 @@ export type EchoEventMap = ScanEventMap;
 export type EchoChannel = keyof EchoEventMap;
 
 /**
- * Every possilbe result for an echo event.
+ * Every possible result for an echo event.
  */
 export type EchoResult<T extends EchoChannel> = EchoEventMap[T];
 
