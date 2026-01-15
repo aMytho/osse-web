@@ -2,6 +2,10 @@
 
 Osse is a free and open source music player and server. This repository is the web frontend.
 
+## ARCHIVED
+
+> This repo was archived as the project now lives in the osse repo at https://github.com/amytho/osse
+
 ## Features
 
 > Osse is in early development. There will be bugs and unexpected behavior. Some features are not yet complete. It is safe to use on your library, but it will need some time before it can be your main music player.
